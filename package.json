@@ -1,0 +1,20 @@
+{
+  "name": "merlo-aventura",
+  "version": "1.0.0",
+  "description": "Sitio web oficial de Merlo Aventura — Turismo Activo y Excursiones 4x4",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 5050",
+    "dev": "python3 -m http.server 5050",
+    "preview": "python3 -m http.server 5050"
+  },
+  "keywords": [
+    "merlo",
+    "aventura",
+    "turismo",
+    "4x4",
+    "san-luis"
+  ],
+  "author": "Merlo Aventura",
+  "license": "ISC"
+}
