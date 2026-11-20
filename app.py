@@ -53,6 +53,11 @@ def inject_global_data():
 
 # ----------------- FRONTEND ROUTES ----------------- #
 
+@app.route("/visor-senderos")
+@app.route("/visor-senderos.html")
+def visor_senderos():
+    return render_template("visor-senderos.html")
+
 @app.route("/")
 def index():
     conn = get_db()

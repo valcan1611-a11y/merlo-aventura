@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-stone-950 text-stone-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor de Senderos GPS • Merlo Aventura | Estilo Wikiloc</title>
+    <meta name="description" content="Visualizador interactivo de senderos GPS, mapas satelitales y perfiles altimétricos de Merlo Aventura en las Sierras de los Comechingones.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sierra: { 800: '#1c2421', 900: '#111715', 950: '#0a0e0d' },
+                        wikiloc: { DEFAULT: '#ff7000', hover: '#e66500', light: '#fff4eb' }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        .custom-map-marker { background: transparent; border: none; }
+        .leaflet-popup-content-wrapper { background: #1c1917 !important; color: #f5f5f4 !important; border: 1px solid #44403c !important; border-radius: 12px !important; }
+        .leaflet-popup-tip { background: #1c1917 !important; }
+    </style>
+</head>
+<body class="h-full flex flex-col overflow-hidden select-none">
+
+    <!-- TOP BAR -->
+    <header class="h-16 bg-stone-900 border-b border-stone-800 px-4 sm:px-6 flex items-center justify-between gap-4 shrink-0 z-30">
+        
+        <div class="flex items-center gap-3">
+            <a href="index.html" class="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors flex items-center gap-2 text-xs font-semibold" title="Volver a Merlo Aventura">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="hidden sm:inline">Volver a la Web</span>
+            </a>
+
+            <div class="h-6 w-px bg-stone-700 hidden sm:block"></div>
+
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-person-hiking text-base"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-heading font-black text-sm text-white tracking-tight">MERLO <span class="text-amber-500">AVENTURA</span></span>
+                        <span class="bg-orange-500/20 text-orange-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-orange-500/30">
+                            <i class="fa-solid fa-map-location-dot mr-1"></i> Visor GPS Oficial
+                        </span>
+                    </div>
+                    <div class="text-[11px] text-stone-400 font-medium hidden md:block">
+                        Sierras de los Comechingones • Villa de Merlo, San Luis
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SELECTOR DE SENDEROS -->
+        <div class="flex-1 max-w-md hidden lg:block">
+            <select id="trailSelect" onchange="changeTrail(this.value)" class="w-full bg-stone-950 border border-stone-700 text-stone-200 text-xs font-semibold rounded-xl px-3.5 py-2 outline-none focus:border-amber-500 cursor-pointer">
+                <option value="pueblo-escondido-cerro-aspero">📍 Pueblo Escondido y Cumbre del Cerro Áspero (13,6 km Loop)</option>
+                <option value="salto-del-tigre">📍 Salto del Tigre & Filo Comechingones (7,2 km)</option>
+                <option value="cerro-de-las-ovejas">📍 Cerro de Las Ovejas 2280m — Techo de San Luis (12,0 km)</option>
+            </select>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Botón Descargar GPX -->
+            <button onclick="downloadGPX()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold flex items-center gap-2 border border-stone-700 transition-colors shadow" title="Descargar archivo GPX para reloj o GPS">
+                <i class="fa-solid fa-file-arrow-down text-amber-400"></i>
+                <span class="hidden sm:inline">Descargar</span> GPX
+            </button>
+
+            <!-- Botón Ver en Wikiloc Oficial -->
+            <a id="btnWikilocOfficial" href="https://www.wikiloc.com/hiking-trails/pueblo-escondido-y-cumbre-del-cerro-aspero-80317263" target="_blank" class="px-3.5 sm:px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black flex items-center gap-1.5 transition-colors shadow" title="Ver en la comunidad de Wikiloc">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                <span>Wikiloc</span>
+            </a>
+
+            <!-- Botón Reservar Excursión -->
+            <a href="index.html#excursiones" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 text-xs font-black hidden sm:flex items-center gap-1.5 shadow transition-all">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Reservar Salida</span>
+            </a>
+        </div>
+
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+
+        <!-- SIDEBAR DE DETALLES Y WAYPOINTS -->
+        <aside id="trailSidebar" class="w-full md:w-80 lg:w-96 bg-stone-900/95 backdrop-blur-md border-r border-stone-800 flex flex-col shrink-0 overflow-y-auto z-20 transition-all">
+            
+            <!-- Mobile Selector -->
+            <div class="p-4 border-b border-stone-800 lg:hidden">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-amber-500 block mb-1.5">Elegir Sendero de Montaña</label>
+                <select id="trailSelectMobile" onchange="changeTrail(this.value)" class="w-full bg-stone-950 border border-stone-700 text-white text-xs font-semibold rounded-xl px-3 py-2 outline-none">
+                    <option value="pueblo-escondido-cerro-aspero">Pueblo Escondido y Cerro Áspero (13,6 km Loop)</option>
+                    <option value="salto-del-tigre">Salto del Tigre & Filo Comechingones (7,2 km)</option>
+                    <option value="cerro-de-las-ovejas">Cerro de Las Ovejas 2280m (12,0 km)</option>
+                </select>
+            </div>
+
+            <div class="p-5 space-y-6">
+                
+                <!-- TÍTULO Y AUTOR -->
+                <div>
+                    <span id="trailLocationBadge" class="text-xs text-amber-400 font-semibold block mb-1">
+                        <i class="fa-solid fa-location-dot mr-1"></i> <span id="trailLocation">Cerro de Oro / Merlo, San Luis</span>
+                    </span>
+                    <h1 id="trailTitle" class="font-heading font-black text-lg sm:text-xl text-white leading-snug mb-3">
+                        Pueblo Escondido por Salto del Tigre y Cumbre del Cerro Áspero
+                    </h1>
+
+                    <!-- Tarjeta de Autor Merlo Aventura -->
+                    <div class="p-3.5 rounded-2xl bg-stone-950/80 border border-stone-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-500/40">
+                                MA
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-xs flex items-center gap-1.5">
+                                    Merlo Aventura
+                                    <span class="bg-amber-400 text-stone-950 text-[9px] font-black px-1.5 py-0.5 rounded uppercase">PREMIUM</span>
+                                </div>
+                                <span class="text-[11px] text-stone-400">Guías de Montaña Habilitados</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[11px] text-emerald-400 font-bold flex items-center justify-end gap-1"><i class="fa-solid fa-thumbs-up"></i> 4 Claps</span>
+                            <span class="text-[10px] text-stone-400">98 descargas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FICHA TÉCNICA (TRAIL STATS IDÉNTICO A WIKILOC) -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-simple text-amber-500"></i> Estadísticas Técnicas del Sendero
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 gap-2.5 text-xs">
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Distancia Total</span>
+                            <span id="statDist" class="font-black text-white text-base mt-0.5 block">13,65 km</span>
+                            <span id="statDistMi" class="text-[10px] text-stone-500">(8.48 mi)</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Tipo de Ruta</span>
+                            <span id="statType" class="font-black text-amber-400 text-base mt-0.5 block">Circular (Loop)</span>
+                            <span class="text-[10px] text-stone-500">Ida y vuelta distintas</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Desnivel (+)</span>
+                            <span id="statEleGain" class="font-black text-emerald-400 text-base mt-0.5 block">+648 m</span>
+                            <span id="statEleGainFt" class="text-[10px] text-stone-500">(+2,126 ft)</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Desnivel (-)</span>
+                            <span id="statEleLoss" class="font-black text-emerald-400 text-base mt-0.5 block">-648 m</span>
+                            <span id="statEleLossFt" class="text-[10px] text-stone-500">(-2,126 ft)</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Altitud Máxima</span>
+                            <span id="statMaxEle" class="font-black text-white text-base mt-0.5 block">2.010 m</span>
+                            <span id="statMaxEleFt" class="text-[10px] text-stone-500">(6,595 ft - Cumbre)</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Altitud Mínima</span>
+                            <span id="statMinEle" class="font-black text-white text-base mt-0.5 block">1.596 m</span>
+                            <span id="statMinEleFt" class="text-[10px] text-stone-500">(5,238 ft - Cañón)</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Tiempo en Mov.</span>
+                            <span id="statMovingTime" class="font-black text-white text-base mt-0.5 block">4h 42m</span>
+                            <span id="statTotalTime" class="text-[10px] text-stone-500">Total: 8h 47m</span>
+                        </div>
+
+                        <div class="bg-stone-950/70 p-3 rounded-xl border border-stone-800/80">
+                            <span class="text-[10px] text-stone-400 uppercase font-semibold block">Dificultad</span>
+                            <span id="statDifficulty" class="font-black text-amber-400 text-base mt-0.5 block">Moderada</span>
+                            <span class="text-[10px] text-stone-500">Terreno técnico</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- APOYO NISSAN FRONTIER 4X4 -->
+                <div class="p-4 rounded-2xl bg-amber-950/20 border border-amber-600/30 text-xs space-y-2">
+                    <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                        <i class="fa-solid fa-truck-pickup"></i>
+                        <span>Aproximación en Nissan Frontier 4x4</span>
+                    </div>
+                    <p class="text-stone-300 text-[11px] leading-relaxed">
+                        El sendero comienza en lo alto del filo serrano donde los autos comunes no pueden acceder. Nuestras dos Nissan Frontier 4x4 realizan el traslado de aproximación desde Merlo hasta el estacionamiento inicial.
+                    </p>
+                </div>
+
+                <!-- WAYPOINTS INTERACTIVOS (PUNTOS DE INTERÉS) -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-location-pin text-amber-500"></i> Puntos de Interés
+                        </h3>
+                        <span id="waypointsCountBadge" class="text-[10px] bg-stone-800 text-stone-300 px-2 py-0.5 rounded-full">10 puntos</span>
+                    </div>
+
+                    <div id="waypointsList" class="space-y-2">
+                        <!-- Injected via JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- MAPA Y PERFIL DE ELEVACIÓN -->
+        <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-stone-950">
+            
+            <!-- LAYER CONTROLS (BOTONES FLOTANTES EN MAPA) -->
+            <div class="absolute top-4 right-4 z-[500] flex flex-wrap gap-2">
+                <button type="button" onclick="setMapLayer('satellite')" id="btnLayerSat" class="px-3 py-1.5 rounded-xl bg-stone-900/90 text-white font-bold text-xs border border-amber-500 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-satellite text-amber-400"></i> Satelital HD
+                </button>
+                <button type="button" onclick="setMapLayer('topo')" id="btnLayerTopo" class="px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-mountain text-emerald-400"></i> Relieve / Topo
+                </button>
+                <button type="button" onclick="setMapLayer('osm')" id="btnLayerOsm" class="px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-map text-sky-400"></i> Callejero
+                </button>
+                <button type="button" onclick="fitCurrentTrail()" class="p-1.5 rounded-xl bg-stone-900/90 text-white text-xs border border-stone-700 hover:border-amber-400 shadow-xl backdrop-blur-md" title="Centrar sendero completo">
+                    <i class="fa-solid fa-compress px-1"></i>
+                </button>
+            </div>
+
+            <!-- CONTENEDOR DE MAPA LEAFLET -->
+            <div id="mainTrailMap" class="flex-1 w-full h-full z-10"></div>
+
+            <!-- PERFIL DE ELEVACIÓN INTERACTIVO (WIKILOC STYLE) -->
+            <div class="h-44 sm:h-52 bg-stone-900/95 border-t border-stone-800 p-3 sm:p-4 shrink-0 flex flex-col justify-between z-20 backdrop-blur-md">
+                
+                <div class="flex items-center justify-between text-xs text-stone-400 mb-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-white text-xs uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-area text-amber-500"></i> Perfil Altimétrico
+                        </span>
+                        <span class="text-[11px] text-stone-500 hidden sm:inline">(Mové el cursor sobre el gráfico para sincronizar con el mapa)</span>
+                    </div>
+                    <div id="chartTooltip" class="font-black text-amber-400 text-xs sm:text-sm bg-stone-950/80 px-2.5 py-1 rounded-lg border border-stone-800">
+                        Km 0.0 • 1.950 msnm
+                    </div>
+                </div>
+
+                <!-- Canvas Gráfico Altimetría -->
+                <div class="relative flex-1 w-full overflow-hidden">
+                    <canvas id="elevationCanvas" class="w-full h-full cursor-crosshair"></canvas>
+                </div>
+
+                <div class="flex items-center justify-between text-[10px] text-stone-500 font-semibold pt-1 border-t border-stone-800/60">
+                    <span id="lblStartKm">0.0 km (1.950m)</span>
+                    <span>Distancia y Pendiente del Recorrido</span>
+                    <span id="lblEndKm">13.65 km (1.950m)</span>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        const TRAILS = {
+  "pueblo-escondido-cerro-aspero": {
+    "id": "pueblo-escondido-cerro-aspero",
+    "title": "Pueblo Escondido por Salto del Tigre y Cumbre del Cerro Áspero",
+    "wikilocUrl": "https://www.wikiloc.com/hiking-trails/pueblo-escondido-y-cumbre-del-cerro-aspero-80317263",
+    "wikilocId": "80317263",
+    "location": "Cerro de Oro / Villa de Merlo, San Luis • Córdoba",
+    "distanceKm": 13.65,
+    "distanceMi": 8.48,
+    "eleGainM": 648,
+    "eleGainFt": 2126,
+    "eleLossM": 648,
+    "eleLossFt": 2126,
+    "maxEleM": 2010,
+    "maxEleFt": 6595,
+    "minEleM": 1596,
+    "minEleFt": 5238,
+    "movingTime": "4h 42m",
+    "totalTime": "8h 47m",
+    "trailType": "Circular (Loop)",
+    "difficulty": "Moderada",
+    "technical": "Terreno técnico de montaña • Gran desnivel",
+    "center": [
+      -32.363,
+      -64.899
+    ],
+    "zoom": 14,
+    "waypoints": [
+      {
+        "name": "Inicio / Parking 4x4 (Filo Comechingones)",
+        "icon": "fa-solid fa-square-parking",
+        "lat": -32.355,
+        "lng": -64.912,
+        "ele": 1950,
+        "dist": 0.0,
+        "desc": "Punto donde finaliza el tramo en camioneta 4x4 y da inicio el trekking."
+      },
+      {
+        "name": "Bifurcación Senda del Tigre",
+        "icon": "fa-solid fa-code-fork",
+        "lat": -32.3565,
+        "lng": -64.905,
+        "ele": 1880,
+        "dist": 1.8,
+        "desc": "Sendero que se desvía hacia el cañón y la cascada."
+      },
+      {
+        "name": "Cascada Salto del Tigre (22m)",
+        "icon": "fa-solid fa-water",
+        "lat": -32.358,
+        "lng": -64.896,
+        "ele": 1670,
+        "dist": 3.4,
+        "desc": "Imponente cascada de 22 metros con hoya de agua esmeralda cristalina."
+      },
+      {
+        "name": "Cañón de Guanaquito & Vados",
+        "icon": "fa-solid fa-water-ladder",
+        "lat": -32.3605,
+        "lng": -64.891,
+        "ele": 1620,
+        "dist": 4.8,
+        "desc": "Cruce de arroyos serranos y piedras de río rumbo al campamento."
+      },
+      {
+        "name": "Pueblo Escondido (Pueblo Minero)",
+        "icon": "fa-solid fa-hotel",
+        "lat": -32.362,
+        "lng": -64.887,
+        "ele": 1596,
+        "dist": 6.2,
+        "desc": "Mítico campamento minero abandonado en el fondo del cañón. Parada de almuerzo."
+      },
+      {
+        "name": "Túneles de Tungsteno & Usina",
+        "icon": "fa-solid fa-person-digging",
+        "lat": -32.364,
+        "lng": -64.889,
+        "ele": 1610,
+        "dist": 7.0,
+        "desc": "Galerías subterráneas y vestigios históricos de la minería de principios del siglo XX."
+      },
+      {
+        "name": "Caracol del Cerro Áspero",
+        "icon": "fa-solid fa-stairs",
+        "lat": -32.3675,
+        "lng": -64.894,
+        "ele": 1820,
+        "dist": 8.8,
+        "desc": "Ascenso en zetas por huella de roca con vistas aéreas al cañón."
+      },
+      {
+        "name": "Cumbre Cerro Áspero (2.010 msnm)",
+        "icon": "fa-solid fa-mountain-sun",
+        "lat": -32.371,
+        "lng": -64.901,
+        "ele": 2010,
+        "dist": 10.5,
+        "desc": "Punto más alto del circuito con panorámica 360° hacia los valles de San Luis y Córdoba."
+      },
+      {
+        "name": "Filo Cumbre & Mirador 360°",
+        "icon": "fa-solid fa-binoculars",
+        "lat": -32.364,
+        "lng": -64.908,
+        "ele": 1980,
+        "dist": 12.1,
+        "desc": "Sendero de altura sobre la línea de cumbres divisoria de aguas."
+      },
+      {
+        "name": "Llegada Parking 4x4 (Fin de Loop)",
+        "icon": "fa-solid fa-flag-checkered",
+        "lat": -32.355,
+        "lng": -64.912,
+        "ele": 1950,
+        "dist": 13.65,
+        "desc": "Regreso al vehículo Nissan Frontier 4x4 para el descenso a Merlo."
+      }
+    ],
+    "track": [
+      [
+        -32.355,
+        -64.912,
+        1950,
+        0.0
+      ],
+      [
+        -32.3553,
+        -64.9105,
+        1938,
+        0.4
+      ],
+      [
+        -32.3556,
+        -64.909,
+        1925,
+        0.8
+      ],
+      [
+        -32.356,
+        -64.907,
+        1905,
+        1.3
+      ],
+      [
+        -32.3565,
+        -64.905,
+        1880,
+        1.8
+      ],
+      [
+        -32.3568,
+        -64.903,
+        1830,
+        2.2
+      ],
+      [
+        -32.3572,
+        -64.901,
+        1780,
+        2.6
+      ],
+      [
+        -32.3576,
+        -64.8985,
+        1720,
+        3.0
+      ],
+      [
+        -32.358,
+        -64.896,
+        1670,
+        3.4
+      ],
+      [
+        -32.3586,
+        -64.8948,
+        1655,
+        3.8
+      ],
+      [
+        -32.3592,
+        -64.8935,
+        1645,
+        4.1
+      ],
+      [
+        -32.3598,
+        -64.8922,
+        1630,
+        4.5
+      ],
+      [
+        -32.3605,
+        -64.891,
+        1620,
+        4.8
+      ],
+      [
+        -32.361,
+        -64.8898,
+        1612,
+        5.2
+      ],
+      [
+        -32.3614,
+        -64.8885,
+        1605,
+        5.5
+      ],
+      [
+        -32.3617,
+        -64.8878,
+        1600,
+        5.9
+      ],
+      [
+        -32.362,
+        -64.887,
+        1596,
+        6.2
+      ],
+      [
+        -32.363,
+        -64.888,
+        1602,
+        6.6
+      ],
+      [
+        -32.364,
+        -64.889,
+        1610,
+        7.0
+      ],
+      [
+        -32.3648,
+        -64.8902,
+        1650,
+        7.4
+      ],
+      [
+        -32.3655,
+        -64.8915,
+        1690,
+        7.8
+      ],
+      [
+        -32.3665,
+        -64.8928,
+        1755,
+        8.3
+      ],
+      [
+        -32.3675,
+        -64.894,
+        1820,
+        8.8
+      ],
+      [
+        -32.3685,
+        -64.8958,
+        1880,
+        9.3
+      ],
+      [
+        -32.3695,
+        -64.8975,
+        1940,
+        9.7
+      ],
+      [
+        -32.3702,
+        -64.8992,
+        1980,
+        10.1
+      ],
+      [
+        -32.371,
+        -64.901,
+        2010,
+        10.5
+      ],
+      [
+        -32.3692,
+        -64.9028,
+        2002,
+        10.9
+      ],
+      [
+        -32.3675,
+        -64.9045,
+        1995,
+        11.3
+      ],
+      [
+        -32.3658,
+        -64.9062,
+        1988,
+        11.7
+      ],
+      [
+        -32.364,
+        -64.908,
+        1980,
+        12.1
+      ],
+      [
+        -32.3618,
+        -64.9092,
+        1972,
+        12.5
+      ],
+      [
+        -32.3595,
+        -64.9105,
+        1965,
+        12.9
+      ],
+      [
+        -32.3572,
+        -64.9112,
+        1958,
+        13.3
+      ],
+      [
+        -32.355,
+        -64.912,
+        1950,
+        13.65
+      ]
+    ]
+  },
+  "salto-del-tigre": {
+    "id": "salto-del-tigre",
+    "title": "Salto del Tigre & Filo de los Comechingones",
+    "wikilocUrl": "https://www.wikiloc.com/hiking-trails/pueblo-escondido-y-cumbre-del-cerro-aspero-80317263",
+    "wikilocId": "80317263",
+    "location": "Filo Serrano, Villa de Merlo, San Luis",
+    "distanceKm": 7.2,
+    "distanceMi": 4.47,
+    "eleGainM": 280,
+    "eleGainFt": 918,
+    "eleLossM": 280,
+    "eleLossFt": 918,
+    "maxEleM": 1950,
+    "maxEleFt": 6397,
+    "minEleM": 1670,
+    "minEleFt": 5479,
+    "movingTime": "2h 30m",
+    "totalTime": "5h 00m",
+    "trailType": "Ida y Vuelta",
+    "difficulty": "Moderada",
+    "technical": "Sendero serrano de roca y pastizal de altura",
+    "center": [
+      -32.3565,
+      -64.904
+    ],
+    "zoom": 14,
+    "waypoints": [
+      {
+        "name": "Inicio / Parking 4x4 (Filo)",
+        "icon": "fa-solid fa-square-parking",
+        "lat": -32.355,
+        "lng": -64.912,
+        "ele": 1950,
+        "dist": 0.0,
+        "desc": "Inicio de senda en el Filo Comechingones."
+      },
+      {
+        "name": "Mirador Panorámico del Filo",
+        "icon": "fa-solid fa-binoculars",
+        "lat": -32.3565,
+        "lng": -64.905,
+        "ele": 1880,
+        "dist": 1.8,
+        "desc": "Vista amplia a las sierras y quebradas."
+      },
+      {
+        "name": "Cascada Salto del Tigre (22m)",
+        "icon": "fa-solid fa-water",
+        "lat": -32.358,
+        "lng": -64.896,
+        "ele": 1670,
+        "dist": 3.6,
+        "desc": "Olla de agua cristalina y cascada natural de 22 metros."
+      },
+      {
+        "name": "Retorno Parking 4x4",
+        "icon": "fa-solid fa-flag-checkered",
+        "lat": -32.355,
+        "lng": -64.912,
+        "ele": 1950,
+        "dist": 7.2,
+        "desc": "Ascenso de regreso al puesto del filo."
+      }
+    ],
+    "track": [
+      [
+        -32.355,
+        -64.912,
+        1950,
+        0.0
+      ],
+      [
+        -32.3556,
+        -64.909,
+        1925,
+        0.9
+      ],
+      [
+        -32.3565,
+        -64.905,
+        1880,
+        1.8
+      ],
+      [
+        -32.3572,
+        -64.901,
+        1780,
+        2.7
+      ],
+      [
+        -32.358,
+        -64.896,
+        1670,
+        3.6
+      ],
+      [
+        -32.3572,
+        -64.901,
+        1780,
+        4.5
+      ],
+      [
+        -32.3565,
+        -64.905,
+        1880,
+        5.4
+      ],
+      [
+        -32.3556,
+        -64.909,
+        1925,
+        6.3
+      ],
+      [
+        -32.355,
+        -64.912,
+        1950,
+        7.2
+      ]
+    ]
+  },
+  "cerro-de-las-ovejas": {
+    "id": "cerro-de-las-ovejas",
+    "title": "Cerro de Las Ovejas (2.280 msnm) — Techo de San Luis",
+    "wikilocUrl": "https://www.wikiloc.com/hiking-trails/pueblo-escondido-y-cumbre-del-cerro-aspero-80317263",
+    "wikilocId": "80317263",
+    "location": "Reserva Mogote Bayo, Villa de Merlo, San Luis",
+    "distanceKm": 12.0,
+    "distanceMi": 7.45,
+    "eleGainM": 1110,
+    "eleGainFt": 3641,
+    "eleLossM": 1110,
+    "eleLossFt": 3641,
+    "maxEleM": 2280,
+    "maxEleFt": 7480,
+    "minEleM": 1170,
+    "minEleFt": 3838,
+    "movingTime": "6h 15m",
+    "totalTime": "11h 30m",
+    "trailType": "Ida y Vuelta",
+    "difficulty": "Exigente / Alta Montaña",
+    "technical": "Gran desnivel continuo de 1.100m • Terreno agreste",
+    "center": [
+      -32.3365,
+      -64.968
+    ],
+    "zoom": 13,
+    "waypoints": [
+      {
+        "name": "Reserva Natural Mogote Bayo",
+        "icon": "fa-solid fa-tree",
+        "lat": -32.338,
+        "lng": -65.002,
+        "ele": 1170,
+        "dist": 0.0,
+        "desc": "Inicio de senda a 1.170 msnm con centro de interpretación."
+      },
+      {
+        "name": "Cerro Mogote Bayo",
+        "icon": "fa-solid fa-mountain",
+        "lat": -32.337,
+        "lng": -64.98,
+        "ele": 1550,
+        "dist": 2.5,
+        "desc": "Mirador clásico con vista panorámica de la Villa de Merlo."
+      },
+      {
+        "name": "Filo de las Sierras",
+        "icon": "fa-solid fa-arrows-split-up-and-left",
+        "lat": -32.336,
+        "lng": -64.958,
+        "ele": 1980,
+        "dist": 4.5,
+        "desc": "Llegada al filo cumbre divisoria de aguas."
+      },
+      {
+        "name": "Cumbre Cerro de Las Ovejas (2.280m)",
+        "icon": "fa-solid fa-flag-checkered",
+        "lat": -32.335,
+        "lng": -64.935,
+        "ele": 2280,
+        "dist": 6.0,
+        "desc": "El punto más alto de toda la provincia de San Luis."
+      },
+      {
+        "name": "Retorno a Base Mogote Bayo",
+        "icon": "fa-solid fa-house-chimney",
+        "lat": -32.338,
+        "lng": -65.002,
+        "ele": 1170,
+        "dist": 12.0,
+        "desc": "Descenso completo por la misma senda."
+      }
+    ],
+    "track": [
+      [
+        -32.338,
+        -65.002,
+        1170,
+        0.0
+      ],
+      [
+        -32.3375,
+        -64.991,
+        1360,
+        1.2
+      ],
+      [
+        -32.337,
+        -64.98,
+        1550,
+        2.5
+      ],
+      [
+        -32.3365,
+        -64.969,
+        1765,
+        3.5
+      ],
+      [
+        -32.336,
+        -64.958,
+        1980,
+        4.5
+      ],
+      [
+        -32.3355,
+        -64.9465,
+        2130,
+        5.2
+      ],
+      [
+        -32.335,
+        -64.935,
+        2280,
+        6.0
+      ],
+      [
+        -32.3355,
+        -64.9465,
+        2130,
+        6.8
+      ],
+      [
+        -32.336,
+        -64.958,
+        1980,
+        7.5
+      ],
+      [
+        -32.3365,
+        -64.969,
+        1765,
+        8.5
+      ],
+      [
+        -32.337,
+        -64.98,
+        1550,
+        9.5
+      ],
+      [
+        -32.3375,
+        -64.991,
+        1360,
+        10.8
+      ],
+      [
+        -32.338,
+        -65.002,
+        1170,
+        12.0
+      ]
+    ]
+  }
+};
+        let currentTrailKey = 'pueblo-escondido-cerro-aspero';
+        let currentTrail = TRAILS[currentTrailKey];
+
+        let map = null;
+        let mapLayers = {};
+        let activeTileLayer = null;
+        let trackPolyline = null;
+        let waypointMarkers = [];
+        let cursorMapMarker = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            initLeafletMap();
+            loadTrail(currentTrailKey);
+            initElevationCanvas();
+            window.addEventListener('resize', () => {
+                if (map) map.invalidateSize();
+                drawElevationProfile(currentTrail);
+            });
+        });
+
+        // 1. Inicializar Mapa Leaflet
+        function initLeafletMap() {
+            map = L.map('mainTrailMap', {
+                zoomControl: false,
+                scrollWheelZoom: true,
+                attributionControl: false
+            });
+
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            // Capas
+            mapLayers.satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19
+            });
+
+            mapLayers.topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                maxZoom: 17
+            });
+
+            mapLayers.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19
+            });
+
+            // Capa por defecto: Satelital HD
+            activeTileLayer = mapLayers.satellite;
+            activeTileLayer.addTo(map);
+
+            // Marcador cursor dinámico sincronizado
+            const cursorIcon = L.divIcon({
+                className: 'custom-map-marker',
+                html: `<div class="relative flex items-center justify-center">
+                          <span class="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-amber-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-400 border-2 border-stone-950 shadow-xl"></span>
+                       </div>`,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+            cursorMapMarker = L.marker([0, 0], { icon: cursorIcon });
+        }
+
+        function setMapLayer(type) {
+            if (activeTileLayer) map.removeLayer(activeTileLayer);
+            activeTileLayer = mapLayers[type];
+            activeTileLayer.addTo(map);
+
+            ['btnLayerSat', 'btnLayerTopo', 'btnLayerOsm'].forEach(id => {
+                const b = document.getElementById(id);
+                if (b) {
+                    b.className = 'px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5';
+                }
+            });
+
+            const activeBtn = type === 'satellite' ? 'btnLayerSat' : (type === 'topo' ? 'btnLayerTopo' : 'btnLayerOsm');
+            const ab = document.getElementById(activeBtn);
+            if (ab) {
+                ab.className = 'px-3 py-1.5 rounded-xl bg-stone-900/90 text-white font-bold text-xs border border-amber-500 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5';
+            }
+        }
+
+        // 2. Cargar Sendero
+        function changeTrail(trailKey) {
+            currentTrailKey = trailKey;
+            currentTrail = TRAILS[trailKey];
+            const sel1 = document.getElementById('trailSelect');
+            const sel2 = document.getElementById('trailSelectMobile');
+            if (sel1) sel1.value = trailKey;
+            if (sel2) sel2.value = trailKey;
+            loadTrail(trailKey);
+        }
+
+        function loadTrail(trailKey) {
+            const t = TRAILS[trailKey];
+            if (!t) return;
+
+            // Actualizar encabezados y textos
+            document.getElementById('trailTitle').innerText = t.title;
+            document.getElementById('trailLocation').innerText = t.location;
+            document.getElementById('statDist').innerText = `${t.distanceKm} km`;
+            document.getElementById('statDistMi').innerText = `(${t.distanceMi} mi)`;
+            document.getElementById('statType').innerText = t.trailType;
+            document.getElementById('statEleGain').innerText = `+${t.eleGainM} m`;
+            document.getElementById('statEleGainFt').innerText = `(+${t.eleGainFt} ft)`;
+            document.getElementById('statEleLoss').innerText = `-${t.eleLossM} m`;
+            document.getElementById('statEleLossFt').innerText = `(-${t.eleLossFt} ft)`;
+            document.getElementById('statMaxEle').innerText = `${t.maxEleM} m`;
+            document.getElementById('statMaxEleFt').innerText = `(${t.maxEleFt} ft - Cumbre)`;
+            document.getElementById('statMinEle').innerText = `${t.minEleM} m`;
+            document.getElementById('statMinEleFt').innerText = `(${t.minEleFt} ft - Cañón)`;
+            document.getElementById('statMovingTime').innerText = t.movingTime;
+            document.getElementById('statTotalTime').innerText = `Total: ${t.totalTime}`;
+            document.getElementById('statDifficulty').innerText = t.difficulty;
+            document.getElementById('btnWikilocOfficial').href = t.wikilocUrl;
+
+            // Waypoints lista
+            const wpContainer = document.getElementById('waypointsList');
+            document.getElementById('waypointsCountBadge').innerText = `${t.waypoints.length} puntos`;
+            wpContainer.innerHTML = t.waypoints.map((wp, idx) => `
+                <div onclick="flyToWaypoint(${wp.lat}, ${wp.lng}, '${wp.name}', '${wp.desc}', ${wp.ele})" class="p-3 rounded-xl bg-stone-950/70 hover:bg-stone-800 border border-stone-800/80 hover:border-amber-500/50 cursor-pointer transition-all flex items-start gap-3 group">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-400 group-hover:text-stone-950 flex items-center justify-center text-xs shrink-0 transition-colors">
+                        <i class="${wp.icon}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="font-bold text-white text-xs truncate group-hover:text-amber-400 transition-colors">${wp.name}</span>
+                            <span class="text-[10px] text-amber-400 font-bold shrink-0">${wp.ele}m</span>
+                        </div>
+                        <p class="text-[11px] text-stone-400 line-clamp-2 mt-0.5">${wp.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Limpiar marcadores anteriores
+            if (trackPolyline) map.removeLayer(trackPolyline);
+            waypointMarkers.forEach(m => map.removeLayer(m));
+            waypointMarkers = [];
+            if (cursorMapMarker && map.hasLayer(cursorMapMarker)) map.removeLayer(cursorMapMarker);
+
+            // Dibujar Polyline naranja estilo Wikiloc
+            const latlngs = t.track.map(p => [p[0], p[1]]);
+            trackPolyline = L.polyline(latlngs, {
+                color: '#ff7000',
+                weight: 5,
+                opacity: 0.95,
+                lineJoin: 'round'
+            }).addTo(map);
+
+            // Crear Marcadores de Waypoints con iconos personalizados
+            t.waypoints.forEach(wp => {
+                const icon = L.divIcon({
+                    className: 'custom-map-marker',
+                    html: `<div class="flex items-center gap-1.5 bg-stone-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-2xl hover:scale-110 transition-transform">
+                              <span class="w-5 h-5 rounded-lg bg-amber-500 text-stone-950 flex items-center justify-center text-[10px]"><i class="${wp.icon}"></i></span>
+                              <span class="truncate max-w-[100px]">${wp.name}</span>
+                           </div>`,
+                    iconSize: [120, 26],
+                    iconAnchor: [60, 13]
+                });
+
+                const marker = L.marker([wp.lat, wp.lng], { icon })
+                    .bindPopup(`<div class="p-1">
+                                  <h4 class="font-bold text-amber-400 text-xs mb-1"><i class="${wp.icon} mr-1"></i> ${wp.name}</h4>
+                                  <div class="text-[11px] text-stone-300 mb-1.5">${wp.desc}</div>
+                                  <div class="text-[10px] text-stone-400 font-semibold">Altitud: <b>${wp.ele} msnm</b> • Km <b>${wp.dist}</b></div>
+                                </div>`)
+                    .addTo(map);
+                waypointMarkers.push(marker);
+            });
+
+            // Ajustar vista del mapa
+            fitCurrentTrail();
+
+            // Dibujar perfil de elevación
+            drawElevationProfile(t);
+        }
+
+        function fitCurrentTrail() {
+            if (trackPolyline) {
+                map.fitBounds(trackPolyline.getBounds(), { padding: [50, 50] });
+            }
+        }
+
+        function flyToWaypoint(lat, lng, name, desc, ele) {
+            map.flyTo([lat, lng], 16, { duration: 1.2 });
+            const m = waypointMarkers.find(w => {
+                const pos = w.getLatLng();
+                return Math.abs(pos.lat - lat) < 0.0001 && Math.abs(pos.lng - lng) < 0.0001;
+            });
+            if (m) setTimeout(() => m.openPopup(), 1250);
+        }
+
+        // 3. Gráfico Altimétrico Interactivo en Canvas con Hover Sync
+        let canvas = null;
+        let ctx = null;
+
+        function initElevationCanvas() {
+            canvas = document.getElementById('elevationCanvas');
+            ctx = canvas.getContext('2d');
+
+            canvas.addEventListener('mousemove', handleCanvasHover);
+            canvas.addEventListener('touchmove', handleCanvasTouch, { passive: false });
+            canvas.addEventListener('mouseleave', () => {
+                if (cursorMapMarker && map.hasLayer(cursorMapMarker)) {
+                    map.removeLayer(cursorMapMarker);
+                }
+            });
+        }
+
+        function drawElevationProfile(t, activeIndex = -1) {
+            if (!canvas) return;
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = rect.height;
+            const pts = t.track;
+            if (!pts || pts.length < 2) return;
+
+            const minEle = t.minEleM - 50;
+            const maxEle = t.maxEleM + 50;
+            const totalDist = t.distanceKm;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Coordenadas del polígono del perfil
+            const getCanvasX = (dist) => (dist / totalDist) * w;
+            const getCanvasY = (ele) => h - ((ele - minEle) / (maxEle - minEle)) * (h - 20) - 10;
+
+            // Gradiente relleno de montaña (verde en valle a naranja/oro en cumbre)
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, 'rgba(255, 112, 0, 0.85)');
+            grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.7)');
+            grad.addColorStop(1, 'rgba(16, 185, 129, 0.3)');
+
+            ctx.beginPath();
+            ctx.moveTo(0, h);
+            pts.forEach(p => {
+                ctx.lineTo(getCanvasX(p[3]), getCanvasY(p[2]));
+            });
+            ctx.lineTo(w, h);
+            ctx.closePath();
+            ctx.fillStyle = grad;
+            ctx.fill();
+
+            // Línea superior de cresta
+            ctx.beginPath();
+            pts.forEach((p, i) => {
+                if (i === 0) ctx.moveTo(getCanvasX(p[3]), getCanvasY(p[2]));
+                else ctx.lineTo(getCanvasX(p[3]), getCanvasY(p[2]));
+            });
+            ctx.strokeStyle = '#ff7000';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Dibujar cursor activo si hay hover
+            if (activeIndex >= 0 && activeIndex < pts.length) {
+                const activePt = pts[activeIndex];
+                const cx = getCanvasX(activePt[3]);
+                const cy = getCanvasY(activePt[2]);
+
+                // Línea vertical
+                ctx.beginPath();
+                ctx.moveTo(cx, 0);
+                ctx.lineTo(cx, h);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.setLineDash([4, 4]);
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Punto en curva
+                ctx.beginPath();
+                ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ff7000';
+                ctx.stroke();
+            }
+
+            // Etiquetas de inicio y fin
+            const lblStart = document.getElementById('lblStartKm');
+            const lblEnd = document.getElementById('lblEndKm');
+            if (lblStart) lblStart.innerText = `0.0 km (${pts[0][2]}m)`;
+            if (lblEnd) lblEnd.innerText = `${totalDist} km (${pts[pts.length - 1][2]}m)`;
+        }
+
+        function handleCanvasHover(e) {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            processElevationScrub(mouseX, rect.width);
+        }
+
+        function handleCanvasTouch(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const touchX = touch.clientX - rect.left;
+            processElevationScrub(touchX, rect.width);
+        }
+
+        function processElevationScrub(x, totalWidth) {
+            const t = currentTrail;
+            if (!t) return;
+            const pts = t.track;
+            const frac = Math.max(0, Math.min(1, x / totalWidth));
+            const targetDist = frac * t.distanceKm;
+
+            // Encontrar punto más cercano
+            let closestIdx = 0;
+            let minDiff = 999999;
+            pts.forEach((p, idx) => {
+                const diff = Math.abs(p[3] - targetDist);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIdx = idx;
+                }
+            });
+
+            const pt = pts[closestIdx];
+            document.getElementById('chartTooltip').innerText = `Km ${pt[3]} • ${pt[2]} msnm`;
+
+            // Mover cursor dinámico en el mapa Leaflet
+            if (cursorMapMarker) {
+                cursorMapMarker.setLatLng([pt[0], pt[1]]);
+                if (!map.hasLayer(cursorMapMarker)) {
+                    cursorMapMarker.addTo(map);
+                }
+            }
+
+            drawElevationProfile(t, closestIdx);
+        }
+
+        // 4. Descargar archivo GPX Oficial
+        function downloadGPX() {
+            const t = currentTrail;
+            if (!t) return;
+
+            let gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Merlo Aventura - Guías Oficiales" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>${t.title}</name>
+    <desc>Track oficial de senderismo por Merlo Aventura en las Sierras de los Comechingones, San Luis.</desc>
+    <link href="${t.wikilocUrl}">
+      <text>Ver en Wikiloc Oficial</text>
+    </link>
+  </metadata>
+`;
+
+            // Waypoints
+            t.waypoints.forEach(w => {
+                gpxContent += `  <wpt lat="${w.lat}" lon="${w.lng}">
+    <ele>${w.ele}</ele>
+    <name>${w.name}</name>
+    <desc>${w.desc}</desc>
+  </wpt>
+`;
+            });
+
+            // Track points
+            gpxContent += `  <trk>
+    <name>${t.title}</name>
+    <trkseg>
+`;
+            t.track.forEach(p => {
+                gpxContent += `      <trkpt lat="${p[0]}" lon="${p[1]}">
+        <ele>${p[2]}</ele>
+      </trkpt>
+`;
+            });
+            gpxContent += `    </trkseg>
+  </trk>
+</gpx>`;
+
+            const blob = new Blob([gpxContent], { type: 'application/gpx+xml;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${t.id}-merlo-aventura.gpx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
