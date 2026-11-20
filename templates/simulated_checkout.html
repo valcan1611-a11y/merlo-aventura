@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Mercado Pago (Modo Demo) | Merlo Aventura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-100 font-sans min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Top MP Nav -->
+    <header class="bg-sky-500 text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-handshake text-2xl"></i>
+                <span class="font-extrabold text-xl tracking-tight">mercado pago</span>
+                <span class="bg-sky-700 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ml-2">Checkout Pro</span>
+            </div>
+            <div class="text-xs text-sky-100 flex items-center gap-1">
+                <i class="fa-solid fa-lock"></i> Compra Protegida
+            </div>
+        </div>
+    </header>
+
+    <!-- Info Notice -->
+    <div class="max-w-3xl mx-auto px-4 mt-6 w-full">
+        <div class="bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3 shadow-sm">
+            <i class="fa-solid fa-circle-info text-amber-600 text-lg mt-0.5"></i>
+            <div>
+                <strong class="font-bold text-amber-950 block mb-1">Entorno de Simulación Interactivo:</strong>
+                Este es el simulador integrado de Mercado Pago para probar el flujo de compra. Cuando configures tu <code>Access Token</code> oficial en el <strong>Panel de Administración</strong>, los clientes serán dirigidos directamente a la pasarela oficial de Mercado Pago.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Payment Container -->
+    <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-1">
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+            
+            <!-- Summary Header -->
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-slate-500 font-bold block mb-1">Vendedor: Merlo Aventura</span>
+                    <h1 class="text-xl font-extrabold text-slate-900">{{ booking.excursion_name }}</h1>
+                    <p class="text-xs text-slate-600 mt-1">
+                        Reserva #{{ booking.code }} • {{ booking.total_passengers }} pasajeros ({{ booking.tour_date }} - {{ booking.tour_time }} hs)
+                    </p>
+                </div>
+                <div class="text-left sm:text-right">
+                    <span class="text-xs text-slate-500 uppercase font-semibold block">Total a Pagar</span>
+                    <span class="text-3xl font-black text-slate-900">${{ '{:,.2f}'.format(booking.total_price) }}</span>
+                    <span class="text-xs text-slate-500 block">ARS</span>
+                </div>
+            </div>
+
+            <!-- Payment Simulation Options -->
+            <div class="p-6 sm:p-8 space-y-6">
+                <h2 class="font-bold text-base text-slate-900">Seleccioná cómo querés simular el pago:</h2>
+
+                <!-- Payment methods -->
+                <div class="space-y-3">
+                    
+                    <label class="flex items-center justify-between p-4 rounded-2xl border-2 border-sky-500 bg-sky-50/50 cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" name="sim_method" value="cc" checked class="text-sky-600">
+                            <div>
+                                <div class="font-bold text-slate-900 text-sm">Tarjeta de Crédito / Débito (Visa, Mastercard, Cabal)</div>
+                                <div class="text-xs text-slate-500">Hasta 3, 6 o 12 cuotas fijas</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-credit-card text-sky-500 text-xl"></i>
+                    </label>
+
+                    <label class="flex items-center justify-between p-4 rounded-2xl border border-slate-200 hover:border-slate-300 cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" name="sim_method" value="mp_balance" class="text-sky-600">
+                            <div>
+                                <div class="font-bold text-slate-900 text-sm">Dinero en cuenta de Mercado Pago</div>
+                                <div class="text-xs text-slate-500">Débito instantáneo</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-wallet text-slate-400 text-xl"></i>
+                    </label>
+
+                </div>
+
+                <!-- Simulation Action Buttons -->
+                <div class="pt-6 border-t border-slate-200 space-y-3">
+                    <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Probar Resultados del Checkout:</span>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a href="/reserva/confirmacion?code={{ booking.code }}&status=approved&payment_id=SIM-{{ booking.code }}-OK" 
+                           class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-center text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Simular Pago Aprobado</span>
+                        </a>
+
+                        <a href="/reserva/confirmacion?code={{ booking.code }}&status=pending&payment_id=SIM-{{ booking.code }}-PND" 
+                           class="w-full py-3.5 px-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-center text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Simular Pago Pendiente</span>
+                        </a>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <a href="/" class="text-xs text-slate-500 hover:text-slate-800 transition-colors">
+                            &larr; Cancelar y volver al sitio
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-slate-500 border-t border-slate-200 bg-white">
+        Mercado Pago • Simulación de integración para Merlo Aventura • Villa de Merlo, San Luis
+    </footer>
+
+</body>
+</html>

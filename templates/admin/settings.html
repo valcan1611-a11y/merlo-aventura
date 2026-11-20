@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuración de Pagos & Sistema | Merlo Aventura{% endblock %}
+
+{% block content %}
+<div class="py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Top Nav Header -->
+    <div class="flex items-center justify-between pb-6 border-b border-stone-800 mb-8">
+        <div>
+            <div class="flex items-center gap-2">
+                <a href="{{ url_for('admin_dashboard') }}" class="text-xs text-amber-500 hover:text-amber-400 font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Panel
+                </a>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-heading font-black text-white mt-2">Configuración General</h1>
+            <p class="text-xs text-stone-400">Credenciales de Mercado Pago, cuentas bancarias y datos de contacto</p>
+        </div>
+
+        <a href="{{ url_for('admin_logout') }}" class="text-xs text-rose-400 hover:text-rose-300">
+            Cerrar Sesión
+        </a>
+    </div>
+
+    <!-- Settings Form -->
+    <form method="POST" action="{{ url_for('admin_settings') }}" class="space-y-8">
+        
+        <!-- SECTION 1: MERCADO PAGO INTEGRATION -->
+        <div class="bg-sierra-950 p-6 sm:p-8 rounded-3xl border-2 border-sky-500/30 shadow-xl space-y-6">
+            <div class="flex items-center gap-3 pb-4 border-b border-stone-800">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-credit-card"></i>
+                </div>
+                <div>
+                    <h2 class="font-heading font-bold text-lg text-white">Pasarela de Mercado Pago (API Oficial)</h2>
+                    <p class="text-xs text-stone-400">Checkout Pro para cobrar con tarjetas de crédito, débito y dinero en cuenta</p>
+                </div>
+            </div>
+
+            <div class="bg-stone-900/80 p-4 rounded-2xl border border-stone-800 text-xs text-stone-300 space-y-2">
+                <div class="flex items-center gap-2 font-semibold text-white">
+                    <i class="fa-solid fa-lightbulb text-amber-400"></i> ¿Cómo obtener tus credenciales de Mercado Pago?
+                </div>
+                <p>1. Ingresá a <a href="https://www.mercadopago.com.ar/developers/panel/app" target="_blank" class="text-sky-400 underline font-semibold">mercadopago.com.ar/developers</a> con tu cuenta de Mercado Pago.</p>
+                <p>2. Creá una aplicación o entrá a tus <strong>Credenciales de producción / prueba</strong>.</p>
+                <p>3. Copiá tu <code>Access Token</code> (empieza con <em>APP_USR-</em> o <em>TEST-</em>) y pegalo acá abajo:</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">
+                        Mercado Pago Access Token <span class="text-amber-500">*</span>
+                    </label>
+                    <input type="password" name="mp_access_token" value="{{ settings.mp_access_token }}" placeholder="APP_USR-xxxxxx-xxxxxx... o TEST-xxxxxx..." class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:border-sky-500 outline-none">
+                    <span class="text-[11px] text-stone-500 mt-1 block">Tu clave privada para generar las preferencias de cobro de forma segura.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">
+                        Mercado Pago Public Key (Opcional)
+                    </label>
+                    <input type="text" name="mp_public_key" value="{{ settings.mp_public_key }}" placeholder="APP_USR-xxxxxx... o TEST-xxxxxx..." class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:border-sky-500 outline-none">
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <input type="checkbox" id="mpSandboxCheck" name="mp_sandbox" value="true" {% if settings.mp_sandbox == 'true' %}checked{% endif %} class="w-4 h-4 rounded text-sky-500 bg-stone-900 border-stone-700">
+                    <label for="mpSandboxCheck" class="text-xs text-stone-300 cursor-pointer">
+                        Habilitar <strong>Modo Sandbox / Prueba</strong> (recomendado para probar antes de salir a producción).
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: DATOS BANCARIOS (TRANSFERENCIAS) -->
+        <div class="bg-sierra-950 p-6 sm:p-8 rounded-3xl border border-stone-800 shadow-xl space-y-6">
+            <div class="flex items-center gap-3 pb-4 border-b border-stone-800">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <div>
+                    <h2 class="font-heading font-bold text-lg text-white">Datos para Transferencias Bancarias</h2>
+                    <p class="text-xs text-stone-400">La información que ven los clientes cuando eligen pagar por transferencia</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Nombre del Banco</label>
+                    <input type="text" name="bank_name" value="{{ settings.bank_name }}" placeholder="Ej: Banco Galicia" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Titular de la Cuenta</label>
+                    <input type="text" name="bank_account_holder" value="{{ settings.bank_account_holder }}" placeholder="Ej: Merlo Aventura SRL" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">CUIT / CUIL</label>
+                    <input type="text" name="bank_cuit" value="{{ settings.bank_cuit }}" placeholder="Ej: 30-71829384-9" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Alias Bancario</label>
+                    <input type="text" name="bank_alias" value="{{ settings.bank_alias }}" placeholder="Ej: MERLO.AVENTURA.4X4" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-amber-500 outline-none">
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">CBU (22 dígitos)</label>
+                    <input type="text" name="bank_cbu" value="{{ settings.bank_cbu }}" placeholder="0070123430004059683921" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-amber-500 outline-none">
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">CVU (Billeteras Virtuales Mercado Pago / Ualá)</label>
+                    <input type="text" name="bank_cvu" value="{{ settings.bank_cvu }}" placeholder="0000003100098472819401" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-amber-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: CONTACTO Y WHATSAPP -->
+        <div class="bg-sierra-950 p-6 sm:p-8 rounded-3xl border border-stone-800 shadow-xl space-y-6">
+            <div class="flex items-center gap-3 pb-4 border-b border-stone-800">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-address-book"></i>
+                </div>
+                <div>
+                    <h2 class="font-heading font-bold text-lg text-white">Canales de Contacto & Base</h2>
+                    <p class="text-xs text-stone-400">Datos mostrados en el encabezado, pie de página y botones de WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">WhatsApp Visible (Formato con espacios)</label>
+                    <input type="text" name="whatsapp_number" value="{{ settings.whatsapp_number }}" placeholder="+54 9 2664 12-3456" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">WhatsApp Numérico (Solo números sin + ni espacios)</label>
+                    <input type="text" name="whatsapp_raw" value="{{ settings.whatsapp_raw }}" placeholder="5492664123456" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-amber-500 outline-none">
+                    <span class="text-[10px] text-stone-500 mt-0.5 block">Usado para generar los links wa.me/</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Email de Notificaciones</label>
+                    <input type="email" name="contact_email" value="{{ settings.contact_email }}" placeholder="reservas@merloaventura.com.ar" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Dirección de la Base en Merlo</label>
+                    <input type="text" name="address" value="{{ settings.address }}" placeholder="Av. del Sol 650, Villa de Merlo, San Luis" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SEGURIDAD DEL PANEL -->
+        <div class="bg-sierra-950 p-6 sm:p-8 rounded-3xl border border-stone-800 shadow-xl space-y-4">
+            <h2 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-500"></i> Contraseña de Administrador
+            </h2>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Contraseña de Acceso al Panel</label>
+                <input type="text" name="admin_password" value="{{ settings.admin_password }}" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-amber-500 outline-none">
+            </div>
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <div class="pt-4 flex items-center justify-between">
+            <a href="{{ url_for('admin_dashboard') }}" class="text-xs text-stone-400 hover:text-white transition-colors">
+                Cancelar cambios
+            </a>
+            <button type="submit" class="px-8 py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black text-xs uppercase tracking-wider rounded-xl shadow-xl shadow-amber-500/20 transition-all">
+                Guardar Toda la Configuración
+            </button>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}

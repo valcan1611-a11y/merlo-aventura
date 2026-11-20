@@ -1,0 +1,194 @@
+<!-- Modal Backdrop & Container -->
+<div id="bookingModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm transition-opacity" onclick="closeBookingModal()"></div>
+
+    <div class="flex min-h-screen items-center justify-center p-4 sm:p-6 text-center">
+        <!-- Modal Card -->
+        <div class="relative w-full max-w-2xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl transition-all my-8">
+            
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-sierra-950 to-stone-900 px-6 py-5 border-b border-stone-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-white" id="modal-title">Reservar Excursión 4x4</h3>
+                        <p class="text-xs text-stone-400">Merlo Aventura • Villa de Merlo, San Luis</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeBookingModal()" class="rounded-xl p-2 text-stone-400 hover:text-white hover:bg-stone-800 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Form) -->
+            <form id="bookingForm" onsubmit="handleBookingSubmit(event)" class="p-6 space-y-6">
+                
+                <!-- Step indicator / progress -->
+                <div class="flex items-center justify-between text-xs font-semibold text-stone-400 border-b border-stone-800/80 pb-3">
+                    <span class="flex items-center gap-1.5 text-amber-400"><i class="fa-solid fa-1"></i> Excursión & Fecha</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-stone-600"></i>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-2"></i> Tus Datos</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-stone-600"></i>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-3"></i> Medio de Pago</span>
+                </div>
+
+                <!-- Section 1: Excursion Selection -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">1. Seleccioná tu Excursión</label>
+                        <select id="modalExcursionSelect" name="excursion_id" required onchange="onExcursionChanged()" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all outline-none">
+                            <!-- Populated dynamically or via Jinja -->
+                            {% for exc in excursions %}
+                                <option value="{{ exc.id }}" data-price-adult="{{ exc.price_adult }}" data-price-child="{{ exc.price_child }}" data-times='{{ exc.departure_times }}' data-name="{{ exc.name }}">
+                                    {{ exc.name }} — ${{ '{:,.0f}'.format(exc.price_adult) }} ARS
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Date & Shift Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                                <i class="fa-regular fa-calendar mr-1 text-amber-500"></i> Fecha de la Salida
+                            </label>
+                            <input type="text" id="modalDatePicker" name="tour_date" required placeholder="Seleccioná una fecha..." class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all outline-none cursor-pointer">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                                <i class="fa-regular fa-clock mr-1 text-amber-500"></i> Turno / Horario
+                            </label>
+                            <select id="modalTimeSelect" name="tour_time" required onchange="checkSlotAvailability()" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all outline-none">
+                                <option value="09:00">Turno Mañana (09:00 hs)</option>
+                                <option value="14:30">Turno Tarde (14:30 hs)</option>
+                            </select>
+                            <div id="availabilityBadge" class="mt-1.5 text-xs font-medium text-emerald-400 flex items-center gap-1 hidden">
+                                <i class="fa-solid fa-circle-check text-[10px]"></i> <span id="availabilityText">Lugares disponibles</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Passengers counter -->
+                    <div class="bg-stone-950/60 border border-stone-800 rounded-2xl p-4">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-3">Cantidad de Pasajeros</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            <!-- Adultos -->
+                            <div class="flex items-center justify-between bg-stone-900 border border-stone-800 p-3 rounded-xl">
+                                <div>
+                                    <div class="font-semibold text-sm text-white">Adultos</div>
+                                    <div class="text-xs text-amber-500" id="adultPriceLabel">$0</div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" onclick="changeCount('adults', -1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&minus;</button>
+                                    <span id="adultCountDisplay" class="font-bold text-white w-6 text-center">1</span>
+                                    <input type="hidden" id="adultsInput" name="adults" value="1">
+                                    <button type="button" onclick="changeCount('adults', 1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&plus;</button>
+                                </div>
+                            </div>
+
+                            <!-- Menores -->
+                            <div class="flex items-center justify-between bg-stone-900 border border-stone-800 p-3 rounded-xl">
+                                <div>
+                                    <div class="font-semibold text-sm text-white">Menores (hasta 11 años)</div>
+                                    <div class="text-xs text-amber-500" id="childPriceLabel">$0</div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" onclick="changeCount('children', -1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&minus;</button>
+                                    <span id="childCountDisplay" class="font-bold text-white w-6 text-center">0</span>
+                                    <input type="hidden" id="childrenInput" name="children" value="0">
+                                    <button type="button" onclick="changeCount('children', 1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&plus;</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Customer details -->
+                <div class="space-y-4 pt-2 border-t border-stone-800/80">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">2. Datos de Contacto & Pasajero Responsable</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" name="customer_name" required placeholder="Nombre y Apellido *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <input type="tel" name="customer_phone" required placeholder="WhatsApp / Teléfono (ej: 2664123456) *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <input type="email" name="customer_email" required placeholder="Correo electrónico para voucher *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <input type="text" name="customer_dni" placeholder="DNI o Pasaporte" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="text" name="hotel_address" placeholder="Hotel o Cabaña en Merlo (para coordinar el pick up en 4x4)" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                    </div>
+                </div>
+
+                <!-- Section 3: Payment method -->
+                <div class="space-y-3 pt-2 border-t border-stone-800/80">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">3. Elegí cómo abonar</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- Mercado Pago Option -->
+                        <label class="relative flex flex-col p-4 bg-stone-950 border-2 border-stone-700 rounded-2xl cursor-pointer hover:border-sky-500/80 transition-all group payment-card has-[:checked]:border-sky-500 has-[:checked]:bg-sky-950/20">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-bold">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                    </div>
+                                    <span class="font-bold text-sm text-white">Mercado Pago</span>
+                                </div>
+                                <input type="radio" name="payment_method" value="mercadopago" checked class="text-sky-500 focus:ring-sky-500">
+                            </div>
+                            <p class="text-xs text-stone-400 leading-tight">Tarjetas de crédito, débito, dinero en cuenta MP y cuotas sin complicaciones.</p>
+                            <span class="inline-block mt-2 text-[10px] text-sky-400 font-semibold uppercase tracking-wider">Acreditación Inmediata</span>
+                        </label>
+
+                        <!-- Bank Transfer Option -->
+                        <label class="relative flex flex-col p-4 bg-stone-950 border-2 border-stone-700 rounded-2xl cursor-pointer hover:border-emerald-500/80 transition-all group payment-card has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-950/20">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold">
+                                        <i class="fa-solid fa-building-columns"></i>
+                                    </div>
+                                    <span class="font-bold text-sm text-white">Transferencia Bancaria</span>
+                                </div>
+                                <input type="radio" name="payment_method" value="transferencia" class="text-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <p class="text-xs text-stone-400 leading-tight">Transferí directo a nuestra cuenta por CBU o Alias y adjuntá tu comprobante.</p>
+                            <span class="inline-block mt-2 text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Alias & CBU Directo</span>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Price summary footer -->
+                <div class="bg-sierra-950 p-4 rounded-2xl border border-stone-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-stone-400 block">Total a pagar:</span>
+                        <div class="text-2xl font-heading font-black text-amber-400" id="modalTotalPriceDisplay">$0 ARS</div>
+                    </div>
+                    <button type="submit" id="submitBookingBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:-translate-y-0.5 transition-all text-sm flex items-center gap-2">
+                        <span>Continuar al Pago</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Status alert container -->
+                <div id="bookingAlert" class="hidden p-4 rounded-xl text-xs font-semibold"></div>
+
+            </form>
+        </div>
+    </div>
+</div>

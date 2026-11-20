@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Merlo Aventura | Excursiones 4x4 en Merlo, San Luis{% endblock %}</title>
+    <meta name="description" content="Travesías en camioneta 4x4 en las Sierras de los Comechingones, Villa de Merlo, San Luis. Cerro Áspero, Pueblo Escondido, Filo Serrano y cascadas secretas.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fbf8f2',
+                            100: '#f5efe0',
+                            200: '#ebddbe',
+                            300: '#dec497',
+                            400: '#d1a86e',
+                            500: '#c58e4b',
+                            600: '#b2753a',
+                            700: '#945b30',
+                            800: '#79482b',
+                            900: '#643c26',
+                            950: '#381f13',
+                        },
+                        sierra: {
+                            800: '#1c2421',
+                            900: '#111715',
+                            950: '#0a0e0d'
+                        },
+                        aventura: {
+                            amber: '#e67e22',
+                            orange: '#d35400',
+                            green: '#27ae60',
+                            darkgreen: '#1e824c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Flatpickr Datepicker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_orange.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-stone-900 text-stone-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white text-xs md:text-sm py-1.5 px-4 sm:px-6 flex items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-center gap-2 mx-auto md:mx-0">
+            <i class="fa-solid fa-mountain-sun"></i>
+            <span>Temporada 2026: <strong>Reservá con anticipación tus cupos en camionetas 4x4</strong>.</span>
+        </div>
+        <!-- Cartel trasladado a la esquina superior derecha del banner de arriba -->
+        <div class="hidden sm:inline-flex items-center gap-2 bg-stone-950/50 border border-amber-300/40 text-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full tracking-wider uppercase backdrop-blur-sm shrink-0 shadow-sm">
+            <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+            </span>
+            <span>VILLA DE MERLO, SAN LUIS • SIERRAS DE LOS COMECHINGONES</span>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header id="mainNavbar" class="sticky top-0 z-40 transition-all duration-300 bg-sierra-950/90 backdrop-blur-md border-b border-stone-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <a href="{{ url_for('index') }}" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-600/20 group-hover:scale-105 transition-transform duration-200">
+                        <i class="fa-solid fa-truck-pickup text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-black text-xl md:text-2xl tracking-tight text-white flex items-center gap-1.5">
+                            MERLO <span class="text-amber-500">AVENTURA</span>
+                        </span>
+                        <span class="block text-[10px] md:text-xs text-stone-400 font-medium tracking-widest uppercase">
+                            Excursiones 4x4 • Sierras de San Luis
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-stone-300">
+                    <a href="{{ url_for('index') }}#excursiones" class="hover:text-amber-400 transition-colors">Excursiones 4x4</a>
+                    <a href="{{ url_for('index') }}#vehiculos" class="hover:text-amber-400 transition-colors">Nuestras Camionetas</a>
+                    <a href="{{ url_for('index') }}#como-funciona" class="hover:text-amber-400 transition-colors">Cómo Reservar</a>
+                    <a href="{{ url_for('index') }}#opiniones" class="hover:text-amber-400 transition-colors">Opiniones</a>
+                    <a href="{{ url_for('index') }}#faq" class="hover:text-amber-400 transition-colors">Preguntas</a>
+                    <a href="{{ url_for('index') }}#contacto" class="hover:text-amber-400 transition-colors">Contacto</a>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden sm:flex items-center gap-4">
+                    <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}" target="_blank" rel="noopener" class="text-stone-300 hover:text-emerald-400 transition-colors p-2 text-lg" title="Escribinos por WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    
+                    <button onclick="openBookingModal()" class="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-stone-900 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full shadow-lg shadow-amber-500/25 hover:from-amber-300 hover:to-amber-400 hover:shadow-amber-500/40 hover:-translate-y-0.5 transition-all duration-200">
+                        <i class="fa-solid fa-calendar-check mr-2"></i>
+                        Reservar Online
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button onclick="openBookingModal()" class="px-3.5 py-1.5 text-xs font-bold text-stone-900 bg-amber-400 rounded-full shadow">
+                        Reservar
+                    </button>
+                    <button id="mobileMenuBtn" class="text-stone-300 hover:text-white p-2 text-2xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-sierra-950 border-b border-stone-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="{{ url_for('index') }}#excursiones" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Excursiones 4x4</a>
+            <a href="{{ url_for('index') }}#vehiculos" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Nuestras Camionetas</a>
+            <a href="{{ url_for('index') }}#como-funciona" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Cómo Reservar</a>
+            <a href="{{ url_for('index') }}#opiniones" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Opiniones</a>
+            <a href="{{ url_for('index') }}#faq" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Preguntas Frecuentes</a>
+            <a href="{{ url_for('index') }}#contacto" class="block py-2 text-stone-300 hover:text-amber-400">Contacto & Ubicación</a>
+            <div class="pt-2 flex flex-col gap-2">
+                <button onclick="openBookingModal()" class="w-full py-3 text-center text-stone-900 font-bold bg-amber-400 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-calendar-check mr-2"></i> Reservar Excursión
+                </button>
+                <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}" target="_blank" class="w-full py-2.5 text-center text-emerald-400 border border-emerald-500/40 font-semibold rounded-xl flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-4xl mx-auto px-4 mt-4">
+                {% for category, message in messages %}
+                    <div class="p-4 rounded-xl text-sm font-medium mb-3 flex items-center justify-between {% if category == 'success' %}bg-emerald-950/80 text-emerald-200 border border-emerald-800{% elif category == 'danger' %}bg-rose-950/80 text-rose-200 border border-rose-800{% else %}bg-amber-950/80 text-amber-200 border border-amber-800{% endif %}">
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()" class="text-stone-400 hover:text-white">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}?text={{ 'Hola Merlo Aventura! Quiero consultar por las excursiones en 4x4.'|urlencode }}" 
+       target="_blank" 
+       rel="noopener" 
+       class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300 group"
+       title="Consultar por WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl group-hover:animate-pulse"></i>
+        <span class="absolute right-16 bg-stone-900 text-stone-100 text-xs font-semibold py-1.5 px-3 rounded-lg shadow-xl border border-stone-800 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            ¿Dudas? Hablá con nosotros
+        </span>
+    </a>
+
+    <!-- Footer -->
+    <footer class="bg-sierra-950 border-t border-stone-800/80 text-stone-400 pt-16 pb-12 mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-stone-950 font-bold text-xl">
+                            <i class="fa-solid fa-truck-pickup"></i>
+                        </div>
+                        <span class="font-heading font-black text-xl text-white tracking-tight">MERLO <span class="text-amber-500">AVENTURA</span></span>
+                    </div>
+                    <p class="text-sm text-stone-400 leading-relaxed">
+                        Pioneros en expediciones 4x4 de alta montaña en Villa de Merlo, San Luis. Te llevamos a donde otros vehículos no pueden llegar con la máxima seguridad y guías baqueanos habilitados.
+                    </p>
+                    <div class="flex items-center gap-3 text-stone-400 pt-2">
+                        <a href="#" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-amber-400 hover:border-amber-500/50 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-amber-400 hover:border-amber-500/50 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-emerald-400 hover:border-emerald-500/50 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Excursions Links -->
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Nuestras Salidas 4x4</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="{{ url_for('excursion_detail', slug='cerro-aspero-pueblo-escondido') }}" class="hover:text-amber-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-amber-600"></i> Cerro Áspero & Pueblo Escondido</a></li>
+                        <li><a href="{{ url_for('excursion_detail', slug='filo-serrano-altas-cumbres') }}" class="hover:text-amber-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-amber-600"></i> Filo Serrano & Mirador 360°</a></li>
+                        <li><a href="{{ url_for('excursion_detail', slug='salto-del-tabaquillo-quebradas') }}" class="hover:text-amber-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-amber-600"></i> Cascada Salto del Tabaquillo</a></li>
+                        <li><a href="{{ url_for('excursion_detail', slug='nocturna-astroturismo-comechingon') }}" class="hover:text-amber-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-amber-600"></i> Safari Nocturno & Astroturismo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Payment & Guarantees -->
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Medios de Pago</h4>
+                    <p class="text-xs text-stone-400 mb-3">Aceptamos todas las opciones oficiales de Mercado Pago y transferencias bancarias:</p>
+                    <div class="flex flex-wrap gap-2 text-stone-300 mb-4">
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-sky-400"></i> Mercado Pago</span>
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs flex items-center gap-1.5"><i class="fa-solid fa-building-columns text-emerald-400"></i> Transferencia CBU/Alias</span>
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs">Cuotas fijas</span>
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs">Débito / Crédito</span>
+                    </div>
+                    <div class="p-3 bg-stone-900/60 rounded-xl border border-stone-800/80 text-xs text-stone-400">
+                        <i class="fa-solid fa-shield-halved text-amber-500 mr-1.5"></i>
+                        Todas las excursiones incluyen seguro integral de pasajero transportado y turismo aventura.
+                    </div>
+                </div>
+
+                <!-- Col 4: Contact & Location -->
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Base & Contacto</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot text-amber-500 mt-1"></i>
+                            <span>{{ settings.address|default('Av. del Sol 650, Villa de Merlo, San Luis, Argentina') }}</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-amber-500"></i>
+                            <span>{{ settings.whatsapp_number|default('+54 9 2664 12-3456') }}</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-amber-500"></i>
+                            <span>{{ settings.contact_email|default('reservas@merloaventura.com.ar') }}</span>
+                        </li>
+                        <li class="flex items-center gap-3 pt-2">
+                            <a href="{{ url_for('admin_login') }}" class="text-xs text-stone-500 hover:text-stone-300 transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-lock text-[10px]"></i> Acceso Panel Administración
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Subfooter -->
+            <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+                <p>© {{ current_year }} Merlo Aventura. Todos los derechos reservados. Villa de Merlo, San Luis.</p>
+                <p class="flex items-center gap-2">
+                    <span>Desarrollado para Turismo Aventura</span>
+                    <span>•</span>
+                    <span class="text-amber-500/80">Sierras de los Comechingones</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Booking Modal -->
+    {% include 'includes/booking_modal.html' %}
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

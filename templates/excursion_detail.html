@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ excursion.name }} | Merlo Aventura 4x4{% endblock %}
+
+{% block content %}
+<!-- Detail Hero Header -->
+<div class="relative py-20 bg-sierra-950 border-b border-stone-800">
+    <div class="absolute inset-0 overflow-hidden">
+        <img src="{{ excursion.image_url }}" alt="{{ excursion.name }}" class="w-full h-full object-cover filter brightness-[0.35] blur-sm scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-sierra-950 via-sierra-950/80 to-transparent"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-xs text-stone-400 mb-6">
+            <a href="{{ url_for('index') }}" class="hover:text-amber-400">Inicio</a>
+            <i class="fa-solid fa-angle-right text-[10px] text-stone-600"></i>
+            <a href="{{ url_for('index') }}#excursiones" class="hover:text-amber-400">Excursiones 4x4</a>
+            <i class="fa-solid fa-angle-right text-[10px] text-stone-600"></i>
+            <span class="text-stone-200 truncate">{{ excursion.name }}</span>
+        </nav>
+
+        <div class="max-w-3xl">
+            <div class="flex flex-wrap items-center gap-2.5 mb-4">
+                {% if excursion.badge %}
+                    <span class="bg-amber-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                        {{ excursion.badge }}
+                    </span>
+                {% endif %}
+                <span class="bg-stone-900/80 border border-stone-700 text-stone-300 text-xs px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <i class="fa-solid fa-clock text-amber-400"></i> {{ excursion.duration }}
+                </span>
+                <span class="bg-stone-900/80 border border-stone-700 text-amber-400 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <i class="fa-solid fa-gauge-high"></i> {{ excursion.difficulty }}
+                </span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-heading font-black text-white uppercase tracking-tight mb-4">
+                {{ excursion.name }}
+            </h1>
+            <p class="text-stone-300 text-base sm:text-lg leading-relaxed">
+                {{ excursion.subtitle }}
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <!-- Left: Full Details & Itinerary (2 cols) -->
+        <div class="lg:col-span-2 space-y-12">
+            
+            <!-- Quick Features Pills -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-stone-900 p-6 rounded-3xl border border-stone-800">
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Duración</span>
+                    <span class="font-bold text-white text-sm sm:text-base flex items-center gap-1.5">
+                        <i class="fa-regular fa-clock text-amber-500"></i> {{ excursion.duration }}
+                    </span>
+                </div>
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Dificultad</span>
+                    <span class="font-bold text-white text-sm sm:text-base flex items-center gap-1.5">
+                        <i class="fa-solid fa-mountain text-amber-500"></i> {{ excursion.difficulty }}
+                    </span>
+                </div>
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Vehículo</span>
+                    <span class="font-bold text-white text-sm sm:text-base flex items-center gap-1.5 truncate">
+                        <i class="fa-solid fa-truck-pickup text-amber-500"></i> 4x4 Especial
+                    </span>
+                </div>
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Cupos Máx.</span>
+                    <span class="font-bold text-emerald-400 text-sm sm:text-base flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> 8 personas
+                    </span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <h2 class="text-2xl font-heading font-black text-white uppercase mb-4 flex items-center gap-2">
+                    <span class="w-2 h-6 bg-amber-500 rounded-full inline-block"></span>
+                    Sobre Esta Aventura
+                </h2>
+                <div class="prose prose-invert max-w-none text-stone-300 leading-relaxed space-y-4 text-base">
+                    <p>{{ excursion.description }}</p>
+                </div>
+            </div>
+
+            <!-- What's included -->
+            <div class="bg-sierra-950 p-8 rounded-3xl border border-stone-800">
+                <h3 class="font-heading font-black text-xl text-white uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    ¿Qué Incluye el Servicio?
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {% for inc in excursion.includes_list %}
+                        <div class="flex items-start gap-3 text-sm text-stone-300">
+                            <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+                            <span>{{ inc }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- What to bring -->
+            <div class="bg-stone-900 p-8 rounded-3xl border border-stone-800">
+                <h3 class="font-heading font-black text-xl text-white uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-backpack text-amber-400"></i>
+                    Recomendaciones para el Día de la Salida
+                </h3>
+                <ul class="space-y-3 text-sm text-stone-300">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-shoe-prints text-amber-500"></i> Calzado cerrado con suela adherente (zapatillas de trekking o deportivas).</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-vest text-amber-500"></i> Ropa cómoda en capas y abrigo ligero (campera corta-viento).</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-sun text-amber-500"></i> Protector solar, lentes de sol y gorra o sombrero.</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-bottle-water text-amber-500"></i> Botella de agua personal recargable.</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-camera text-amber-500"></i> Cámara de fotos o smartphone con batería suficiente.</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Right: Sticky Booking Box (1 col) -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-28 bg-sierra-950 p-6 sm:p-8 rounded-3xl border border-stone-800 shadow-2xl">
+                
+                <span class="text-xs uppercase font-bold text-amber-500 tracking-wider block mb-1">Tarifa Oficial 2026</span>
+                <div class="flex items-baseline gap-2 mb-4">
+                    <span class="text-3xl sm:text-4xl font-heading font-black text-white">${{ '{:,.0f}'.format(excursion.price_adult) }}</span>
+                    <span class="text-xs text-stone-400 font-medium">ARS / Adulto</span>
+                </div>
+                <div class="text-xs text-stone-400 pb-6 border-b border-stone-800 flex items-center justify-between">
+                    <span>Menores (hasta 11 años):</span>
+                    <span class="font-bold text-white">${{ '{:,.0f}'.format(excursion.price_child) }} ARS</span>
+                </div>
+
+                <div class="py-6 space-y-4 text-xs text-stone-300">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot text-amber-400 text-sm mt-0.5"></i>
+                        <span>{{ excursion.pickup }}</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-calendar text-amber-400 text-sm mt-0.5"></i>
+                        <span>Salidas regulares confirmadas con reserva previa.</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-shield-halved text-amber-400 text-sm mt-0.5"></i>
+                        <span>Seguro integral de turismo aventura incluido.</span>
+                    </div>
+                </div>
+
+                <button onclick="openBookingModal({{ excursion.id }})" class="w-full py-4 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black text-sm uppercase tracking-wider rounded-2xl shadow-xl shadow-amber-500/20 hover:shadow-amber-500/40 hover:-translate-y-0.5 transition-all mb-3 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-calendar-check text-base"></i>
+                    <span>RESERVAR FECHA ONLINE</span>
+                </button>
+
+                <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}?text={{ ('Hola! Quiero consultar disponibilidad para ' + excursion.name)|urlencode }}" target="_blank" class="w-full py-3 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/30 font-semibold text-xs rounded-2xl transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Consultar por WhatsApp</span>
+                </a>
+
+                <div class="mt-6 pt-4 border-t border-stone-800/80 flex items-center justify-center gap-4 text-stone-500 text-xs">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-lock text-[10px]"></i> Pago Seguro</span>
+                    <span>•</span>
+                    <span>Mercado Pago</span>
+                    <span>•</span>
+                    <span>Transferencia</span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Other Excursions Recommendation -->
+{% if others %}
+<div class="bg-stone-900 py-16 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="font-heading font-black text-2xl text-white uppercase mb-8">
+            Otras Travesías Recomendadas
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for o in others %}
+                <a href="{{ url_for('excursion_detail', slug=o.slug) }}" class="bg-sierra-950 rounded-2xl overflow-hidden border border-stone-800 hover:border-amber-500/50 transition-all group block">
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="{{ o.image_url }}" alt="{{ o.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-white text-base mb-1 group-hover:text-amber-400">{{ o.name }}</h4>
+                        <div class="text-xs text-stone-400 mb-3 flex items-center gap-2">
+                            <span><i class="fa-regular fa-clock text-amber-500"></i> {{ o.duration }}</span>
+                        </div>
+                        <div class="text-sm font-black text-amber-400">
+                            ${{ '{:,.0f}'.format(o.price_adult) }} ARS
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

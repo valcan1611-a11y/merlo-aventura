@@ -1,0 +1,21 @@
+# Entorno virtual y secretos
+venv/
+.env
+
+# Versiones duplicadas de video (se mantiene hero.mp4 a 75MB)
+hero_1080p.mp4
+hero_720p.mp4
+hero_web.mp4
+videos/hero.mp4
+static/videos/hero.mp4
+
+# Archivos de sistema y Python
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log

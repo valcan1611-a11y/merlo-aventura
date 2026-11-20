@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merlo Aventura | Excursiones en Camioneta 4x4 en Merlo, San Luis</title>
+    <meta name="description" content="Excursiones y travesías 4x4 en las Sierras de los Comechingones, Merlo, San Luis. Cerro Áspero, Pueblo Escondido, Filo Serrano y cascadas secretas.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sierra: {
+                            800: '#1c2421',
+                            900: '#111715',
+                            950: '#0a0e0d'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Flatpickr Datepicker (Calendario interactivo) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_orange.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- Mercado Pago Official SDK -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111715; }
+        ::-webkit-scrollbar-thumb { background: #44403c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+
+        /* Video de fondo */
+        #heroVideo {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        /* Gradiente viñeta */
+        .bg-radial-vignette {
+            background: radial-gradient(circle at center, transparent 30%, rgba(10, 14, 13, 0.90) 100%);
+        }
+
+        /* Flatpickr dark mode */
+        .flatpickr-calendar {
+            background: #1c1917 !important;
+            border: 1px solid #44403c !important;
+            border-radius: 1.25rem !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+            color: #f5f5f4 !important;
+            font-family: inherit !important;
+        }
+        .flatpickr-months { background: #292524 !important; border-radius: 1.25rem 1.25rem 0 0 !important; }
+        .flatpickr-current-month { color: #f59e0b !important; }
+        .flatpickr-day { color: #e7e5e4 !important; border-radius: 0.5rem !important; }
+        .flatpickr-day:hover { background: #44403c !important; }
+        .flatpickr-day.selected { background: #f59e0b !important; border-color: #f59e0b !important; color: #0c0a09 !important; font-weight: bold !important; }
+        .flatpickr-day.disabled { color: #57534e !important; }
+
+        @media print {
+            .no-print, header, footer, #bookingModal { display: none !important; }
+            #voucherModal { position: static !important; background: white !important; color: black !important; }
+            #voucherContent { border: none !important; box-shadow: none !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="bg-stone-900 text-stone-100 font-sans antialiased selection:bg-amber-500 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white text-xs md:text-sm py-1.5 px-4 sm:px-6 flex items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-center gap-2 mx-auto md:mx-0">
+            <i class="fa-solid fa-mountain-sun"></i>
+            <span>Temporada 2026: <strong>Reservá con anticipación tus cupos en camionetas 4x4</strong>.</span>
+        </div>
+        <!-- Cartel trasladado a la esquina superior derecha del banner de arriba -->
+        <div class="hidden sm:inline-flex items-center gap-2 bg-stone-950/50 border border-amber-300/40 text-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full tracking-wider uppercase backdrop-blur-sm shrink-0 shadow-sm">
+            <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+            </span>
+            <span>VILLA DE MERLO, SAN LUIS • SIERRAS DE LOS COMECHINGONES</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-sierra-950/90 backdrop-blur-md border-b border-stone-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-600/20 group-hover:scale-105 transition-transform duration-200">
+                        <i class="fa-solid fa-truck-pickup text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-black text-xl md:text-2xl tracking-tight text-white flex items-center gap-1.5">
+                            MERLO <span class="text-amber-500">AVENTURA</span>
+                        </span>
+                        <span class="block text-[10px] md:text-xs text-stone-400 font-medium tracking-widest uppercase">
+                            Excursiones 4x4 • Sierras de San Luis
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-stone-300">
+                    <a href="#excursiones" class="hover:text-amber-400 transition-colors">Excursiones 4x4</a>
+                    <a href="#vehiculos" class="hover:text-amber-400 transition-colors">Nuestras Camionetas</a>
+                    <a href="#como-funciona" class="hover:text-amber-400 transition-colors">Cómo Reservar</a>
+                    <a href="#opiniones" class="hover:text-amber-400 transition-colors">Opiniones</a>
+                    <a href="#faq" class="hover:text-amber-400 transition-colors">Preguntas</a>
+                    <a href="#contacto" class="hover:text-amber-400 transition-colors">Contacto</a>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden sm:flex items-center gap-4">
+                    <a id="navWhatsappBtn" href="https://wa.me/5492664123456" target="_blank" class="text-stone-300 hover:text-emerald-400 transition-colors p-2 text-xl" title="Escribinos por WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    
+                    <button onclick="openBookingModal()" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-stone-950 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full shadow-lg shadow-amber-500/25 hover:from-amber-300 hover:to-amber-400 hover:shadow-amber-500/40 hover:-translate-y-0.5 transition-all duration-200">
+                        <i class="fa-solid fa-calendar-check mr-2"></i>
+                        Reservar Online
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button onclick="openBookingModal()" class="px-3.5 py-1.5 text-xs font-bold text-stone-950 bg-amber-400 rounded-full shadow">
+                        Reservar
+                    </button>
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white p-2 text-2xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-sierra-950 border-b border-stone-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#excursiones" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Excursiones 4x4</a>
+            <a href="#vehiculos" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Nuestras Camionetas</a>
+            <a href="#como-funciona" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Cómo Reservar</a>
+            <a href="#opiniones" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Opiniones</a>
+            <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Preguntas Frecuentes</a>
+            <a href="#contacto" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400">Contacto & Ubicación</a>
+            <div class="pt-2 flex flex-col gap-2">
+                <button onclick="openBookingModal(); toggleMobileMenu();" class="w-full py-3 text-center text-stone-950 font-bold bg-amber-400 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-calendar-check mr-2"></i> Reservar Excursión
+                </button>
+                <a href="https://wa.me/5492664123456" target="_blank" class="w-full py-2.5 text-center text-emerald-400 border border-emerald-500/40 font-semibold rounded-xl flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION WITH VIDEO BACKGROUND (Centro despejado para ver el texto del video) -->
+    <section class="relative min-h-[95vh] flex flex-col justify-end items-center overflow-hidden pb-10 sm:pb-14 pt-44 sm:pt-60 md:pt-72">
+        
+        <!-- Video Player Container -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
+            <!-- HTML5 Video con Autoplay Muted Loop Playsinline (Full 1080p HD) -->
+            <video id="heroVideo" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline 
+                   preload="auto"
+                   poster="images/hero-poster.jpg"
+                   class="filter brightness-[0.88] contrast-[1.08] saturate-[1.10]">
+                <!-- Busca el video tanto en la raíz como en la carpeta videos/ -->
+                <source src="hero.mp4" type="video/mp4">
+                <source src="videos/hero.mp4" type="video/mp4">
+                <source src="static/videos/hero.mp4" type="video/mp4">
+            </video>
+
+            <!-- Capas de sombras inferiores para máxima legibilidad del texto abajo sin tapar el centro -->
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/30 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-radial-vignette opacity-25 z-10"></div>
+
+            <!-- Video Controls & Status Overlay -->
+            <div class="absolute bottom-6 right-6 z-20 flex items-center gap-3">
+                <div id="videoReadyNotice" class="hidden sm:flex items-center gap-2 bg-stone-900/90 border border-amber-500/40 text-amber-300 text-xs px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-lg">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span>Portada lista para reproducir tu video: <code>hero.mp4</code></span>
+                </div>
+                
+                <button id="videoSoundBtn" onclick="toggleHeroSound()" class="w-10 h-10 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-200 border border-stone-700/80 flex items-center justify-center backdrop-blur-md transition-all shadow-lg" title="Activar / Silenciar sonido">
+                    <i id="soundIcon" class="fa-solid fa-volume-xmark text-sm"></i>
+                </button>
+                <button id="videoPlayBtn" onclick="toggleHeroPlay()" class="w-10 h-10 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-200 border border-stone-700/80 flex items-center justify-center backdrop-blur-md transition-all shadow-lg" title="Pausar / Reproducir">
+                    <i id="playIcon" class="fa-solid fa-pause text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Content (Bajado a la parte inferior para no tapar el centro del video) -->
+        <div class="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-auto">
+
+            <!-- Main Headline bajado y estilizado -->
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-heading font-black tracking-tight text-white uppercase leading-[1.1] mb-4 drop-shadow-2xl">
+                Viví las Sierras <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">en Camioneta 4x4</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="max-w-xl mx-auto text-sm sm:text-base text-stone-200 font-normal leading-relaxed mb-6 drop-shadow">
+                Travesías a <strong>Pueblo Escondido</strong>, <strong>Filo Serrano a 2.200m</strong>, cascadas secretas y avistaje de cóndores con guías habilitados.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                <button onclick="openBookingModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-heading font-black text-sm shadow-xl shadow-amber-500/30 hover:from-amber-300 hover:to-amber-400 hover:scale-105 transition-all flex items-center justify-center gap-2 group">
+                    <i class="fa-solid fa-calendar-check text-stone-900 group-hover:rotate-12 transition-transform"></i>
+                    <span>RESERVAR MI SALIDA 4X4</span>
+                </button>
+                <a href="#excursiones" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-stone-950/80 hover:bg-stone-900 text-white font-heading font-bold text-sm border border-stone-700/80 hover:border-amber-500/60 backdrop-blur-md transition-all flex items-center justify-center gap-2">
+                    <span>Ver Excursiones</span>
+                    <i class="fa-solid fa-arrow-down text-xs text-amber-400"></i>
+                </a>
+            </div>
+
+            <!-- Trust Badges compactos -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 border-t border-stone-800/60 max-w-3xl mx-auto text-xs text-stone-300">
+                <div class="flex items-center gap-1.5 justify-center bg-stone-950/40 py-1.5 px-2 rounded-lg border border-stone-800/40">
+                    <i class="fa-solid fa-truck-monster text-amber-400 text-xs"></i>
+                    <span class="text-[11px]">Flota 4x4 Equipada</span>
+                </div>
+                <div class="flex items-center gap-1.5 justify-center bg-stone-950/40 py-1.5 px-2 rounded-lg border border-stone-800/40">
+                    <i class="fa-solid fa-user-shield text-amber-400 text-xs"></i>
+                    <span class="text-[11px]">Guías Habilitados</span>
+                </div>
+                <div class="flex items-center gap-1.5 justify-center bg-stone-950/40 py-1.5 px-2 rounded-lg border border-stone-800/40">
+                    <i class="fa-solid fa-shield-heart text-amber-400 text-xs"></i>
+                    <span class="text-[11px]">Seguro Aventura</span>
+                </div>
+                <div class="flex items-center gap-1.5 justify-center bg-stone-950/40 py-1.5 px-2 rounded-lg border border-stone-800/40">
+                    <i class="fa-solid fa-credit-card text-amber-400 text-xs"></i>
+                    <span class="text-[11px]">Mercado Pago & Transf.</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Scroll down indicator -->
+        <a href="#excursiones" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 text-stone-400 hover:text-white transition-colors animate-bounce p-2">
+            <i class="fa-solid fa-angles-down text-lg"></i>
+        </a>
+    </section>
+
+    <!-- EXCURSIONS CATALOG -->
+    <section id="excursiones" class="py-24 bg-stone-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">CATÁLOGO DE SALIDAS</span>
+                <h2 class="text-3xl sm:text-5xl font-heading font-black text-white uppercase tracking-tight mb-4">
+                    Excursiones en Camioneta 4x4
+                </h2>
+                <p class="text-stone-400 text-base sm:text-lg">
+                    Seleccioná tu próxima aventura en las Sierras Comechingones. Todas nuestras salidas incluyen pick-up en tu cabaña u hotel en Merlo, seguro de aventura y guía baqueano.
+                </p>
+            </div>
+
+            <!-- Grid container rendered by JS -->
+            <div id="excursionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+                <!-- Dynamically populated from JS array -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4X4 VEHICLES & EQUIPMENT -->
+    <section id="vehiculos" class="py-24 bg-sierra-950 border-t border-b border-stone-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">FLOTA PREPARADA</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-6">
+                        Camionetas 4x4 Diseñadas para Terreno Serrano
+                    </h2>
+                    <p class="text-stone-300 text-base leading-relaxed mb-8">
+                        La geografía de los Comechingones exige máquinas a la altura del desafío. Nuestras camionetas Toyota Hilux y Ford Ranger están preparadas con suspensión reforzada para huella rocosa, tracción 4x4 en alta y baja, y todas las normas de seguridad exigidas por la Secretaría de Turismo de San Luis.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-compass text-amber-500 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm mb-1">Suspensión Reforzada</h4>
+                            <p class="text-xs text-stone-400">Amortiguación especial para trayectos en piedras y vados de río sin resignar confort.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-tower-broadcast text-amber-500 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm mb-1">Comunicación VHF</h4>
+                            <p class="text-xs text-stone-400">Radiocomunicación enlazada permanente con nuestra base central en Merlo.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-snowflake text-amber-500 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm mb-1">Climatización Integral</h4>
+                            <p class="text-xs text-stone-400">Calefacción y aire acondicionado para viajar cómodos en cualquier estación.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-kit-medical text-amber-500 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm mb-1">Primeros Auxilios</h4>
+                            <p class="text-xs text-stone-400">Botiquín de alta montaña y guías capacitados en RCP y rescate en áreas agrestes.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <button onclick="openBookingModal()" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl text-sm shadow-lg shadow-amber-500/20">
+                            Subite a la Próxima Salida
+                        </button>
+                        <a href="https://wa.me/5492664123456" target="_blank" class="px-5 py-3.5 text-stone-300 hover:text-white border border-stone-700 rounded-xl text-sm font-semibold">
+                            Consultar al Baqueano
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-800">
+                        <img src="https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1000&q=80" alt="Camioneta 4x4 en montaña" class="w-full h-[450px] object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-sierra-950 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-stone-900/80 backdrop-blur-md border border-stone-800">
+                            <div class="flex items-center justify-between text-xs text-stone-200">
+                                <span class="font-bold text-white text-sm">Flota Oficial Merlo Aventura</span>
+                                <span class="text-amber-400 font-semibold"><i class="fa-solid fa-star mr-1"></i> Mantenimiento Diario</span>
+                            </div>
+                            <p class="text-[11px] text-stone-400 mt-1">Capacidad máxima de 8 pasajeros por vehículo para una experiencia personalizada y segura.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="como-funciona" class="py-24 bg-stone-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">RESERVA FÁCIL Y RÁPIDA</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-4">
+                    ¿Cómo Reservar tu Lugar?
+                </h2>
+                <p class="text-stone-400 text-sm sm:text-base">
+                    Sistema 100% online con confirmación en el acto y múltiples opciones de pago.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="bg-sierra-950 p-8 rounded-3xl border border-stone-800 relative group hover:border-amber-500/40 transition-colors">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black mb-6">
+                        1
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white mb-2">Elegí Excursión y Fecha</h3>
+                    <p class="text-stone-400 text-sm leading-relaxed mb-4">
+                        Seleccioná en nuestro calendario la fecha de tu viaje a Merlo, el turno (mañana o tarde) y la cantidad de pasajeros.
+                    </p>
+                    <span class="text-xs text-amber-500 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> Calendario con fechas activas</span>
+                </div>
+
+                <div class="bg-sierra-950 p-8 rounded-3xl border border-stone-800 relative group hover:border-amber-500/40 transition-colors">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black mb-6">
+                        2
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white mb-2">Aboná con Tu Medio Preferido</h3>
+                    <p class="text-stone-400 text-sm leading-relaxed mb-4">
+                        Pagá con <strong>Mercado Pago</strong> (tarjetas de crédito, débito o dinero en cuenta) o mediante <strong>Transferencia Bancaria directa</strong> con Alias y CBU oficial.
+                    </p>
+                    <span class="text-xs text-sky-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-lock"></i> Pagos seguros</span>
+                </div>
+
+                <div class="bg-sierra-950 p-8 rounded-3xl border border-stone-800 relative group hover:border-amber-500/40 transition-colors">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black mb-6">
+                        3
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white mb-2">¡Te Buscamos en tu Hotel!</h3>
+                    <p class="text-stone-400 text-sm leading-relaxed mb-4">
+                        Descargás tu voucher digital al instante. El día pactado, nuestra camioneta 4x4 pasa por tu cabaña u hotel en Merlo.
+                    </p>
+                    <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Pick-up puerta a puerta</span>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-12">
+                <button onclick="openBookingModal()" class="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-heading font-black text-sm uppercase tracking-wider shadow-xl shadow-amber-500/25 hover:from-amber-300 hover:to-amber-400">
+                    Iniciar Reserva Ahora
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="opiniones" class="py-24 bg-sierra-950 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">TESTIMONIOS REALES</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-4">
+                    Lo que Dicen Nuestros Viajeros
+                </h2>
+                <p class="text-stone-400 text-sm sm:text-base">Más de 4.000 aventureros recorrieron las sierras puntanas con Merlo Aventura.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-stone-900 p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-amber-400 gap-1 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 text-sm italic mb-6 leading-relaxed">
+                            "La travesía a Pueblo Escondido en las camionetas es una locura de linda. Los chicos manejan con un cuidado tremendo en la roca, el almuerzo en el pueblo de diez. Sin dudas la mejor excursión de Merlo."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-stone-800">
+                        <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">MB</div>
+                        <div>
+                            <div class="font-bold text-white text-sm">Martín Berardi</div>
+                            <div class="text-xs text-stone-500">Buenos Aires</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-900 p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-amber-400 gap-1 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 text-sm italic mb-6 leading-relaxed">
+                            "Hicimos la nocturna de astroturismo en familia. Ver el cielo desde los 2.200 metros con el telescopio y tomar chocolate caliente en la cima fue mágico. Los chicos quedaron fascinados."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-stone-800">
+                        <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">LP</div>
+                        <div>
+                            <div class="font-bold text-white text-sm">Lorena Pereyra</div>
+                            <div class="text-xs text-stone-500">Rosario, Santa Fe</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-900 p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-amber-400 gap-1 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 text-sm italic mb-6 leading-relaxed">
+                            "Reservamos por la web súper rápido, nos pasaron a buscar por la cabaña puntual. El guía Gabriel sabe muchísimo de la flora, fauna y leyendas de la zona. 100% recomendable."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-stone-800">
+                        <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">GF</div>
+                        <div>
+                            <div class="font-bold text-white text-sm">Gonzalo Fernández</div>
+                            <div class="text-xs text-stone-500">Córdoba Capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-stone-900 border-t border-stone-800">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">RESPUESTAS CLARAS</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-4">Preguntas Frecuentes</h2>
+                <p class="text-stone-400 text-sm sm:text-base">Todo lo que necesitás saber antes de tu travesía serrana.</p>
+            </div>
+
+            <div class="space-y-4">
+                <details class="group bg-sierra-950 p-6 rounded-2xl border border-stone-800 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base">
+                        <span>¿Nos pasan a buscar por nuestro alojamiento?</span>
+                        <span class="transition group-open:rotate-180 text-amber-400"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="mt-4 text-sm text-stone-400 leading-relaxed">
+                        ¡Sí! El servicio incluye pick-up y drop-off en hoteles, cabañas y posadas de Villa de Merlo, Carpintería y Cerro de Oro. Al hacer la reserva nos dejás la dirección y el guía pasa a buscarte.
+                    </p>
+                </details>
+
+                <details class="group bg-sierra-950 p-6 rounded-2xl border border-stone-800 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base">
+                        <span>¿Qué indumentaria y elementos recomendamos llevar?</span>
+                        <span class="transition group-open:rotate-180 text-amber-400"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="mt-4 text-sm text-stone-400 leading-relaxed">
+                        Recomendamos calzado cómodo o de trekking, protector solar, lentes de sol, gorra y abrigo ligero (en la altura del Filo Serrano y en las nocturnas suele refrescar incluso en pleno verano).
+                    </p>
+                </details>
+
+                <details class="group bg-sierra-950 p-6 rounded-2xl border border-stone-800 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base">
+                        <span>¿Es apto para niños y adultos mayores?</span>
+                        <span class="transition group-open:rotate-180 text-amber-400"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="mt-4 text-sm text-stone-400 leading-relaxed">
+                        Excursiones como el <strong>Filo Serrano & Mirador 360°</strong> y la <strong>Nocturna de Astroturismo</strong> son aptas para toda la familia sin ninguna exigencia física. La travesía a <strong>Cerro Áspero & Pueblo Escondido</strong> tiene tramos de 4x4 técnico y senderos de roca, recomendada para personas con movilidad estándar.
+                    </p>
+                </details>
+
+                <details class="group bg-sierra-950 p-6 rounded-2xl border border-stone-800 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base">
+                        <span>¿Cómo funcionan los pagos por Mercado Pago y Transferencia?</span>
+                        <span class="transition group-open:rotate-180 text-amber-400"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="mt-4 text-sm text-stone-400 leading-relaxed">
+                        Con <strong>Mercado Pago</strong> podés pagar con tarjeta de crédito, débito o dinero en cuenta en cuotas. Si elegís <strong>Transferencia</strong>, la web te genera tu código de reserva único con el Alias/CBU copiable en un toque y un botón para enviarnos el comprobante por WhatsApp.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & WHATSAPP FORM -->
+    <section id="contacto" class="py-24 bg-sierra-950 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <div>
+                    <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">UBICACIÓN Y ATENCIÓN</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-6">
+                        Vení a Conocernos o Escribinos
+                    </h2>
+                    <p class="text-stone-300 text-base leading-relaxed mb-8">
+                        Nuestra base operativa se encuentra en pleno centro comercial de la Villa de Merlo. Podés acercarte a despejar dudas o coordinar salidas exclusivas para grupos cerrados o empresas.
+                    </p>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-location-dot text-amber-400 text-xl mt-1"></i>
+                            <div>
+                                <div class="font-bold text-white text-sm">Base Operativa</div>
+                                <div class="text-xs text-stone-400" id="baseAddressText">Av. del Sol 650, Villa de Merlo, San Luis</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-xl mt-1"></i>
+                            <div>
+                                <div class="font-bold text-white text-sm">WhatsApp Directo</div>
+                                <div class="text-xs text-stone-400" id="basePhoneText">+54 9 2664 12-3456 (Atención 8:00 a 22:00 hs)</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-envelope text-sky-400 text-xl mt-1"></i>
+                            <div>
+                                <div class="font-bold text-white text-sm">Correo Electrónico</div>
+                                <div class="text-xs text-stone-400">reservas@merloaventura.com.ar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a id="contactWhatsappBtn" href="https://wa.me/5492664123456" target="_blank" class="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm shadow-lg shadow-emerald-600/20">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Chatear Ahora por WhatsApp</span>
+                    </a>
+                </div>
+
+                <!-- Formulario de Consulta Rápida -->
+                <div class="bg-stone-900 p-8 rounded-3xl border border-stone-800">
+                    <h3 class="font-heading font-black text-2xl text-white mb-2">¿Querés una Salida a Medida?</h3>
+                    <p class="text-xs text-stone-400 mb-6">Completá este formulario y te respondemos por WhatsApp con una propuesta personalizada para tu familia o grupo.</p>
+
+                    <form onsubmit="handleInquirySubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-300 mb-1">Nombre Completo</label>
+                            <input type="text" id="inqName" required placeholder="Tu nombre..." class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-300 mb-1">WhatsApp de Contacto</label>
+                            <input type="tel" id="inqPhone" required placeholder="Ej: +54 9 11 5555-5555" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-300 mb-1">¿Qué excursión te interesa?</label>
+                            <select id="inqTour" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white focus:border-amber-500 outline-none">
+                                <option value="Pueblo Escondido y Salto del Tigre ($90.000)">Pueblo Escondido y Salto del Tigre ($90.000)</option>
+                                <option value="Pueblo Escondido ($75.000)">Pueblo Escondido ($75.000)</option>
+                                <option value="Salto del Tigre ($60.000)">Salto del Tigre ($60.000)</option>
+                                <option value="Salto del Tabaquillo ($45.000)">Salto del Tabaquillo ($45.000)</option>
+                                <option value="Cascada Hoya de Piedra - Quebrada El Molino ($30.000)">Cascada Hoya de Piedra - Quebrada El Molino ($30.000)</option>
+                                <option value="Salto del Tigre + Atardecer ($65.000)">Salto del Tigre + Atardecer ($65.000)</option>
+                                <option value="Trekking Nocturno - Aventura bajo las estrellas ($60.000)">Trekking Nocturno - Aventura bajo las estrellas ($60.000)</option>
+                                <option value="Los Vallecitos (Parque Natural) ($95.000)">Los Vallecitos (Parque Natural) ($95.000)</option>
+                                <option value="Cerro de Las Ovejas 2280msnm ($130.000)">Cerro de Las Ovejas 2280msnm ($130.000)</option>
+                                <option value="Experiencia La Huertita (Fin de Semana Todo Incluido) ($195.000)">Experiencia La Huertita (Fin de Semana) ($195.000)</option>
+                                <option value="Camioneta 4x4 Exclusiva / Privada">Camioneta 4x4 Exclusiva / Privada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-300 mb-1">Mensaje o fecha estimada</label>
+                            <textarea id="inqMsg" rows="3" placeholder="Contanos cuándo venís a Merlo y cuántas personas son..." class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-sm text-white focus:border-amber-500 outline-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-bold rounded-xl text-sm shadow-lg hover:from-amber-300 hover:to-amber-400">
+                            Enviar Consulta por WhatsApp
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-sierra-950 border-t border-stone-800 text-stone-400 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-stone-950 font-bold text-xl">
+                            <i class="fa-solid fa-truck-pickup"></i>
+                        </div>
+                        <span class="font-heading font-black text-xl text-white tracking-tight">MERLO <span class="text-amber-500">AVENTURA</span></span>
+                    </div>
+                    <p class="text-sm text-stone-400 leading-relaxed">
+                        Pioneros en expediciones 4x4 de alta montaña en Villa de Merlo, San Luis. Te llevamos a donde otros vehículos no pueden llegar con la máxima seguridad y guías baqueanos habilitados.
+                    </p>
+                    <div class="flex items-center gap-3 text-stone-400 pt-2">
+                        <a href="#" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-amber-400 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                        <a id="footerWhatsapp" href="https://wa.me/5492664123456" class="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center hover:text-emerald-400 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Nuestras Salidas 4x4</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#excursiones" onclick="openBookingModal(1)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Pueblo Escondido y Salto del Tigre ($90.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(2)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Pueblo Escondido ($75.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(3)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Salto del Tigre ($60.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(4)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Salto del Tabaquillo ($45.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(5)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Cascada Hoya de Piedra ($30.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(6)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Salto del Tigre + Atardecer ($65.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(7)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Trekking Nocturno ($60.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(8)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Los Vallecitos ($95.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(9)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Cerro de Las Ovejas ($130.000)</a></li>
+                        <li><a href="#excursiones" onclick="openBookingModal(10)" class="hover:text-amber-400 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-amber-600"></i> Experiencia La Huertita ($195.000)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Medios de Pago</h4>
+                    <p class="text-xs text-stone-400 mb-3">Aceptamos todas las opciones oficiales de Mercado Pago y transferencias bancarias:</p>
+                    <div class="flex flex-wrap gap-2 text-stone-300 mb-4">
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-sky-400"></i> Mercado Pago</span>
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs flex items-center gap-1.5"><i class="fa-solid fa-building-columns text-emerald-400"></i> Transferencia CBU/Alias</span>
+                        <span class="bg-stone-900 border border-stone-800 px-2.5 py-1 rounded text-xs">Cuotas</span>
+                    </div>
+                    <div class="p-3 bg-stone-900/60 rounded-xl border border-stone-800/80 text-xs text-stone-400">
+                        <i class="fa-solid fa-shield-halved text-amber-500 mr-1.5"></i>
+                        Todas las excursiones incluyen seguro integral de pasajero transportado y turismo aventura.
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase text-xs tracking-wider mb-4 text-amber-500">Contacto & Base</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot text-amber-500 mt-1"></i>
+                            <span>Av. del Sol 650, Villa de Merlo, San Luis</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-amber-500"></i>
+                            <span id="footerPhoneText">+54 9 2664 12-3456</span>
+                        </li>
+                        <li class="flex items-center gap-3 pt-2">
+                            <button onclick="openAdminModal()" class="text-xs text-stone-500 hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock text-[10px]"></i> Acceso Panel Administración
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+                <p>© 2026 Merlo Aventura. Villa de Merlo, San Luis, Argentina.</p>
+                <p class="flex items-center gap-2">
+                    <span>Turismo Aventura</span>
+                    <span>•</span>
+                    <span class="text-amber-500/80">Sierras de los Comechingones</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a id="floatingWhatsapp" href="https://wa.me/5492664123456?text=Hola%20Merlo%20Aventura!%20Quiero%20consultar%20por%20las%20excursiones%20en%204x4." 
+       target="_blank" 
+       rel="noopener" 
+       class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-emerald-400 transition-all duration-300 group"
+       title="Consultar por WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl group-hover:animate-pulse"></i>
+        <span class="absolute right-16 bg-stone-900 text-stone-100 text-xs font-semibold py-1.5 px-3 rounded-lg shadow-xl border border-stone-800 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            ¿Dudas? Hablá con nosotros
+        </span>
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- MODAL DETALLE DE EXCURSIÓN (FOTOS Y DESCRIPCIÓN COMPLETA) -->
+    <!-- ============================================================ -->
+    <div id="excursionDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-stone-950/85 backdrop-blur-md transition-opacity" onclick="closeExcursionDetailModal()"></div>
+
+        <div class="flex min-h-screen items-center justify-center p-3 sm:p-6 text-center">
+            <div class="relative w-full max-w-4xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl transition-all my-6 max-h-[92vh] flex flex-col">
+                
+                <!-- Modal Sticky Header -->
+                <div class="bg-gradient-to-r from-sierra-950 via-stone-900 to-sierra-950 px-6 py-4 border-b border-stone-800 flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                            <i class="fa-solid fa-mountain-sun"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-amber-500 font-bold uppercase tracking-widest block">Detalle de Salida 4x4</span>
+                            <h3 id="detailModalTitle" class="font-heading font-black text-lg sm:text-xl text-white truncate max-w-xs sm:max-w-xl">Nombre de Excursión</h3>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeExcursionDetailModal()" class="rounded-xl p-2 text-stone-400 hover:text-white hover:bg-stone-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Scrollable Body -->
+                <div class="overflow-y-auto p-6 space-y-6">
+                    
+                    <!-- FOTO PRINCIPAL Y MINIATURAS (GALERÍA) -->
+                    <div class="space-y-3">
+                        <div class="relative h-64 sm:h-96 rounded-2xl overflow-hidden border border-stone-800 group shadow-lg">
+                            <img id="detailMainImage" src="" alt="Foto de excursión" class="w-full h-full object-cover transition-all duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-transparent to-transparent"></div>
+                            
+                            <!-- Badges flotantes sobre la foto -->
+                            <div class="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span id="detailBadgePrice" class="bg-amber-500 text-stone-950 text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-xl shadow-lg">
+                                        $0,00
+                                    </span>
+                                    <span id="detailBadgeDuration" class="bg-stone-900/90 text-stone-200 text-xs font-semibold px-3 py-1.5 rounded-xl border border-stone-700/60 backdrop-blur-md">
+                                        <i class="fa-solid fa-clock text-amber-400 mr-1"></i> Duración
+                                    </span>
+                                    <span id="detailBadgeDifficulty" class="bg-stone-900/90 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-stone-700/60 backdrop-blur-md">
+                                        <i class="fa-solid fa-gauge-high mr-1"></i> Dificultad
+                                    </span>
+                                </div>
+                                <span id="detailBadgeAge" class="hidden bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold px-3 py-1.5 rounded-xl backdrop-blur-md">
+                                    +7 años
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Thumbnails strip -->
+                        <div id="detailThumbnails" class="grid grid-cols-4 gap-2.5 sm:gap-3">
+                            <!-- Populated with thumbnails -->
+                        </div>
+                    </div>
+
+                    <!-- DESCRIPCIÓN COMPLETA -->
+                    <div class="bg-sierra-950 p-6 rounded-2xl border border-stone-800 space-y-4">
+                        <h4 class="font-heading font-black text-base text-white uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-align-left text-amber-500"></i>
+                            Descripción de la Aventura
+                        </h4>
+                        <div id="detailFullText" class="text-sm text-stone-300 leading-relaxed space-y-3 font-normal whitespace-pre-line">
+                            <!-- Full text injected here -->
+                        </div>
+                    </div>
+
+                    <!-- GRILLA DE DETALLES: INCLUYE Y EQUIPAMIENTO -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Qué Incluye -->
+                        <div class="bg-stone-950 p-5 rounded-2xl border border-stone-800">
+                            <h5 class="font-bold text-sm text-emerald-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> El Recorrido Incluye:
+                            </h5>
+                            <ul id="detailIncludesList" class="space-y-2 text-xs text-stone-300">
+                                <!-- list items -->
+                            </ul>
+                        </div>
+
+                        <!-- Equipo Recomendado -->
+                        <div class="bg-stone-950 p-5 rounded-2xl border border-stone-800">
+                            <h5 class="font-bold text-sm text-amber-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-backpack"></i> Equipo Recomendado & Qué Llevar:
+                            </h5>
+                            <div id="detailEquipmentText" class="text-xs text-stone-300 leading-relaxed space-y-1.5 whitespace-pre-line">
+                                <!-- text -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- VALORES Y EXTRAS (SI TIENE) -->
+                    <div id="detailExtrasBox" class="hidden bg-amber-950/30 border border-amber-600/40 p-4 rounded-2xl text-xs text-amber-200">
+                        <strong class="font-bold text-amber-400 block mb-1">
+                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Valores y Opciones Extras:
+                        </strong>
+                        <span id="detailExtrasText"></span>
+                    </div>
+
+                </div>
+
+                <!-- Modal Sticky Footer (Acciones) -->
+                <div class="bg-sierra-950 px-6 py-4 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
+                    <div>
+                        <span class="text-xs text-stone-400 block">Tarifa Oficial:</span>
+                        <div class="text-2xl font-heading font-black text-amber-400" id="detailFooterPrice">$0,00 ARS</div>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <a id="detailWhatsappBtn" href="#" target="_blank" class="flex-1 sm:flex-none px-5 py-3 rounded-xl border border-emerald-500/50 text-emerald-400 hover:bg-emerald-950/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>Consultar</span>
+                        </a>
+
+                        <button id="detailBookBtn" onclick="" class="flex-1 sm:flex-none px-7 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-sm"></i>
+                            <span>Reservar Fecha</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL 1: RESERVAS Y CALENDARIO INTERACTIVO -->
+    <!-- ============================================================ -->
+    <div id="bookingModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm transition-opacity" onclick="closeBookingModal()"></div>
+
+        <div class="flex min-h-screen items-center justify-center p-4 sm:p-6 text-center">
+            <div class="relative w-full max-w-2xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl transition-all my-8">
+                
+                <!-- Encabezado Modal -->
+                <div class="bg-gradient-to-r from-sierra-950 to-stone-900 px-6 py-5 border-b border-stone-800 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-heading font-bold text-lg text-white">Reservar Excursión 4x4</h3>
+                            <p class="text-xs text-stone-400">Merlo Aventura • Villa de Merlo, San Luis</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeBookingModal()" class="rounded-xl p-2 text-stone-400 hover:text-white hover:bg-stone-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Formulario de Reserva -->
+                <form id="bookingForm" onsubmit="processBooking(event)" class="p-6 space-y-6">
+                    
+                    <!-- Paso 1: Excursión, Fecha y Cupos -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">1. Seleccioná tu Excursión</label>
+                            <select id="modalExcursionSelect" required onchange="onExcursionSelectChange()" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Fecha y Horario en Grilla -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                                    <i class="fa-regular fa-calendar mr-1 text-amber-500"></i> Fecha en el Calendario
+                                </label>
+                                <input type="text" id="modalDatePicker" required placeholder="Elegí el día..." class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none cursor-pointer">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                                    <i class="fa-regular fa-clock mr-1 text-amber-500"></i> Turno / Horario
+                                </label>
+                                <select id="modalTimeSelect" required onchange="updateAvailabilityBadge()" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                                    <option value="09:00">Turno Mañana (09:00 hs)</option>
+                                    <option value="14:30">Turno Tarde (14:30 hs)</option>
+                                </select>
+                                <div id="availabilityBadge" class="mt-1.5 text-xs font-semibold text-emerald-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-check text-[10px]"></i> <span id="availabilityText">¡Quedan 8 cupos disponibles!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contador de Pasajeros -->
+                        <div class="bg-stone-950/60 border border-stone-800 rounded-2xl p-4">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-3">Cantidad de Pasajeros</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                
+                                <div class="flex items-center justify-between bg-stone-900 border border-stone-800 p-3 rounded-xl">
+                                    <div>
+                                        <div class="font-semibold text-sm text-white">Adultos</div>
+                                        <div class="text-xs text-amber-500" id="adultRateLabel">$0 c/u</div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <button type="button" onclick="adjustPax('adults', -1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&minus;</button>
+                                        <span id="adultCountDisplay" class="font-bold text-white w-6 text-center">1</span>
+                                        <button type="button" onclick="adjustPax('adults', 1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&plus;</button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between bg-stone-900 border border-stone-800 p-3 rounded-xl">
+                                    <div>
+                                        <div class="font-semibold text-sm text-white">Menores (hasta 11 años)</div>
+                                        <div class="text-xs text-amber-500" id="childRateLabel">$0 c/u</div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <button type="button" onclick="adjustPax('children', -1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&minus;</button>
+                                        <span id="childCountDisplay" class="font-bold text-white w-6 text-center">0</span>
+                                        <button type="button" onclick="adjustPax('children', 1)" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 flex items-center justify-center font-bold text-lg">&plus;</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Datos de Contacto y Pick-up -->
+                    <div class="space-y-4 pt-2 border-t border-stone-800/80">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">2. Datos de Contacto & Pick-up en Merlo</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <input type="text" id="custName" required placeholder="Nombre y Apellido *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                            <div>
+                                <input type="tel" id="custPhone" required placeholder="WhatsApp de Contacto *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <input type="email" id="custEmail" required placeholder="Email para recibir el voucher *" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                            <div>
+                                <input type="text" id="custDNI" placeholder="DNI o Pasaporte" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="text" id="custHotel" placeholder="Hotel o Cabaña en Merlo (para el pick-up en 4x4)" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm focus:border-amber-500 outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Selección de Medio de Pago -->
+                    <div class="space-y-3 pt-2 border-t border-stone-800/80">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">3. Elegí cómo abonar</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            <!-- Opción Mercado Pago -->
+                            <label class="relative flex flex-col p-4 bg-stone-950 border-2 border-stone-700 rounded-2xl cursor-pointer hover:border-sky-500/80 transition-all has-[:checked]:border-sky-500 has-[:checked]:bg-sky-950/20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-bold">
+                                            <i class="fa-solid fa-credit-card"></i>
+                                        </div>
+                                        <span class="font-bold text-sm text-white">Mercado Pago</span>
+                                    </div>
+                                    <input type="radio" name="payMethod" value="mercadopago" checked class="text-sky-500">
+                                </div>
+                                <p class="text-xs text-stone-400">Tarjetas de crédito, débito, dinero en cuenta MP y cuotas fijas.</p>
+                                <span class="inline-block mt-2 text-[10px] text-sky-400 font-semibold uppercase tracking-wider">Acreditación Inmediata</span>
+                            </label>
+
+                            <!-- Opción Transferencia -->
+                            <label class="relative flex flex-col p-4 bg-stone-950 border-2 border-stone-700 rounded-2xl cursor-pointer hover:border-emerald-500/80 transition-all has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-950/20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold">
+                                            <i class="fa-solid fa-building-columns"></i>
+                                        </div>
+                                        <span class="font-bold text-sm text-white">Transferencia Bancaria</span>
+                                    </div>
+                                    <input type="radio" name="payMethod" value="transferencia" class="text-emerald-500">
+                                </div>
+                                <p class="text-xs text-stone-400">Transferí con Alias/CBU directo y adjuntá tu comprobante por WhatsApp.</p>
+                                <span class="inline-block mt-2 text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Alias & CBU Directo</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- Resumen de Precio y Botón de Acción -->
+                    <div class="bg-sierra-950 p-4 rounded-2xl border border-stone-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-stone-400 block">Total a pagar:</span>
+                            <div class="text-2xl font-heading font-black text-amber-400" id="modalPriceSummary">$0 ARS</div>
+                        </div>
+                        <button type="submit" id="bookingSubmitBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black rounded-xl shadow-lg shadow-amber-500/20 transition-all text-sm flex items-center gap-2">
+                            <span>Confirmar Reserva</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL 2: TRANSFERENCIA BANCARIA (ALIAS & CBU) -->
+    <!-- ============================================================ -->
+    <div id="transferModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm" onclick="closeTransferModal()"></div>
+        <div class="flex min-h-screen items-center justify-center p-4 sm:p-6 text-center">
+            <div class="relative w-full max-w-xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl p-6 sm:p-8 my-8">
+                
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-stone-800">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/30">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs uppercase font-bold text-amber-500 tracking-wider">Instrucciones de Pago</span>
+                        <h3 class="text-xl sm:text-2xl font-heading font-black text-white">Transferencia Bancaria</h3>
+                    </div>
+                </div>
+
+                <!-- Resumen de Reserva -->
+                <div class="bg-sierra-950 p-4 rounded-2xl border border-stone-800 text-xs text-stone-300 space-y-2 mb-6">
+                    <div class="flex justify-between items-center pb-2 border-b border-stone-800">
+                        <span>Código de Reserva:</span>
+                        <strong class="font-mono text-amber-400 text-base" id="transferCodeDisplay">MA-00000</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Excursión:</span>
+                        <strong class="text-white" id="transferTourDisplay">-</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Total a transferir:</span>
+                        <strong class="text-amber-400 text-base" id="transferTotalDisplay">$0 ARS</strong>
+                    </div>
+                </div>
+
+                <!-- Cuentas Bancarias con Botones de Copiado -->
+                <div class="space-y-3 mb-6">
+                    <!-- Alias -->
+                    <div class="flex items-center justify-between bg-stone-950 p-3.5 rounded-xl border border-stone-800">
+                        <div>
+                            <span class="text-[11px] text-stone-400 block">ALIAS BANCARIO:</span>
+                            <span id="transferAliasText" class="font-mono font-bold text-white text-base">MERLO.AVENTURA.4X4</span>
+                        </div>
+                        <button type="button" onclick="copyText('transferAliasText', this)" class="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+
+                    <!-- CBU -->
+                    <div class="flex items-center justify-between bg-stone-950 p-3.5 rounded-xl border border-stone-800">
+                        <div class="overflow-hidden">
+                            <span class="text-[11px] text-stone-400 block">CBU OFICIAL:</span>
+                            <span id="transferCBUText" class="font-mono font-bold text-white text-sm break-all">0070123430004059683921</span>
+                        </div>
+                        <button type="button" onclick="copyText('transferCBUText', this)" class="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 shrink-0 ml-2">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs text-stone-400 p-2">
+                        <div>Titular: <strong class="text-white">Merlo Aventura SRL</strong></div>
+                        <div>CUIT: <strong class="text-white">30-71829384-9</strong></div>
+                        <div>Banco: <strong class="text-white">Galicia / Mercado Pago</strong></div>
+                        <div>Referencia: <strong class="text-amber-400" id="transferRefDisplay">MA-00000</strong></div>
+                    </div>
+                </div>
+
+                <!-- Botón de Envío por WhatsApp -->
+                <div class="space-y-3">
+                    <a id="transferWhatsappBtn" href="#" target="_blank" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Enviar Comprobante por WhatsApp</span>
+                    </a>
+
+                    <button type="button" onclick="showVoucherFromTransfer()" class="w-full py-3 bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold text-xs rounded-xl transition-all">
+                        Ver Voucher de Reserva
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL 3: VOUCHER / COMPROBANTE DIGITAL IMPRIMIBLE -->
+    <!-- ============================================================ -->
+    <div id="voucherModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm" onclick="closeVoucherModal()"></div>
+        <div class="flex min-h-screen items-center justify-center p-4 sm:p-6 text-center">
+            <div id="voucherContent" class="relative w-full max-w-xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl p-6 sm:p-8 my-8 print:p-0 print:border-none print:shadow-none">
+                
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-2xl mx-auto mb-3">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800">
+                        Voucher de Excursión 4x4
+                    </span>
+                    <h3 class="text-2xl font-heading font-black text-white mt-2">¡Reserva Registrada!</h3>
+                    <p class="text-xs text-stone-400">Merlo Aventura • Sierras de los Comechingones</p>
+                </div>
+
+                <div class="bg-sierra-950 p-6 rounded-2xl border border-stone-800 space-y-4 text-xs text-stone-300">
+                    <div class="flex justify-between items-center pb-3 border-b border-stone-800">
+                        <span class="text-stone-400 uppercase tracking-wider font-semibold">Código de Voucher:</span>
+                        <span class="font-mono font-black text-xl text-amber-400" id="vouchCode">MA-00000</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-stone-500 block mb-0.5">Excursión:</span>
+                            <strong class="text-white text-sm" id="vouchTour">-</strong>
+                        </div>
+                        <div>
+                            <span class="text-stone-500 block mb-0.5">Fecha y Turno:</span>
+                            <strong class="text-amber-400 text-sm" id="vouchDateTime">-</strong>
+                        </div>
+                        <div>
+                            <span class="text-stone-500 block mb-0.5">Pasajeros:</span>
+                            <strong class="text-white" id="vouchPax">-</strong>
+                        </div>
+                        <div>
+                            <span class="text-stone-500 block mb-0.5">Monto Total:</span>
+                            <strong class="text-white text-sm" id="vouchTotal">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-800">
+                        <span class="text-stone-500 block mb-0.5">Titular:</span>
+                        <div class="text-white" id="vouchClient">-</div>
+                    </div>
+
+                    <div>
+                        <span class="text-stone-500 block mb-0.5">Pick-up en Merlo:</span>
+                        <div class="text-amber-300 font-semibold" id="vouchHotel">-</div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 no-print">
+                    <button onclick="window.print()" class="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-print"></i> Imprimir Voucher
+                    </button>
+                    <button onclick="closeVoucherModal()" class="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-colors">
+                        Listo, Cerrar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL 4: PANEL DE ADMINISTRACIÓN INTEGRADO (LOCAL) -->
+    <!-- ============================================================ -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-stone-950/90 backdrop-blur-sm" onclick="closeAdminModal()"></div>
+        <div class="flex min-h-screen items-center justify-center p-4 sm:p-6 text-center">
+            <div class="relative w-full max-w-4xl transform overflow-hidden rounded-3xl bg-stone-900 border border-stone-800 text-left shadow-2xl p-6 sm:p-8 my-8">
+                
+                <div class="flex justify-between items-center pb-4 border-b border-stone-800 mb-6">
+                    <div>
+                        <h3 class="font-heading font-black text-xl text-white">Panel de Administración de Reservas</h3>
+                        <p class="text-xs text-stone-400">Merlo Aventura • Registro de Pasajeros y Configuración</p>
+                    </div>
+                    <button onclick="closeAdminModal()" class="text-stone-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Métricas -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-sierra-950 p-4 rounded-xl border border-stone-800">
+                            <span class="text-[10px] uppercase text-stone-400 block font-bold">Total Reservas</span>
+                            <strong class="text-2xl text-white" id="admTotalCount">0</strong>
+                        </div>
+                        <div class="bg-sierra-950 p-4 rounded-xl border border-stone-800">
+                            <span class="text-[10px] uppercase text-emerald-400 block font-bold">Aprobadas</span>
+                            <strong class="text-2xl text-emerald-400" id="admApprovedCount">0</strong>
+                        </div>
+                        <div class="bg-sierra-950 p-4 rounded-xl border border-stone-800">
+                            <span class="text-[10px] uppercase text-amber-400 block font-bold">Pendientes</span>
+                            <strong class="text-2xl text-amber-400" id="admPendingCount">0</strong>
+                        </div>
+                        <div class="bg-sierra-950 p-4 rounded-xl border border-stone-800">
+                            <span class="text-[10px] uppercase text-sky-400 block font-bold">Recaudación</span>
+                            <strong class="text-lg text-white" id="admTotalRevenue">$0</strong>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Reservas -->
+                    <div class="bg-sierra-950 rounded-xl border border-stone-800 overflow-hidden">
+                        <div class="p-3 bg-stone-950 flex justify-between items-center text-xs">
+                            <strong class="text-stone-300">Listado de Pasajeros</strong>
+                            <button onclick="exportReservationsCSV()" class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded hover:bg-amber-500/30 text-[11px] font-semibold">
+                                <i class="fa-solid fa-download mr-1"></i> Descargar Excel / CSV
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto max-h-72">
+                            <table class="w-full text-left text-xs text-stone-300">
+                                <thead class="bg-stone-900 text-stone-400 uppercase text-[10px] sticky top-0">
+                                    <tr>
+                                        <th class="p-3">Código</th>
+                                        <th class="p-3">Excursión & Fecha</th>
+                                        <th class="p-3">Pasajeros</th>
+                                        <th class="p-3">Cliente / Tel</th>
+                                        <th class="p-3">Total / Pago</th>
+                                        <th class="p-3">Estado</th>
+                                        <th class="p-3 text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admReservationsTable" class="divide-y divide-stone-800">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Configuración Rápida de Claves -->
+                    <div class="bg-stone-950 p-5 rounded-2xl border border-stone-800 space-y-4">
+                        <strong class="text-xs uppercase text-amber-400 block tracking-wider">Ajustes de Mercado Pago & Transferencias</strong>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <label class="block text-stone-400 mb-1">Mercado Pago Link de Pago o Access Token:</label>
+                                <input type="text" id="cfgMpToken" placeholder="APP_USR-... o link de Mercado Pago" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-stone-400 mb-1">WhatsApp de Atención (sin + ni espacios):</label>
+                                <input type="text" id="cfgWhatsapp" placeholder="5492664123456" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-stone-400 mb-1">Alias Bancario:</label>
+                                <input type="text" id="cfgAlias" placeholder="MERLO.AVENTURA.4X4" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-stone-400 mb-1">CBU Oficial:</label>
+                                <input type="text" id="cfgCBU" placeholder="0070123430004059683921" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-white outline-none">
+                            </div>
+                        </div>
+                        <button onclick="saveAdminSettings()" class="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-lg text-xs uppercase tracking-wider">
+                            Guardar Ajustes
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT DE LA APLICACIÓN -->
+    <!-- ============================================================ -->
+    <script>
+        // 1. Datos oficiales completos de las 9 excursiones con descripciones, extras y galerías de fotos
+        const EXCURSIONS = [
+            {
+                id: 1,
+                name: "Pueblo Escondido y Salto del Tigre",
+                subtitle: "Travesía de Día Completo hasta el mítico pueblo minero y la cascada Salto del Tigre con hoya esmeralda (+7 años).",
+                duration: "Día Completo (8 a 9 hs)",
+                difficulty: "Aventura / Nivel Medio",
+                priceAdult: 90000,
+                priceChild: 68000,
+                priceFormatted: "$ 90.000,00",
+                badge: "Más Completa",
+                ageLimit: "+7 años",
+                image: "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Camioneta 4x4 de alta montaña",
+                times: ["08:30"],
+                fullDescription: `DIA COMPLETO / + 7 años.
+
+La experiencia definitiva de alta montaña en los Comechingones: combinamos la visita al legendario pueblo minero abandonado de Pueblo Escondido en el fondo del cañón y el trekking hacia la majestuosa cascada Salto del Tigre con su imponente pileta natural de agua cristalina.
+
+Descendemos en camionetas 4x4 por la Quebrada de Guanaquito atravesando vados de roca y arroyos serranos. En Pueblo Escondido recorremos las antiguas galerías subterráneas de tungsteno, la usina hidroeléctrica y puentes colgantes. Luego emprendemos la caminata hacia la hoya natural del Salto del Tigre con tiempo libre para almorzar, tomar mate y refrescarse.`,
+                includes: [
+                    "Servicio de Guía Habilitado e inscripto",
+                    "Seguros integrales de turismo aventura y pasajero transportado",
+                    "Traslados 4x4 de alta montaña ida y vuelta",
+                    "Entradas a los campos y acceso a Pueblo Escondido",
+                    "Trekking guiado a la cascada Salto del Tigre"
+                ],
+                equipment: `Zapatillas acordonadas con buen agarre, mochila cómoda (tamaño escolar), abrigo liviano para verano, gafas de sol y protector solar, gorro para el sol o de abrigo en invierno.
+En los meses de calor pueden llevar malla para refrescarse en los pozos de agua.
+Se recomienda llevar agua para el camino y el mate con algo para acompañar.`,
+                extras: `Regreso a Caballo opcional desde Pueblo Escondido: $25.000.
+En Pueblo Escondido hay servicio de pastas y sándwiches (se recomienda vianda si se requiere comida para celíacos).`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 2,
+                name: "Pueblo Escondido",
+                subtitle: "Expedición al mítico pueblo minero abandonado en el cañón de los Comechingones, túneles y quebrada (+7 años).",
+                duration: "Día Completo (+7 años)",
+                difficulty: "Poco difícil",
+                priceAdult: 75000,
+                priceChild: 56000,
+                priceFormatted: "$ 75.000,00",
+                badge: "Clásico Imperdible",
+                ageLimit: "+7 años",
+                image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Toyota Hilux 4x4 preparada",
+                times: ["09:00"],
+                fullDescription: `DIA COMPLETO: +7años
+DIFICULTAD: Poco difícil
+ZONA: Villa de Merlo
+TRASLADO: A convenir
+INCLUYE: Entradas a los campos
+
+VALORES Y EXTRAS:
+Regreso a Caballo $25.000
+
+DESCRIPCION: Desde Merlo se tarda una hora hasta llegar al estacionamiento donde inicia la senda, es un sendero en descenso de dificultad media que llega hasta Pueblo Escondido. El tiempo estimado es de 90 minutos, ahí se almuerza y se recorre el lugar.
+Desde Pueblo Escondido se puede regresar a Caballo o a pie, si es a pie la dificultad aumenta ya que son 400mts de desnivel. El tiempo estimado de regreso es de 80 minutos a Caballo y 120 minutos a pie, dependiendo de la preparación física de cada persona.`,
+                includes: [
+                    "Servicio de Guía Habilitado y Baqueano",
+                    "Seguros de turismo aventura",
+                    "Entradas a los campos",
+                    "Visita guiada a túneles, usina y construcciones históricas",
+                    "Traslado coordinado"
+                ],
+                equipment: `INDISPENSABLE: Se debe contar con calzado deportivo y acordonado con buen agarre, abrigo en invierno (gorro y guantes) protector solar, gafas de sol, mochila ( 20 litros aconsejable) gorra de sol. En verano puede bajar la temperatura.
+En los meses de calor pueden llevar malla para refrescarse en los pozos de agua.
+Se recomienda llevar agua para el camino y el mate con algo para acompañar si lo desea.`,
+                extras: `Regreso a Caballo opcional: $25.000.
+En Pueblo Escondido hay pastas y sándwiches por lo que se recomienda llevar comida especial para celiacos o su propia vianda si no es de su agrado lo que se ofrece.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 3,
+                name: "Salto del Tigre",
+                subtitle: "Una imponente cascada escondida en pleno corazón de las sierras con filo panorámico y hoya natural.",
+                duration: "9:00 HS a 16:00 HS",
+                difficulty: "Moderada / Trekking 90 min",
+                priceAdult: 60000,
+                priceChild: 45000,
+                priceFormatted: "$ 60.000,00",
+                badge: "Cascada Imponente",
+                ageLimit: "",
+                image: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Camioneta 4x4 tracción total",
+                times: ["09:00"],
+                fullDescription: `Una imponente cascada escondida en pleno corazón de las sierras.
+
+Se trata de un salto de agua que se ubica en lo más alto de las sierras de los Comechingones. Por sus características naturales, es uno de los paisajes preferidos para pasar el día, incluye el filo de las sierras y un trekking de aproximadamente 90 minutos ida y vuelta por una senda marcada.
+
+DURACION: 9:00 HS a 16:00 Hs.
+TRASLADO: A convenir.
+ENTRADA AL CAMPO: $3.500`,
+                includes: [
+                    "Servicio de Guía Habilitado",
+                    "Seguros de turismo aventura",
+                    "Recorrido por el filo de las sierras",
+                    "Trekking guiado hacia la cascada y pozas de agua"
+                ],
+                equipment: `Calzado deportivo o de trekking con buena suela, protector solar, lentes de sol, abrigo liviano, botella de agua personal y malla en temporada cálida.`,
+                extras: `Entrada al campo: $3.500 por persona.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 4,
+                name: "Salto del Tabaquillo",
+                subtitle: "Travesía por la Reserva del Rincón cruzando arroyos y bosques de tabaquillos hasta la cascada de 17 metros.",
+                duration: "Medio Día (5-6 horas)",
+                difficulty: "Poco difícil",
+                priceAdult: 45000,
+                priceChild: 34000,
+                priceFormatted: "$ 45.000,00",
+                badge: "Naturaleza Pura",
+                ageLimit: "+7 años",
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "4x4 tracción total con acceso a reserva",
+                times: ["09:00"],
+                fullDescription: `MEDIO DIA ( 5-6 horas ) + 7 años.
+DIFICULTAD: Poco difícil
+ZONA: Villa de Merlo
+TRASLADO: A convenir
+HORARIO SALIDA: 9:00HS
+
+El recorrido inicia en la Reserva del Rincón. Luego de cruzar un arroyo nos internamos en un bosquesillo para continuar todo el recorrido por el arroyo. Requiere algo de destreza ya que es un entretenido paseo cruzando arroyos, saltando rocas y sorteando saltos de agua hasta llegar al Salto.
+El Salto del Tabaquillo es una cascada de 17 metros de altura en un maravilloso cajón de roca.
+En este lugar hacemos una pausa de 15 a 30 minutos para tomar fotografías, comer algo o simplemente tomar mate.
+El retorno es por un sendero de altura.`,
+                includes: [
+                    "Servicio de Guía inscripto en la Villa de Merlo",
+                    "El guía está provisto de comunicaciones y equipamiento de primeros auxilios",
+                    "Seguros de turismo aventura",
+                    "Paseo por senderos de altura con vistas panorámicas"
+                ],
+                equipment: `EQUIPO RECOMENDADO:
+Zapatillas acordonada con buen agarre, mochila comoda (tamaño escolar), abrigo liviano para verano, gafas de sol y protector solar, gorro para el sol o de abrigo en invierno.
+Se puede ir en pantalón corto pero hay que tener en cuenta que se puede raspar en algunos lugares.
+Cuando hace calor es posible disfrutar de los pozos de agua.`,
+                extras: `Pausa especial en el salto para fotografías y mate.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 5,
+                name: "Cascada Hoya de Piedra - Quebrada El Molino",
+                subtitle: "Caminata pensada para disfrutar en familia por la pintoresca Quebrada El Molino con merienda serrana.",
+                duration: "3 horas aprox.",
+                difficulty: "Baja (Ideal toda la familia)",
+                priceAdult: 30000,
+                priceChild: 22000,
+                priceFormatted: "$ 30.000,00",
+                badge: "Rincón Secreto",
+                ageLimit: "Toda la familia",
+                image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Vehículo 4x4 climatizado",
+                times: ["09:30", "15:00"],
+                fullDescription: `Descubrí uno de los rincones más hermosos de las sierras en una caminata pensada para disfrutar en familia. Recorreremos la pintoresca Quebrada El Molino, atravesando senderos rodeados de vegetación nativa, arroyos de aguas cristalinas y espectaculares formaciones rocosas, hasta llegar a la imponente Cascada Hoya de Piedra, un lugar ideal para relajarse, tomar fotografías y conectar con la naturaleza. La Quebrada se caracteriza por sus paisajes serranos, cursos de agua y cascadas que la convierten en un escenario ideal para senderismo.
+
+Dificultad: Baja
+Ideal para toda la familia
+Duracion: 3 horas aprox.
+Incluye merienda Serrana - servicio puerta a puerta.
+Costo: $30.000 por persona`,
+                includes: [
+                    "Merienda Serrana incluida",
+                    "Servicio puerta a puerta (pick up hotel)",
+                    "Guía baqueano y habilitado",
+                    "Seguros integrales"
+                ],
+                equipment: `Ropa cómoda, zapatillas deportivas o de trekking, protector solar, cámara o celular para fotos y buena energía.`,
+                extras: `Ideal para niños, adultos mayores y toda la familia sin exigencia física.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 6,
+                name: "Excursión Salto del Tigre + Atardecer",
+                subtitle: "Trekking de dificultad media en senderos serranos, cascada y pausa especial para disfrutar el atardecer.",
+                duration: "Tarde / Atardecer (5 a 6 hs)",
+                difficulty: "Dificultad Media",
+                priceAdult: 65000,
+                priceChild: 49000,
+                priceFormatted: "$ 65.000,00",
+                badge: "Atardecer Mágico",
+                ageLimit: "Mínimo 2 pasajeros",
+                image: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Camioneta 4x4 con luces auxiliares",
+                times: ["14:30"],
+                fullDescription: `📍 Destino: salto del Tigre
+Salida : Todos los días
+👥 Minimo: 2 pasajeros
+🏃 Actividad: Trekking de dificultad media recorriendo senderos serranos, trepada suaves y arroyos.
+💫 Incluye: Guía Habilitado, Seguros, entradas a los campos, pausa especial para disfrutar el atardecer.
+📌 Ideal para: Amantes de la naturaleza, fotografía y aventuras al aire libre.`,
+                includes: [
+                    "Guía Habilitado",
+                    "Seguros de turismo aventura",
+                    "Entradas a los campos",
+                    "Pausa especial para disfrutar el atardecer serrano",
+                    "Traslados en 4x4"
+                ],
+                equipment: `Calzado deportivo o de trekking con buen agarre, abrigo para la caída del sol en la cumbre, agua y cámara de fotos.`,
+                extras: `Salida garantizada todos los días (mínimo 2 pasajeros).`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 7,
+                name: "Trekking Nocturno - Aventura bajo las estrellas",
+                subtitle: "Senderos de montaña bajo la luz de la luna, linternas frontales, cielo estrellado y picada serrana.",
+                duration: "3-4 HORAS",
+                difficulty: "Senderos con pendientes",
+                priceAdult: 60000,
+                priceChild: 45000,
+                priceFormatted: "$ 60.000,00",
+                badge: "Aventura Estelar",
+                ageLimit: "Para todas las edades",
+                image: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Camionetas 4x4 equipadas",
+                times: ["19:30"],
+                fullDescription: `Viví una experiencia diferente recorriendo los senderos de montaña bajo la luz de la luna.
+Esta caminata de dificultad media nos lleva por un paisaje serrano encantador, donde la calma de la noche y los sonidos del entorno se vuelven protagonistas.
+Con nuestras linternas frontales, avanzaremos por senderos con suaves pendientes, disfrutando de miradores naturales y la magia del cielo estrellado.
+Al finalizar, compartiremos una picada serrana para reponer energías y disfrutar del momento en grupo.
+
+DURACION: 3-4 HORAS
+DIFICULTAD: Senderos de montaña con pendientes.
+INCLUYE: Linterna frontal y Picada Serrana
+RECOMENDACION : Llevar Calzado cómodo acordonado, abrigo liviano, agua.`,
+                includes: [
+                    "Linterna frontal para la caminata",
+                    "Picada Serrana grupal al finalizar",
+                    "Guía baqueano habilitado",
+                    "Seguros de turismo aventura"
+                ],
+                equipment: `Llevar calzado cómodo acordonado con buen agarre, abrigo liviano (en la montaña la temperatura desciende de noche), agua personal.`,
+                extras: `Observación de estrellas y reconocimiento de constelaciones en la cumbre.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 8,
+                name: "Los Vallecitos (parque Natural)",
+                subtitle: "Parque Natural de más de 1000 has de bosques y valles, cascadas, hoyas con truchas y picada serrana.",
+                duration: "8 horas",
+                difficulty: "Fácil",
+                priceAdult: 95000,
+                priceChild: 72000,
+                priceFormatted: "$ 95.000,00",
+                badge: "Parque Natural",
+                ageLimit: "Familiar",
+                image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Toyota Hilux 4x4 de alta cumbre",
+                times: ["08:30"],
+                fullDescription: `Parque Natural de más de 1000has de bosques y valles ubicado en el corazón de las sierras de los Comechingones. Un día en las sierras donde vamos a conocer diferentes cascadas y sus hoyas repletas de truchas, pasear por los bosques, descansar en los espacios de estancia y maravillarse con la fauna del lugar.
+
+Duracion: 8 horas
+Dificultad: Facil
+Incluye: entrada al Parque, picada serrana.`,
+                includes: [
+                    "Entrada oficial al Parque Natural Los Vallecitos",
+                    "Picada serrana",
+                    "Recorrido por diferentes cascadas y hoyas con truchas",
+                    "Paseo por bosques y espacios de estancia",
+                    "Guía profesional y seguros"
+                ],
+                equipment: `Calzado cómodo con agarre, protector solar, cámara o celular, abrigo liviano, botella de agua personal.`,
+                extras: `Avistaje de fauna autóctona y aves serranas en estado salvaje.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 9,
+                name: "Cerro de Las Ovejas 2280msnm o Cabeza del Indio",
+                subtitle: "Ascenso al cerro más alto de San Luis (2.280 msnm), Reserva Mogote Bayo y panorámicas épicas.",
+                duration: "Aprox 12 horas",
+                difficulty: "Media (Desnivel 1.100m)",
+                priceAdult: 130000,
+                priceChild: 98000,
+                priceFormatted: "$ 130.000,00",
+                badge: "Cumbre Más Alta (2.280m)",
+                ageLimit: "Buena preparación física",
+                image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
+                vehicle: "Flota 4x4 de alta cumbre con VHF",
+                times: ["08:00"],
+                fullDescription: `Ascenso al cerro más alto de la provincia de San Luis.
+Adelante recorrido inicia en la Reserva Mogote Bayo (1170 msnm) Desde ahí sale una senda hasta Mogote Bayo, un cerro icónico con una vista de la Villa de Merlo. Desde ahí se continua por un antiguo camino utilizado por los pobladores de la sierra. Un sendero que permite recorrer todo el valle con una vista espectacular.
+Una vez que llegamos al filo, seguimos el recorrido por caminos poco marcados hasta llegar a la cumbre del Cerro de las Ovejas. Aquí arriba es conveniente hacer una parada para almorzar .
+Hay que tener en cuenta que el desnivel es de 1100 mts, por lo que el ritmo de ascenso es lento , es decir, entre 5 a 7 horas aproximadamente.
+El descenso se hace por el mismo lugar.
+
+DIA COMPLETO: Aprox 12horas
+DIFICULTAS: Media
+ZONA: Límite San Luis- Córdoba
+TRASLADO: A convenir
+HORARIO DE SALIDA: 8:00HS
+
+OPCION: Cabeza del Indio es el mismo recorrido y altura.`,
+                includes: [
+                    "Servicio de Guía de Alta Montaña especializado",
+                    "Seguros de turismo aventura",
+                    "Pase por Reserva Natural Mogote Bayo",
+                    "Comunicaciones y equipamiento de seguridad",
+                    "Ascenso completo a cumbre (2.280 msnm)"
+                ],
+                equipment: `Calzado de trekking con buen agarre indispensable, vianda para el almuerzo en la cumbre, agua abundante (2 litros mínimo), ropa en capas (abrigo de montaña, campera corta-viento), protector solar y gorro.`,
+                extras: `Opción Cabeza del Indio: mismo recorrido y altura. Desnivel total de 1.100 metros.`,
+                gallery: [
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=1200&q=80"
+                ]
+            },
+            {
+                id: 10,
+                name: "Experiencia La Huertita (Fin de Semana Exclusivo)",
+                subtitle: "Fin de semana exclusivo de naturaleza, agua y serranías: trekking al Cerro La Bandera, kayak, cicloturismo e interpretación arqueológica en Cueva del Indio y La Olla.",
+                duration: "3 Días / 2 Noches",
+                difficulty: "Multiaventura (Trekking, Kayak, Bici)",
+                priceAdult: 195000,
+                priceChild: 145000,
+                priceFormatted: "$ 195.000,00",
+                badge: "Fin de Semana Todo Incluido",
+                ageLimit: "Grupos reducidos (hasta 16 pax)",
+                image: "images/excursions/huertita/huertita_portada.png",
+                vehicle: "2 Camionetas de expedición desde Merlo (~100 km)",
+                times: ["15:00"],
+                fullDescription: `TURISMO ACTIVO & SOSTENIBLE — EXPERIENCIA LA HUERTITA
+Un fin de semana exclusivo de naturaleza, agua y serranías en el Dique La Huertita, San Luis. Un destino virgen, de aguas calmas y tranquilidad absoluta en el norte puntano.
+
+CRONOGRAMA DETALLADO:
+
+• DÍA 1:
+  - Llegada y check-in en la Casa del Club de Pescadores frente al espejo de agua (4 habitaciones / 16 plazas, living con hogar a leña, cocina y quincho).
+  - Mañana: Trekking al Cerro La Bandera. Sendero serrano con ascenso continuo, interpretación botánica de flora autóctona del monte puntano y mirador natural 360° sobre el murallón y valles circundantes.
+  - Tarde: Taller y Bautismo de Kayak. Charla técnica de seguridad náutica, colocación de chalecos DAF homologados, práctica de remada, control de estabilidad y navegación en bahía protegida frente al club para ganar confianza.
+  - Noche: Cena casera preparada en las instalaciones y descanso con vista panorámica.
+
+• DÍA 2: TRAVESÍA COMBINADA EN ESPEJO (Kayak + Cicloturismo):
+  - Desayuno serrano con vista al lago.
+  - Dinámica en Espejo (16 pasajeros divididos en 2 subgrupos de 8 coordinados por 1 guía cada uno):
+    * IDA: Subgrupo A navega en kayak (2,5 km por aguas calmas ingresando por el cañón) | Subgrupo B pedalea en bicicleta mountain bike (7 km bordeando el embalse, desnivel +200m con vistas aéreas).
+    * ENCUENTRO ARQUEOLÓGICO: Cueva del Indio y cultura Comechingón. Alero rocoso natural utilizado ancestralmente como refugio y morteros comunales prehispánicos excavados en roca.
+    * DESCANSO Y ALMUERZO: Pozos de agua cristalina en La Olla para refrescarse, vianda serrana compartida y contemplación.
+    * VUELTA: ¡Se intercambian los roles! Los que fueron en kayak regresan en bici y viceversa, experimentando ambas disciplinas al 100%.
+  - Noche: Gran asado serrano al quincho con asador a la estaca y horno de barro.
+
+• DÍA 3:
+  - Desayuno de despedida, relax frente al lago o última remada suave en el muelle, y regreso coordinado en camionetas hacia Merlo.`,
+                includes: [
+                    "Traslado ida y vuelta desde Merlo en 2 camionetas (~100 km por tramo)",
+                    "2 Noches de alojamiento exclusivo en la Casa del Club de Pescadores (16 plazas)",
+                    "Pensión completa: 2 desayunos serranos + 2 cenas caseras en quincho + viandas de marcha y picadas",
+                    "Trekking guiado al Cerro La Bandera con interpretación de flora y cumbres",
+                    "Travesía náutica en kayaks con chalecos DAF homologados y remos",
+                    "Travesía en bicicletas de montaña (7 km panorámicos)",
+                    "Interpretación arqueológica en Cueva del Indio (alero y mortero Comechingón) y relax en La Olla",
+                    "2 Guías profesionales habilitados de turismo aventura y montaña durante todo el fin de semana",
+                    "Seguros integrales de turismo activo y botiquín de primeros auxilios"
+                ],
+                equipment: `Calzado deportivo o de trekking con buen agarre, ropa cómoda y muda de recambio, traje de baño / toalla, abrigo para la noche en las sierras, protector solar, lentes de sol, gorra, linterna frontal y botella para hidratación personal.`,
+                extras: `Tarifa final con todo incluido: $195.000 por persona (menores hasta 12 años: $145.000).
+Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con reserva previa.`,
+                gallery: [
+                    "images/excursions/huertita/huertita_portada.png",
+                    "images/excursions/huertita/huertita_dique.png",
+                    "images/excursions/huertita/huertita_kayak.png",
+                    "images/excursions/huertita/huertita_trekking.png",
+                    "images/excursions/huertita/huertita_club.png",
+                    "images/excursions/huertita/huertita_olla.png",
+                    "images/excursions/huertita/huertita_sintesis.png"
+                ]
+            }
+        ];
+
+        // 2. Estado de la aplicación
+        let paxCounts = { adults: 1, children: 0 };
+        let flatpickrInst = null;
+        let lastCreatedReservation = null;
+
+        // 3. Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderExcursionsCatalog();
+            populateExcursionSelect();
+            initFlatpickrCalendar();
+            initHeroVideo();
+            loadSettings();
+        });
+
+        // ------------------ VIDEO HERO ------------------ //
+        function initHeroVideo() {
+            const video = document.getElementById('heroVideo');
+            const notice = document.getElementById('videoReadyNotice');
+            if (!video) return;
+
+            video.muted = true;
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Video playing successfully
+                    if (notice) notice.classList.add('hidden');
+                }).catch(err => {
+                    // Waiting for file
+                    if (notice) notice.classList.remove('hidden');
+                });
+            }
+        }
+
+        function toggleHeroSound() {
+            const video = document.getElementById('heroVideo');
+            const icon = document.getElementById('soundIcon');
+            if (!video) return;
+            video.muted = !video.muted;
+            if (icon) {
+                icon.className = video.muted ? 'fa-solid fa-volume-xmark text-sm' : 'fa-solid fa-volume-high text-sm text-amber-400';
+            }
+        }
+
+        function toggleHeroPlay() {
+            const video = document.getElementById('heroVideo');
+            const icon = document.getElementById('playIcon');
+            if (!video) return;
+            if (video.paused) {
+                video.play();
+                if (icon) icon.className = 'fa-solid fa-pause text-sm';
+            } else {
+                video.pause();
+                if (icon) icon.className = 'fa-solid fa-play text-sm text-amber-400';
+            }
+        }
+
+        // ------------------ CATÁLOGO DE EXCURSIONES ------------------ //
+        function renderExcursionsCatalog() {
+            const grid = document.getElementById('excursionsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = EXCURSIONS.map(exc => `
+                <div class="bg-sierra-950 rounded-3xl overflow-hidden border border-stone-800 hover:border-amber-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10 flex flex-col group">
+                    
+                    <!-- Imagen interactiva con clic para abrir menú de fotos y detalles -->
+                    <div onclick="openExcursionDetailModal(${exc.id})" class="relative h-64 sm:h-72 overflow-hidden cursor-pointer">
+                        <img src="${exc.image}" alt="${exc.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-sierra-950 via-transparent to-black/40 group-hover:bg-black/20 transition-colors"></div>
+                        
+                        <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+                            <span class="bg-amber-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow">
+                                ${exc.badge}
+                            </span>
+                            <span class="bg-stone-900/80 backdrop-blur-md text-stone-200 text-xs font-medium px-3 py-1 rounded-full border border-stone-700/60">
+                                <i class="fa-solid fa-clock text-amber-400 mr-1"></i> ${exc.duration}
+                            </span>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-stone-900/80 backdrop-blur-md text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-stone-700/60">
+                                <i class="fa-solid fa-gauge-high mr-1"></i> ${exc.difficulty}
+                            </span>
+                        </div>
+
+                        <!-- Pill indicando ver fotos -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                            <span class="px-4 py-2 rounded-full bg-stone-950/90 text-white text-xs font-bold border border-amber-500/60 shadow-xl flex items-center gap-2 backdrop-blur-sm">
+                                <i class="fa-solid fa-camera text-amber-400"></i> Ver Fotos & Detalle
+                            </span>
+                        </div>
+
+                        <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-stone-300">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck-pickup text-amber-400"></i> ${exc.vehicle}</span>
+                            <span class="flex items-center gap-1 text-emerald-400 font-semibold"><i class="fa-solid fa-images text-xs"></i> ${(exc.gallery && exc.gallery.length) || 1} fotos</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 onclick="openExcursionDetailModal(${exc.id})" class="font-heading font-black text-xl sm:text-2xl text-white mb-2 group-hover:text-amber-400 transition-colors cursor-pointer">
+                                ${exc.name}
+                            </h3>
+                            <p class="text-stone-300 text-sm leading-relaxed mb-6">
+                                ${exc.subtitle}
+                            </p>
+                            <div class="space-y-2 mb-6">
+                                ${exc.includes.slice(0, 3).map(inc => `
+                                    <div class="flex items-start gap-2.5 text-xs text-stone-400">
+                                        <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                        <span>${inc}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-stone-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider text-stone-400 block">Tarifa por persona:</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl sm:text-3xl font-heading font-black text-amber-400">${exc.priceFormatted || '$' + formatMoney(exc.priceAdult)}</span>
+                                </div>
+                                <span class="text-[11px] text-stone-400 block mt-0.5">Menores: $${formatMoney(exc.priceChild)} ARS</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button onclick="openExcursionDetailModal(${exc.id})" class="px-4 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700 text-xs font-bold transition-colors flex items-center justify-center gap-1.5" title="Ver galería y descripción completa">
+                                    <i class="fa-solid fa-circle-info text-amber-400"></i>
+                                    <span>Ver Más</span>
+                                </button>
+                                <button onclick="openBookingModal(${exc.id})" class="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-heading font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                    <span>Reservar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ------------------ MODAL DE DETALLE DE EXCURSIÓN (FOTOS & DESCRIPCIÓN) ------------------ //
+        function openExcursionDetailModal(excursionId) {
+            const exc = EXCURSIONS.find(e => e.id === excursionId);
+            if (!exc) return;
+
+            document.getElementById('detailModalTitle').innerText = exc.name;
+            document.getElementById('detailBadgePrice').innerText = exc.priceFormatted || `$${formatMoney(exc.priceAdult)}`;
+            document.getElementById('detailBadgeDuration').innerHTML = `<i class="fa-solid fa-clock text-amber-400 mr-1"></i> ${exc.duration}`;
+            document.getElementById('detailBadgeDifficulty').innerHTML = `<i class="fa-solid fa-gauge-high mr-1"></i> ${exc.difficulty}`;
+
+            const ageBadge = document.getElementById('detailBadgeAge');
+            if (exc.ageLimit) {
+                ageBadge.innerText = exc.ageLimit;
+                ageBadge.classList.remove('hidden');
+            } else {
+                ageBadge.classList.add('hidden');
+            }
+
+            // Fotos y galería
+            const mainImg = document.getElementById('detailMainImage');
+            mainImg.src = exc.gallery && exc.gallery[0] ? exc.gallery[0] : exc.image;
+
+            const thumbsContainer = document.getElementById('detailThumbnails');
+            if (exc.gallery && exc.gallery.length > 0) {
+                thumbsContainer.innerHTML = exc.gallery.map((photoUrl, idx) => `
+                    <button type="button" onclick="setDetailMainPhoto('${photoUrl}', this)" class="h-16 sm:h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${idx === 0 ? 'border-amber-400 scale-[1.02] shadow-md opacity-100' : 'border-stone-800 opacity-70 hover:opacity-100'}">
+                        <img src="${photoUrl}" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
+                    </button>
+                `).join('');
+            } else {
+                thumbsContainer.innerHTML = '';
+            }
+
+            // Descripción de texto completo
+            document.getElementById('detailFullText').innerText = exc.fullDescription || exc.subtitle;
+
+            // Qué incluye
+            const includesList = document.getElementById('detailIncludesList');
+            if (exc.includes && exc.includes.length > 0) {
+                includesList.innerHTML = exc.includes.map(inc => `
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                        <span>${inc}</span>
+                    </li>
+                `).join('');
+            } else {
+                includesList.innerHTML = '<li>Guía habilitado y seguros de excursión.</li>';
+            }
+
+            // Equipamiento recomendado
+            document.getElementById('detailEquipmentText').innerText = exc.equipment || 'Calzado cómodo deportivo o de trekking, abrigo liviano, agua y protector solar.';
+
+            // Extras y valores
+            const extrasBox = document.getElementById('detailExtrasBox');
+            const extrasText = document.getElementById('detailExtrasText');
+            if (exc.extras) {
+                extrasText.innerText = exc.extras;
+                extrasBox.classList.remove('hidden');
+            } else {
+                extrasBox.classList.add('hidden');
+            }
+
+            // Footer del modal
+            document.getElementById('detailFooterPrice').innerText = `${exc.priceFormatted || '$' + formatMoney(exc.priceAdult)} ARS`;
+
+            const rawPhone = localStorage.getItem('ma_whatsapp') || '5492664123456';
+            const msg = `¡Hola Merlo Aventura! Quiero consultar sobre la excursión "${exc.name}" (${exc.priceFormatted}).`;
+            document.getElementById('detailWhatsappBtn').href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+
+            const bookBtn = document.getElementById('detailBookBtn');
+            bookBtn.onclick = function() {
+                closeExcursionDetailModal();
+                openBookingModal(exc.id);
+            };
+
+            const modal = document.getElementById('excursionDetailModal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeExcursionDetailModal() {
+            const modal = document.getElementById('excursionDetailModal');
+            if (modal) modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function setDetailMainPhoto(photoUrl, btn) {
+            const mainImg = document.getElementById('detailMainImage');
+            mainImg.src = photoUrl;
+
+            // Highlight thumbnail
+            const allBtns = document.getElementById('detailThumbnails').querySelectorAll('button');
+            allBtns.forEach(b => {
+                b.className = 'h-16 sm:h-20 rounded-xl overflow-hidden border-2 border-stone-800 opacity-70 hover:opacity-100 transition-all cursor-pointer';
+            });
+            if (btn) {
+                btn.className = 'h-16 sm:h-20 rounded-xl overflow-hidden border-2 border-amber-400 scale-[1.02] shadow-md opacity-100 transition-all cursor-pointer';
+            }
+        }
+
+        function populateExcursionSelect() {
+            const select = document.getElementById('modalExcursionSelect');
+            if (!select) return;
+            select.innerHTML = EXCURSIONS.map(e => `
+                <option value="${e.id}">${e.name} — $${formatMoney(e.priceAdult)} ARS</option>
+            `).join('');
+        }
+
+        // ------------------ CALENDARIO INTERACTIVO FLATPICKR ------------------ //
+        function initFlatpickrCalendar() {
+            const dateInput = document.getElementById('modalDatePicker');
+            if (!dateInput) return;
+
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            flatpickrInst = flatpickr(dateInput, {
+                locale: flatpickr.l1ons.es,
+                minDate: 'today',
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'l, j \\de F \\de Y',
+                defaultDate: tomorrow,
+                onChange: function(dates, dateStr) {
+                    updateAvailabilityBadge();
+                }
+            });
+        }
+
+        // ------------------ MODAL DE RESERVA & CUPOS ------------------ //
+        function openBookingModal(excursionId = null) {
+            const modal = document.getElementById('bookingModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+
+            const select = document.getElementById('modalExcursionSelect');
+            if (select && excursionId) {
+                select.value = excursionId;
+            }
+            onExcursionSelectChange();
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            if (modal) modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function onExcursionSelectChange() {
+            const select = document.getElementById('modalExcursionSelect');
+            if (!select) return;
+            const excId = parseInt(select.value);
+            const exc = EXCURSIONS.find(e => e.id === excId) || EXCURSIONS[0];
+
+            document.getElementById('adultRateLabel').innerText = `$${formatMoney(exc.priceAdult)} c/u`;
+            document.getElementById('childRateLabel').innerText = `$${formatMoney(exc.priceChild)} c/u`;
+
+            const timeSelect = document.getElementById('modalTimeSelect');
+            if (timeSelect) {
+                timeSelect.innerHTML = exc.times.map(t => `
+                    <option value="${t}">Turno ${t >= '12:00' ? 'Tarde' : 'Mañana'} (${t} hs)</option>
+                `).join('');
+            }
+
+            calculateTotal();
+            updateAvailabilityBadge();
+        }
+
+        function adjustPax(type, delta) {
+            let next = paxCounts[type] + delta;
+            let min = (type === 'adults') ? 1 : 0;
+            if (next < min) next = min;
+            if (next > 8) next = 8;
+            paxCounts[type] = next;
+
+            document.getElementById(type === 'adults' ? 'adultCountDisplay' : 'childCountDisplay').innerText = next;
+            calculateTotal();
+            updateAvailabilityBadge();
+        }
+
+        function calculateTotal() {
+            const select = document.getElementById('modalExcursionSelect');
+            const excId = parseInt(select.value);
+            const exc = EXCURSIONS.find(e => e.id === excId) || EXCURSIONS[0];
+
+            const total = (paxCounts.adults * exc.priceAdult) + (paxCounts.children * exc.priceChild);
+            document.getElementById('modalPriceSummary').innerText = `$${formatMoney(total)} ARS`;
+            return total;
+        }
+
+        function updateAvailabilityBadge() {
+            const badgeText = document.getElementById('availabilityText');
+            if (!badgeText) return;
+
+            // Simulación de control de cupos (máximo 8 asientos)
+            const totalPax = paxCounts.adults + paxCounts.children;
+            const available = Math.max(1, 8 - (totalPax > 4 ? 2 : 0));
+            badgeText.innerHTML = `¡Quedan <strong>${available}</strong> cupos disponibles para esta salida!`;
+        }
+
+        // ------------------ PROCESAR RESERVA & PAGOS ------------------ //
+        function processBooking(e) {
+            e.preventDefault();
+
+            const select = document.getElementById('modalExcursionSelect');
+            const excId = parseInt(select.value);
+            const exc = EXCURSIONS.find(e => e.id === excId);
+
+            const tourDate = document.getElementById('modalDatePicker').value;
+            const tourTime = document.getElementById('modalTimeSelect').value;
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const email = document.getElementById('custEmail').value.trim();
+            const dni = document.getElementById('custDNI').value.trim();
+            const hotel = document.getElementById('custHotel').value.trim();
+            const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+            const total = calculateTotal();
+            const totalPax = paxCounts.adults + paxCounts.children;
+
+            // Generar código de reserva único (ej: MA-74921)
+            const code = 'MA-' + Math.floor(10000 + Math.random() * 90000);
+
+            const reservation = {
+                code: code,
+                tourName: exc.name,
+                tourDate: tourDate,
+                tourTime: tourTime,
+                adults: paxCounts.adults,
+                children: paxCounts.children,
+                totalPax: totalPax,
+                totalPrice: total,
+                clientName: name,
+                clientPhone: phone,
+                clientEmail: email,
+                clientDni: dni,
+                hotel: hotel || 'A coordinar en Merlo',
+                paymentMethod: payMethod,
+                paymentStatus: (payMethod === 'mercadopago') ? 'approved' : 'pending',
+                dateCreated: new Date().toLocaleDateString('es-AR')
+            };
+
+            // Guardar en el almacenamiento local (persistente)
+            saveReservation(reservation);
+            lastCreatedReservation = reservation;
+
+            closeBookingModal();
+
+            if (payMethod === 'mercadopago') {
+                // Si el usuario configuró link de pago de MP en admin, redirige; sino muestra el voucher aprobado
+                const mpToken = localStorage.getItem('ma_mp_token') || '';
+                if (mpToken.startsWith('http')) {
+                    window.open(mpToken, '_blank');
+                }
+                showVoucher(reservation, true);
+            } else {
+                // Mostrar datos para transferencia
+                showTransferDetails(reservation);
+            }
+        }
+
+        // ------------------ TRANSFERENCIA Y COMPROBANTES ------------------ //
+        function showTransferDetails(res) {
+            document.getElementById('transferCodeDisplay').innerText = res.code;
+            document.getElementById('transferTourDisplay').innerText = `${res.tourName} (${res.tourDate} - ${res.tourTime} hs)`;
+            document.getElementById('transferTotalDisplay').innerText = `$${formatMoney(res.totalPrice)} ARS`;
+            document.getElementById('transferRefDisplay').innerText = res.code;
+
+            const rawPhone = localStorage.getItem('ma_whatsapp') || '5492664123456';
+            const msg = `¡Hola Merlo Aventura! Acabo de hacer la reserva #${res.code} para ${res.tourName} el ${res.tourDate} a las ${res.tourTime} hs (${res.totalPax} personas). Monto total: $${formatMoney(res.totalPrice)} ARS. Adjunto mi comprobante de transferencia.`;
+            document.getElementById('transferWhatsappBtn').href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+
+            document.getElementById('transferModal').classList.remove('hidden');
+        }
+
+        function closeTransferModal() {
+            document.getElementById('transferModal').classList.add('hidden');
+        }
+
+        function showVoucherFromTransfer() {
+            closeTransferModal();
+            if (lastCreatedReservation) {
+                showVoucher(lastCreatedReservation, false);
+            }
+        }
+
+        // ------------------ VOUCHER DIGITAL ------------------ //
+        function showVoucher(res, isApproved) {
+            document.getElementById('vouchCode').innerText = res.code;
+            document.getElementById('vouchTour').innerText = res.tourName;
+            document.getElementById('vouchDateTime').innerText = `${res.tourDate} a las ${res.tourTime} hs`;
+            document.getElementById('vouchPax').innerText = `${res.totalPax} personas (${res.adults} Adultos, ${res.children} Menores)`;
+            document.getElementById('vouchTotal').innerText = `$${formatMoney(res.totalPrice)} ARS (${res.paymentMethod === 'mercadopago' ? 'Mercado Pago' : 'Transferencia'})`;
+            document.getElementById('vouchClient').innerText = `${res.clientName} • Tel: ${res.clientPhone}`;
+            document.getElementById('vouchHotel').innerText = res.hotel;
+
+            document.getElementById('voucherModal').classList.remove('hidden');
+        }
+
+        function closeVoucherModal() {
+            document.getElementById('voucherModal').classList.add('hidden');
+        }
+
+        // ------------------ ALMACENAMIENTO & PANEL ADMIN ------------------ //
+        function saveReservation(res) {
+            let list = getStoredReservations();
+            list.unshift(res);
+            localStorage.setItem('ma_reservations', JSON.stringify(list));
+            refreshAdminView();
+        }
+
+        function getStoredReservations() {
+            try {
+                return JSON.parse(localStorage.getItem('ma_reservations')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function openAdminModal() {
+            const pwd = prompt('Ingresá la contraseña de administrador:');
+            if (pwd !== 'admin') {
+                if (pwd !== null) alert('Contraseña incorrecta');
+                return;
+            }
+            refreshAdminView();
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function refreshAdminView() {
+            const list = getStoredReservations();
+            const total = list.length;
+            const approved = list.filter(r => r.paymentStatus === 'approved').length;
+            const pending = list.filter(r => r.paymentStatus === 'pending').length;
+            const revenue = list.filter(r => r.paymentStatus === 'approved').reduce((acc, r) => acc + r.totalPrice, 0);
+
+            document.getElementById('admTotalCount').innerText = total;
+            document.getElementById('admApprovedCount').innerText = approved;
+            document.getElementById('admPendingCount').innerText = pending;
+            document.getElementById('admTotalRevenue').innerText = `$${formatMoney(revenue)}`;
+
+            const tbody = document.getElementById('admReservationsTable');
+            if (!tbody) return;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-stone-500">No hay reservas registradas aún.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((r, idx) => `
+                <tr class="hover:bg-stone-900/60">
+                    <td class="p-3 font-mono font-bold text-amber-400">${r.code}</td>
+                    <td class="p-3"><strong>${r.tourName}</strong><br><span class="text-stone-500">${r.tourDate} - ${r.tourTime} hs</span></td>
+                    <td class="p-3 font-bold">${r.totalPax} pax</td>
+                    <td class="p-3">${r.clientName}<br><a href="https://wa.me/${r.clientPhone.replace(/\\D/g,'')}" target="_blank" class="text-emerald-400"><i class="fa-brands fa-whatsapp"></i> ${r.clientPhone}</a></td>
+                    <td class="p-3 font-bold">$${formatMoney(r.totalPrice)}<br><span class="text-[10px] uppercase text-stone-400">${r.paymentMethod}</span></td>
+                    <td class="p-3">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.paymentStatus === 'approved' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'}">
+                            ${r.paymentStatus === 'approved' ? 'Aprobada' : 'Pendiente'}
+                        </span>
+                    </td>
+                    <td class="p-3 text-center">
+                        ${r.paymentStatus !== 'approved' ? `
+                            <button onclick="toggleResStatus(${idx}, 'approved')" class="px-2 py-1 bg-emerald-900 text-emerald-300 rounded text-[11px] hover:bg-emerald-800">
+                                Aprobar
+                            </button>
+                        ` : `
+                            <button onclick="toggleResStatus(${idx}, 'pending')" class="px-2 py-1 bg-stone-800 text-stone-400 rounded text-[11px]">
+                                Pendiente
+                            </button>
+                        `}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleResStatus(index, newStatus) {
+            let list = getStoredReservations();
+            if (list[index]) {
+                list[index].paymentStatus = newStatus;
+                localStorage.setItem('ma_reservations', JSON.stringify(list));
+                refreshAdminView();
+            }
+        }
+
+        function exportReservationsCSV() {
+            const list = getStoredReservations();
+            if (list.length === 0) {
+                alert('No hay reservas para exportar.');
+                return;
+            }
+            let csv = "Codigo,Excursion,Fecha,Horario,Pasajeros,Cliente,Telefono,Email,Hotel,Total,Metodo,Estado\n";
+            list.forEach(r => {
+                csv += `"${r.code}","${r.tourName}","${r.tourDate}","${r.tourTime}",${r.totalPax},"${r.clientName}","${r.clientPhone}","${r.clientEmail}","${r.hotel}",${r.totalPrice},"${r.paymentMethod}","${r.paymentStatus}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reservas_merlo_aventura_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        }
+
+        function saveAdminSettings() {
+            const token = document.getElementById('cfgMpToken').value.trim();
+            const wp = document.getElementById('cfgWhatsapp').value.trim();
+            const alias = document.getElementById('cfgAlias').value.trim();
+            const cbu = document.getElementById('cfgCBU').value.trim();
+
+            if (token) localStorage.setItem('ma_mp_token', token);
+            if (wp) localStorage.setItem('ma_whatsapp', wp);
+            if (alias) localStorage.setItem('ma_alias', alias);
+            if (cbu) localStorage.setItem('ma_cbu', cbu);
+
+            loadSettings();
+            alert('¡Ajustes guardados correctamente!');
+        }
+
+        function loadSettings() {
+            const alias = localStorage.getItem('ma_alias') || 'MERLO.AVENTURA.4X4';
+            const cbu = localStorage.getItem('ma_cbu') || '0070123430004059683921';
+            const wp = localStorage.getItem('ma_whatsapp') || '5492664123456';
+
+            if (document.getElementById('transferAliasText')) document.getElementById('transferAliasText').innerText = alias;
+            if (document.getElementById('transferCBUText')) document.getElementById('transferCBUText').innerText = cbu;
+            if (document.getElementById('cfgAlias')) document.getElementById('cfgAlias').value = alias;
+            if (document.getElementById('cfgCBU')) document.getElementById('cfgCBU').value = cbu;
+            if (document.getElementById('cfgWhatsapp')) document.getElementById('cfgWhatsapp').value = wp;
+        }
+
+        // ------------------ HELPERS ------------------ //
+        function copyText(elementId, btn) {
+            const text = document.getElementById(elementId).innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const prev = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> ¡Copiado!';
+                setTimeout(() => btn.innerHTML = prev, 2000);
+            });
+        }
+
+        function formatMoney(n) {
+            return new Intl.NumberFormat('es-AR').format(Math.round(n));
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('inqName').value;
+            const phone = document.getElementById('inqPhone').value;
+            const tour = document.getElementById('inqTour').value;
+            const msg = document.getElementById('inqMsg').value;
+            const rawPhone = localStorage.getItem('ma_whatsapp') || '5492664123456';
+            const text = `¡Hola Merlo Aventura! Mi nombre es ${name} (Tel: ${phone}). Quisiera consultar sobre la excursión "${tour}". Detalle: ${msg}`;
+            window.open(`https://wa.me/${rawPhone}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+</body>
+</html>

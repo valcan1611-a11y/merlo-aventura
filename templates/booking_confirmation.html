@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Voucher de Reserva | {{ booking.code }} | Merlo Aventura{% endblock %}
+
+{% block content %}
+<div class="py-16 max-w-3xl mx-auto px-4 sm:px-6">
+    
+    <!-- Print Container -->
+    <div id="voucherCard" class="bg-sierra-950 rounded-3xl border border-stone-800 p-6 sm:p-10 shadow-2xl relative overflow-hidden print:border-none print:shadow-none print:p-0 print:bg-white print:text-black">
+        
+        <!-- Status Header Badge -->
+        <div class="mb-8 text-center">
+            {% if booking.payment_status == 'approved' %}
+                <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <span class="text-xs font-bold tracking-widest text-emerald-400 uppercase bg-emerald-950/80 px-3.5 py-1 rounded-full border border-emerald-800">
+                    Pago Acreditado • Reserva Confirmada
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-heading font-black text-white mt-3 print:text-black">
+                    ¡Todo Listo para tu Aventura!
+                </h1>
+                <p class="text-stone-400 text-sm mt-2 max-w-md mx-auto print:text-stone-600">
+                    Tu salida 4x4 está agendada. Te enviamos la confirmación a <strong>{{ booking.customer_email }}</strong>.
+                </p>
+            {% elif booking.payment_status == 'pending' %}
+                <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <span class="text-xs font-bold tracking-widest text-amber-400 uppercase bg-amber-950/80 px-3.5 py-1 rounded-full border border-amber-800">
+                    Reserva en Proceso • Pendiente de Validación
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-heading font-black text-white mt-3 print:text-black">
+                    Reserva Registrada
+                </h1>
+                <p class="text-stone-400 text-sm mt-2 max-w-md mx-auto print:text-stone-600">
+                    Estamos verificando el pago con Mercado Pago o tu transferencia. Te notificaremos a <strong>{{ booking.customer_email }}</strong> en cuanto esté confirmada.
+                </p>
+            {% else %}
+                <div class="w-16 h-16 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <span class="text-xs font-bold tracking-widest text-rose-400 uppercase bg-rose-950/80 px-3.5 py-1 rounded-full border border-rose-800">
+                    Estado: {{ booking.payment_status }}
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-heading font-black text-white mt-3 print:text-black">
+                    Atención con tu Reserva
+                </h1>
+            {% endif %}
+        </div>
+
+        <!-- Voucher Body -->
+        <div class="bg-stone-900 rounded-2xl p-6 sm:p-8 border border-stone-800 print:bg-stone-50 print:border-stone-300 print:text-black space-y-6">
+            
+            <!-- Code Bar -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-stone-800 print:border-stone-300 gap-4">
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block">Código de Voucher</span>
+                    <span class="font-mono font-black text-2xl sm:text-3xl text-amber-400 print:text-stone-900">{{ booking.code }}</span>
+                </div>
+                <div class="text-left sm:text-right">
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block">Fecha de Registro</span>
+                    <span class="text-xs text-stone-300 print:text-stone-700">{{ booking.created_at }}</span>
+                </div>
+            </div>
+
+            <!-- Excursion Details -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Excursión 4x4</span>
+                    <div class="font-heading font-bold text-lg text-white print:text-black">{{ booking.excursion_name }}</div>
+                    <span class="text-xs text-stone-400 print:text-stone-600"><i class="fa-solid fa-clock mr-1 text-amber-500"></i> {{ booking.excursion_duration }}</span>
+                </div>
+
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Fecha & Turno de Salida</span>
+                    <div class="font-heading font-bold text-lg text-amber-400 print:text-stone-900">{{ booking.tour_date }}</div>
+                    <span class="text-xs text-stone-300 print:text-stone-700">Horario de partida: <strong>{{ booking.tour_time }} hs</strong></span>
+                </div>
+
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Pasajeros</span>
+                    <div class="font-bold text-white print:text-black">
+                        {{ booking.total_passengers }} personas ({{ booking.adults }} Adultos{% if booking.children > 0 %}, {{ booking.children }} Menores{% endif %})
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block mb-1">Vehículo Asignado</span>
+                    <div class="font-bold text-white print:text-black flex items-center gap-1.5">
+                        <i class="fa-solid fa-truck-pickup text-amber-500"></i> {{ booking.excursion_vehicle|default('Toyota Hilux / Ranger 4x4') }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pick up & Passenger details -->
+            <div class="pt-6 border-t border-stone-800 print:border-stone-300 space-y-3 text-sm">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-location-dot text-amber-500 mt-1"></i>
+                    <div>
+                        <span class="text-xs text-stone-500 uppercase tracking-wider block">Punto de Pick-up coordinado</span>
+                        <div class="font-semibold text-white print:text-black">
+                            {{ booking.hotel_address if booking.hotel_address else 'A coordinar en Merlo (nos pondremos en contacto por WhatsApp)' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-user text-amber-500 mt-1"></i>
+                    <div>
+                        <span class="text-xs text-stone-500 uppercase tracking-wider block">Pasajero Responsable</span>
+                        <div class="text-white print:text-black">
+                            <strong>{{ booking.customer_name }}</strong> • Tel: {{ booking.customer_phone }} {% if booking.customer_dni %}• DNI: {{ booking.customer_dni }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Breakdown -->
+            <div class="pt-6 border-t border-stone-800 print:border-stone-300 flex justify-between items-center">
+                <div>
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block">Método de Pago</span>
+                    <span class="text-xs text-stone-300 print:text-stone-700 capitalize font-medium">
+                        {% if booking.payment_method == 'mercadopago' %}
+                            <i class="fa-solid fa-credit-card text-sky-400 mr-1"></i> Mercado Pago Oficial
+                        {% else %}
+                            <i class="fa-solid fa-building-columns text-emerald-400 mr-1"></i> Transferencia Bancaria
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-stone-500 uppercase tracking-wider block">Total Abonado</span>
+                    <span class="text-2xl font-heading font-black text-amber-400 print:text-black">${{ '{:,.2f}'.format(booking.total_price) }} ARS</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons (Hidden when printing) -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 print:hidden">
+            <button onclick="window.print()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-200 border border-stone-700 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors">
+                <i class="fa-solid fa-print"></i>
+                <span>Imprimir / Guardar PDF</span>
+            </button>
+
+            <a href="https://wa.me/{{ settings.whatsapp_raw|default('5492664123456') }}?text={{ ('Hola! Tengo una consulta sobre mi voucher ' + booking.code)|urlencode }}" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Hablar con la Base</span>
+            </a>
+
+            <a href="{{ url_for('index') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors">
+                <i class="fa-solid fa-house"></i>
+                <span>Ir al Inicio</span>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

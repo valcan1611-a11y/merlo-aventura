@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Acceso Administración | Merlo Aventura{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center py-16 px-4">
+    <div class="w-full max-w-md bg-sierra-950 p-8 sm:p-10 rounded-3xl border border-stone-800 shadow-2xl">
+        
+        <div class="text-center mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h1 class="text-2xl font-heading font-black text-white">Panel de Control</h1>
+            <p class="text-xs text-stone-400 mt-1">Merlo Aventura • Gestión de Reservas y Pagos</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('admin_login') }}" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">Contraseña de Administrador</label>
+                <input type="password" name="password" required placeholder="Ingresá la contraseña..." autofocus class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-white text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none">
+                <span class="text-[11px] text-stone-500 mt-1 block">Contraseña por defecto: <code>admin</code></span>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-bold rounded-xl text-sm shadow-lg uppercase tracking-wider transition-all">
+                Ingresar al Panel
+            </button>
+        </form>
+
+        <div class="mt-8 text-center border-t border-stone-800 pt-6">
+            <a href="{{ url_for('index') }}" class="text-xs text-stone-400 hover:text-white transition-colors">
+                &larr; Volver a la web pública
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

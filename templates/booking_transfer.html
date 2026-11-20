@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block title %}Datos para Transferencia | Reserva #{{ booking.code }}{% endblock %}
+
+{% block content %}
+<div class="py-16 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6">
+    
+    <!-- Top Step Card -->
+    <div class="bg-sierra-950 rounded-3xl border border-stone-800 p-6 sm:p-8 shadow-2xl mb-8">
+        
+        <!-- Status Header -->
+        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-stone-800">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl border border-amber-500/30">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <div>
+                <span class="text-xs uppercase font-bold text-amber-500 tracking-wider">Paso Final de Reserva</span>
+                <h1 class="text-2xl sm:text-3xl font-heading font-black text-white">Transferencia Bancaria</h1>
+            </div>
+        </div>
+
+        <!-- Reservation Summary Box -->
+        <div class="bg-stone-900 rounded-2xl p-5 border border-stone-800 mb-8 space-y-3 text-sm">
+            <div class="flex justify-between items-center text-stone-400 pb-3 border-b border-stone-800/80">
+                <span>Código de Reserva:</span>
+                <span class="font-mono font-bold text-amber-400 text-base">{{ booking.code }}</span>
+            </div>
+            <div class="flex justify-between items-center text-stone-300">
+                <span>Excursión:</span>
+                <span class="font-semibold text-white text-right">{{ booking.excursion_name }}</span>
+            </div>
+            <div class="flex justify-between items-center text-stone-300">
+                <span>Fecha y Horario:</span>
+                <span class="font-semibold text-white">{{ booking.tour_date }} a las {{ booking.tour_time }} hs</span>
+            </div>
+            <div class="flex justify-between items-center text-stone-300">
+                <span>Pasajeros:</span>
+                <span class="font-semibold text-white">{{ booking.total_passengers }} ({{ booking.adults }} Adultos{% if booking.children > 0 %}, {{ booking.children }} Menores{% endif %})</span>
+            </div>
+            <div class="flex justify-between items-center text-stone-300">
+                <span>Titular:</span>
+                <span class="font-semibold text-white">{{ booking.customer_name }}</span>
+            </div>
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/80">
+                <span class="font-bold text-white text-base">Monto Total a Transferir:</span>
+                <span class="font-heading font-black text-2xl text-amber-400">${{ '{:,.2f}'.format(booking.total_price) }} ARS</span>
+            </div>
+        </div>
+
+        <!-- Official Bank Account Details Box -->
+        <div class="bg-stone-950 rounded-2xl p-6 border-2 border-amber-500/40 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-vault"></i> Cuentas Bancarias Oficiales
+                </h2>
+                <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2.5 py-0.5 rounded-full font-semibold border border-amber-500/20">
+                    Copia en 1 Clic
+                </span>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                
+                <!-- Alias -->
+                <div class="flex items-center justify-between bg-stone-900 p-3.5 rounded-xl border border-stone-800">
+                    <div>
+                        <span class="text-[11px] text-stone-400 block">ALIAS:</span>
+                        <span id="bankAlias" class="font-mono font-bold text-white text-base">{{ settings.bank_alias|default('MERLO.AVENTURA.4X4') }}</span>
+                    </div>
+                    <button onclick="copyToClipboard('bankAlias', this)" class="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copiar Alias</span>
+                    </button>
+                </div>
+
+                <!-- CBU / CVU -->
+                <div class="flex items-center justify-between bg-stone-900 p-3.5 rounded-xl border border-stone-800">
+                    <div class="overflow-hidden">
+                        <span class="text-[11px] text-stone-400 block">CBU:</span>
+                        <span id="bankCBU" class="font-mono font-bold text-white text-sm sm:text-base break-all">{{ settings.bank_cbu|default('0070123430004059683921') }}</span>
+                    </div>
+                    <button onclick="copyToClipboard('bankCBU', this)" class="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 ml-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copiar CBU</span>
+                    </button>
+                </div>
+
+                <!-- Account Info -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-300 pt-2">
+                    <div>
+                        <span class="text-stone-500 block">Titular:</span>
+                        <span class="font-semibold text-white">{{ settings.bank_account_holder|default('Merlo Aventura SRL') }}</span>
+                    </div>
+                    <div>
+                        <span class="text-stone-500 block">CUIT:</span>
+                        <span class="font-semibold text-white">{{ settings.bank_cuit|default('30-71829384-9') }}</span>
+                    </div>
+                    <div>
+                        <span class="text-stone-500 block">Banco:</span>
+                        <span class="font-semibold text-white">{{ settings.bank_name|default('Banco Galicia / Mercado Pago') }}</span>
+                    </div>
+                    <div>
+                        <span class="text-stone-500 block">Referencia en transferencia:</span>
+                        <span class="font-mono font-semibold text-amber-400">{{ booking.code }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Step 2: Inform Payment -->
+        <div class="space-y-6">
+            <h2 class="text-lg font-heading font-black text-white">¿Cómo informar tu comprobante?</h2>
+
+            <!-- Option 1: WhatsApp (Recommended) -->
+            <div class="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="space-y-1 text-center sm:text-left">
+                    <div class="font-bold text-emerald-300 text-sm flex items-center justify-center sm:justify-start gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Opción Rápida: Enviar por WhatsApp
+                    </div>
+                    <p class="text-xs text-stone-300">Te abre el chat directo con el baqueano encargado con el mensaje ya armado.</p>
+                </div>
+                <a href="{{ whatsapp_url }}" target="_blank" class="w-full sm:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all text-center whitespace-nowrap">
+                    Abrir WhatsApp
+                </a>
+            </div>
+
+            <!-- Option 2: Upload File on Page -->
+            <div class="p-6 rounded-2xl bg-stone-900 border border-stone-800">
+                <h3 class="font-bold text-white text-sm mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i> O subilo directamente aquí:
+                </h3>
+                <p class="text-xs text-stone-400 mb-4">Aceptamos capturas de pantalla, fotos o recibos PDF emitidos por tu banco.</p>
+
+                <form id="receiptUploadForm" onsubmit="handleReceiptUpload(event, '{{ booking.code }}')" class="space-y-4">
+                    <div class="relative border-2 border-dashed border-stone-700 hover:border-amber-500/60 rounded-xl p-6 text-center cursor-pointer transition-colors bg-stone-950">
+                        <input type="file" id="receiptFileInput" name="receipt" accept="image/*,.pdf" required class="absolute inset-0 opacity-0 cursor-pointer">
+                        <i class="fa-solid fa-file-invoice-dollar text-3xl text-stone-500 mb-2"></i>
+                        <div class="text-xs text-stone-300 font-semibold" id="receiptFileName">Hacé clic para seleccionar o arrastrá el comprobante</div>
+                        <span class="text-[11px] text-stone-500">JPG, PNG o PDF (hasta 15 MB)</span>
+                    </div>
+
+                    <button type="submit" id="uploadBtn" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl text-xs uppercase tracking-wider shadow transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Adjuntar Comprobante</span>
+                    </button>
+                </form>
+
+                <div id="uploadFeedback" class="hidden mt-4 p-3 rounded-xl text-xs"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Back to Home -->
+    <div class="text-center">
+        <a href="{{ url_for('index') }}" class="text-xs text-stone-400 hover:text-white transition-colors">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Volver a la página principal
+        </a>
+    </div>
+
+</div>
+
+<script>
+function copyToClipboard(elementId, btn) {
+    const text = document.getElementById(elementId).innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> ¡Copiado!';
+        btn.classList.add('bg-emerald-500/20', 'text-emerald-300');
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('bg-emerald-500/20', 'text-emerald-300');
+        }, 2000);
+    });
+}
+
+document.getElementById('receiptFileInput').addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        document.getElementById('receiptFileName').innerText = this.files[0].name;
+    }
+});
+
+async function handleReceiptUpload(e, bookingCode) {
+    e.preventDefault();
+    const fileInput = document.getElementById('receiptFileInput');
+    if (!fileInput.files || !fileInput.files[0]) {
+        alert('Por favor seleccioná un archivo de comprobante');
+        return;
+    }
+
+    const btn = document.getElementById('uploadBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subiendo...';
+
+    const formData = new FormData();
+    formData.append('receipt', fileInput.files[0]);
+
+    const feedback = document.getElementById('uploadFeedback');
+
+    try {
+        const res = await fetch(`/api/bookings/${bookingCode}/upload-receipt`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        feedback.classList.remove('hidden', 'bg-rose-950', 'text-rose-200', 'bg-emerald-950', 'text-emerald-200');
+
+        if (data.success) {
+            feedback.classList.add('bg-emerald-950', 'text-emerald-200', 'border', 'border-emerald-800');
+            feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> ' + data.message + ' Redirigiendo a tu voucher...';
+            setTimeout(() => {
+                window.location.href = `/reserva/confirmacion?code=${bookingCode}`;
+            }, 2500);
+        } else {
+            feedback.classList.add('bg-rose-950', 'text-rose-200', 'border', 'border-rose-800');
+            feedback.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1.5"></i> ' + (data.error || 'Error al subir comprobante');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-upload"></i> Reintentar Subida';
+        }
+    } catch (err) {
+        feedback.classList.remove('hidden');
+        feedback.classList.add('bg-rose-950', 'text-rose-200');
+        feedback.innerText = 'Error de conexión. Podés enviarlo directamente por WhatsApp.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-upload"></i> Reintentar Subida';
+    }
+}
+</script>
+{% endblock %}

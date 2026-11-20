@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Control | Merlo Aventura{% endblock %}
+
+{% block content %}
+<div class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Top Nav & Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between pb-8 border-b border-stone-800 gap-4 mb-8">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-amber-500 uppercase tracking-widest">Sistema de Gestión</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Panel de Reservas 4x4</h1>
+            <p class="text-xs text-stone-400">Merlo Aventura • Villa de Merlo, San Luis</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="{{ url_for('admin_settings') }}" class="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
+                <i class="fa-solid fa-gear text-amber-500"></i>
+                <span>Configurar Mercado Pago & Banco</span>
+            </a>
+
+            <a href="{{ url_for('admin_logout') }}" class="px-4 py-2.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800 text-rose-300 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Salir</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Overview Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+        
+        <div class="bg-sierra-950 p-5 rounded-2xl border border-stone-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-stone-400 uppercase font-bold tracking-wider">Total Reservas</span>
+                <div class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+            </div>
+            <div class="text-3xl font-heading font-black text-white">{{ total_bookings }}</div>
+            <span class="text-[11px] text-stone-500 mt-1 block">Histórico en base de datos</span>
+        </div>
+
+        <div class="bg-sierra-950 p-5 rounded-2xl border border-stone-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-stone-400 uppercase font-bold tracking-wider">Confirmadas / Pagas</span>
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+            <div class="text-3xl font-heading font-black text-emerald-400">{{ approved_bookings }}</div>
+            <span class="text-[11px] text-stone-500 mt-1 block">Mercado Pago y Transferencias verificadas</span>
+        </div>
+
+        <div class="bg-sierra-950 p-5 rounded-2xl border border-stone-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-stone-400 uppercase font-bold tracking-wider">Pendientes de Cobro</span>
+                <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+            </div>
+            <div class="text-3xl font-heading font-black text-amber-400">{{ pending_bookings }}</div>
+            <span class="text-[11px] text-stone-500 mt-1 block">A la espera de acreditación o comprobante</span>
+        </div>
+
+        <div class="bg-sierra-950 p-5 rounded-2xl border border-stone-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-stone-400 uppercase font-bold tracking-wider">Recaudación Confirmada</span>
+                <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-heading font-black text-white">${{ '{:,.0f}'.format(total_revenue) }} <span class="text-xs text-stone-400 font-normal">ARS</span></div>
+            <span class="text-[11px] text-stone-500 mt-1 block">Ingresos de salidas confirmadas</span>
+        </div>
+
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-sierra-950 p-5 rounded-2xl border border-stone-800 mb-8">
+        <form method="GET" action="{{ url_for('admin_dashboard') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+            
+            <div class="sm:col-span-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">Buscar por Código, Nombre, Teléfono o Email</label>
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-stone-500 text-xs"></i>
+                    <input type="text" name="q" value="{{ current_q }}" placeholder="Ej: MA-8421, Juan, 2664..." class="w-full bg-stone-900 border border-stone-700 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-stone-500 focus:border-amber-500 outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">Estado</label>
+                <select name="status" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>Todos los estados</option>
+                    <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>Confirmadas / Aprobadas</option>
+                    <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pendientes</option>
+                    <option value="cancelled" {% if current_status == 'cancelled' %}selected{% endif %}>Canceladas</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">Fecha de Excursión</label>
+                <input type="date" name="date" value="{{ current_date }}" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3 py-2.5 text-xs text-white focus:border-amber-500 outline-none">
+            </div>
+
+            <div class="sm:col-span-4 flex items-center justify-between pt-2">
+                <span class="text-xs text-stone-400">Mostrando {{ reservations|length }} reservas encontradas</span>
+                <div class="flex items-center gap-2">
+                    <a href="{{ url_for('admin_dashboard') }}" class="px-3 py-1.5 text-xs text-stone-400 hover:text-white transition-colors">Limpiar Filtros</a>
+                    <button type="submit" class="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl text-xs transition-colors">
+                        Filtrar
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Reservations Table -->
+    <div class="bg-sierra-950 rounded-2xl border border-stone-800 overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-stone-300">
+                <thead class="bg-stone-900 text-stone-400 uppercase tracking-wider text-[10px] font-bold border-b border-stone-800">
+                    <tr>
+                        <th class="py-4 px-4">Código / Fecha</th>
+                        <th class="py-4 px-4">Excursión & Turno</th>
+                        <th class="py-4 px-4">Pasajeros</th>
+                        <th class="py-4 px-4">Cliente & Contacto</th>
+                        <th class="py-4 px-4">Alojamiento</th>
+                        <th class="py-4 px-4">Pago & Total</th>
+                        <th class="py-4 px-4">Estado</th>
+                        <th class="py-4 px-4 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-800/80">
+                    {% for res in reservations %}
+                        <tr class="hover:bg-stone-900/50 transition-colors">
+                            
+                            <!-- Código & Fecha -->
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="font-mono font-bold text-amber-400 text-sm block">{{ res.code }}</span>
+                                <span class="text-[10px] text-stone-500">{{ res.created_at[:10] }}</span>
+                            </td>
+
+                            <!-- Excursión & Turno -->
+                            <td class="py-4 px-4">
+                                <span class="font-semibold text-white block">{{ res.excursion_name }}</span>
+                                <span class="text-xs text-stone-400">
+                                    <i class="fa-regular fa-calendar mr-1 text-amber-500"></i> {{ res.tour_date }} • <strong>{{ res.tour_time }} hs</strong>
+                                </span>
+                            </td>
+
+                            <!-- Pasajeros -->
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="font-bold text-white text-sm">{{ res.total_passengers }} pax</span>
+                                <span class="block text-[10px] text-stone-400">{{ res.adults }} Ad. {% if res.children > 0 %}+ {{ res.children }} Men.{% endif %}</span>
+                            </td>
+
+                            <!-- Cliente & Contacto -->
+                            <td class="py-4 px-4">
+                                <span class="font-semibold text-white block">{{ res.customer_name }}</span>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <a href="https://wa.me/{{ res.customer_phone.replace('+', '').replace(' ', '') }}" target="_blank" class="text-emerald-400 hover:text-emerald-300 text-xs font-semibold flex items-center gap-1" title="Abrir WhatsApp">
+                                        <i class="fa-brands fa-whatsapp"></i> {{ res.customer_phone }}
+                                    </a>
+                                </div>
+                                <span class="text-[10px] text-stone-500 block truncate max-w-[150px]">{{ res.customer_email }}</span>
+                            </td>
+
+                            <!-- Alojamiento -->
+                            <td class="py-4 px-4">
+                                <span class="text-xs text-stone-300 block max-w-[160px] truncate" title="{{ res.hotel_address }}">
+                                    {{ res.hotel_address if res.hotel_address else 'A coordinar' }}
+                                </span>
+                            </td>
+
+                            <!-- Pago & Monto -->
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="font-heading font-black text-white text-sm block">${{ '{:,.0f}'.format(res.total_price) }} ARS</span>
+                                <span class="text-[10px] uppercase font-semibold text-stone-400">
+                                    {% if res.payment_method == 'mercadopago' %}
+                                        <i class="fa-solid fa-credit-card text-sky-400 mr-1"></i> MP Oficial
+                                    {% else %}
+                                        <i class="fa-solid fa-building-columns text-emerald-400 mr-1"></i> Transferencia
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <!-- Estado Badge -->
+                            <td class="py-4 px-4 whitespace-nowrap" id="statusBadge-{{ res.id }}">
+                                {% if res.payment_status == 'approved' %}
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                        <i class="fa-solid fa-check"></i> Aprobado
+                                    </span>
+                                {% elif res.payment_status == 'pending' %}
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800">
+                                        <i class="fa-solid fa-clock"></i> Pendiente
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-950 text-rose-400 border border-rose-800">
+                                        {{ res.payment_status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Acciones -->
+                            <td class="py-4 px-4 text-center whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    
+                                    <!-- Ver Comprobante si subió -->
+                                    {% if res.transfer_receipt %}
+                                        <a href="{{ url_for('static', filename=res.transfer_receipt) }}" target="_blank" class="p-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-sky-400 border border-stone-700" title="Ver Comprobante">
+                                            <i class="fa-solid fa-receipt"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    <!-- Aprobar rápida -->
+                                    {% if res.payment_status != 'approved' %}
+                                        <button onclick="updateBookingStatus({{ res.id }}, 'approved')" class="p-2 rounded-lg bg-emerald-950 hover:bg-emerald-900 text-emerald-400 border border-emerald-800" title="Aprobar Pago / Transferencia">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                    {% endif %}
+
+                                    <!-- Cancelar rápida -->
+                                    {% if res.payment_status != 'cancelled' %}
+                                        <button onclick="updateBookingStatus({{ res.id }}, 'cancelled')" class="p-2 rounded-lg bg-stone-900 hover:bg-rose-950 text-stone-400 hover:text-rose-400 border border-stone-800" title="Cancelar Reserva">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    {% endif %}
+
+                                    <!-- Ver Voucher -->
+                                    <a href="{{ url_for('booking_confirmation', code=res.code) }}" target="_blank" class="p-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800" title="Ver Voucher de Pasajero">
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="py-12 text-center text-stone-500">
+                                <i class="fa-regular fa-folder-open text-3xl mb-2 block"></i>
+                                No se encontraron reservas con los filtros seleccionados.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+async function updateBookingStatus(resId, newStatus) {
+    if (!confirm(`¿Confirmás cambiar el estado de la reserva #${resId} a "${newStatus}"?`)) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`/admin/reservations/${resId}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (e) {
+        alert('Error al conectar con el servidor');
+    }
+}
+</script>
+{% endblock %}
