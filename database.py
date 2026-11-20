@@ -156,7 +156,7 @@ def seed_excursions(cursor):
             56000.0,
             "Clásico Imperdible",
             "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
-            "Toyota Hilux 4x4 preparada",
+            "Nissan Frontier 4x4 preparada",
             "Pick up en tu cabaña u hotel en Merlo",
             json.dumps([
                 "Traslado 4x4 por huella de montaña",
@@ -276,7 +276,7 @@ def seed_excursions(cursor):
             45000.0,
             "Aventura Estelar",
             "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
-            "Camionetas 4x4 equipadas",
+            "Nissan Frontier 4x4 equipadas",
             "Punto de encuentro o pick up en hotel",
             json.dumps([
                 "Ascenso nocturno en 4x4 a miradores de altura",
@@ -300,7 +300,7 @@ def seed_excursions(cursor):
             72000.0,
             "Parque Natural",
             "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
-            "Toyota Hilux 4x4 alta montaña",
+            "Nissan Frontier 4x4 alta montaña",
             "Pick up en tu cabaña u hotel en Merlo",
             json.dumps([
                 "Ingreso y pase al Parque Natural Los Vallecitos",
@@ -324,7 +324,7 @@ def seed_excursions(cursor):
             98000.0,
             "Cumbre Más Alta (2.280m)",
             "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
-            "Flota 4x4 de alta cumbre con VHF",
+            "Nissan Frontier 4x4 con VHF y rescate",
             "Pick up en tu cabaña u hotel en Merlo",
             json.dumps([
                 "Travesía 4x4 de ascenso al techo de San Luis",
