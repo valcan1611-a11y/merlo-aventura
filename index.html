@@ -42,6 +42,15 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
+        <!-- Leaflet.js (Mapas interactivos de recorrido) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        .custom-map-marker { background: transparent; border: none; }
+        .leaflet-popup-content-wrapper { background: #1c1917 !important; color: #f5f5f4 !important; border: 1px solid #44403c !important; border-radius: 12px !important; }
+        .leaflet-popup-tip { background: #1c1917 !important; }
+    </style>
+
     <!-- Mercado Pago Official SDK -->
     <script src="https://sdk.mercadopago.com/js/v2"></script>
 
@@ -108,7 +117,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
             </span>
-            <span>VILLA DE MERLO, SAN LUIS • SIERRAS DE LOS COMECHINGONES</span>
+            <span>TREKKING & SENDERISMO EN SIERRAS DE LOS COMECHINGONES • APROXIMACIÓN EN NISSAN FRONTIER 4X4 • GUÍAS HABILITADOS</span>
         </div>
     </div>
 
@@ -120,22 +129,22 @@
                 <!-- Logo -->
                 <a href="#" class="flex items-center gap-3 group">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-600/20 group-hover:scale-105 transition-transform duration-200">
-                        <i class="fa-solid fa-truck-pickup text-white text-xl"></i>
+                        <i class="fa-solid fa-person-hiking text-white text-xl"></i>
                     </div>
                     <div>
                         <span class="font-heading font-black text-xl md:text-2xl tracking-tight text-white flex items-center gap-1.5">
                             MERLO <span class="text-amber-500">AVENTURA</span>
                         </span>
                         <span class="block text-[10px] md:text-xs text-stone-400 font-medium tracking-widest uppercase">
-                            Excursiones 4x4 • Sierras de San Luis
+                            Trekking, Senderismo & Montaña • San Luis
                         </span>
                     </div>
                 </a>
 
                 <!-- Desktop Nav Links -->
                 <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-stone-300">
-                    <a href="#excursiones" class="hover:text-amber-400 transition-colors">Excursiones 4x4</a>
-                    <a href="#vehiculos" class="hover:text-amber-400 transition-colors">Nuestras Camionetas</a>
+                    <a href="#excursiones" class="hover:text-amber-400 transition-colors">Circuitos de Trekking</a>
+                    <a href="#vehiculos" class="hover:text-amber-400 transition-colors">Aproximación 4x4</a>
                     <a href="#como-funciona" class="hover:text-amber-400 transition-colors">Cómo Reservar</a>
                     <a href="#opiniones" class="hover:text-amber-400 transition-colors">Opiniones</a>
                     <a href="#faq" class="hover:text-amber-400 transition-colors">Preguntas</a>
@@ -169,8 +178,8 @@
 
         <!-- Mobile Drawer -->
         <div id="mobileMenu" class="hidden lg:hidden bg-sierra-950 border-b border-stone-800 px-4 pt-2 pb-6 space-y-3">
-            <a href="#excursiones" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Excursiones 4x4</a>
-            <a href="#vehiculos" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Nuestras Camionetas</a>
+            <a href="#excursiones" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Circuitos de Trekking</a>
+            <a href="#vehiculos" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Aproximación 4x4</a>
             <a href="#como-funciona" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Cómo Reservar</a>
             <a href="#opiniones" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Opiniones</a>
             <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-stone-300 hover:text-amber-400 border-b border-stone-800/50">Preguntas Frecuentes</a>
@@ -231,24 +240,24 @@
 
             <!-- Main Headline bajado y estilizado -->
             <h1 class="text-3xl sm:text-5xl md:text-6xl font-heading font-black tracking-tight text-white uppercase leading-[1.1] mb-4 drop-shadow-2xl">
-                Viví las Sierras <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">en Camioneta 4x4</span>
+                Descubrí las Sierras <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">Caminando</span>
             </h1>
 
             <!-- Subtitle -->
-            <p class="max-w-xl mx-auto text-sm sm:text-base text-stone-200 font-normal leading-relaxed mb-6 drop-shadow">
-                Travesías a <strong>Pueblo Escondido</strong>, <strong>Filo Serrano a 2.200m</strong>, cascadas secretas y avistaje de cóndores con guías habilitados.
+            <p class="max-w-2xl mx-auto text-sm sm:text-base text-stone-200 font-normal leading-relaxed mb-6 drop-shadow">
+                Trekking guiado a cascadas secretas, quebradas vírgenes y cumbres de los Comechingones. Nuestras dos camionetas <strong>Nissan Frontier 4x4</strong> son el soporte logístico para aproximarte al inicio de cada sendero.
             </p>
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-                <button onclick="openBookingModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-heading font-black text-sm shadow-xl shadow-amber-500/30 hover:from-amber-300 hover:to-amber-400 hover:scale-105 transition-all flex items-center justify-center gap-2 group">
-                    <i class="fa-solid fa-calendar-check text-stone-900 group-hover:rotate-12 transition-transform"></i>
-                    <span>RESERVAR MI SALIDA 4X4</span>
-                </button>
-                <a href="#excursiones" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-stone-950/80 hover:bg-stone-900 text-white font-heading font-bold text-sm border border-stone-700/80 hover:border-amber-500/60 backdrop-blur-md transition-all flex items-center justify-center gap-2">
-                    <span>Ver Excursiones</span>
-                    <i class="fa-solid fa-arrow-down text-xs text-amber-400"></i>
+                <a href="#excursiones" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-heading font-black text-sm shadow-xl shadow-amber-500/30 hover:from-amber-300 hover:to-amber-400 hover:scale-105 transition-all flex items-center justify-center gap-2 group">
+                    <i class="fa-solid fa-person-hiking text-stone-900 group-hover:rotate-12 transition-transform"></i>
+                    <span>VER CIRCUITOS DE TREKKING</span>
                 </a>
+                <button onclick="openBookingModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-stone-950/80 hover:bg-stone-900 text-white font-heading font-bold text-sm border border-stone-700/80 hover:border-amber-500/60 backdrop-blur-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-calendar-check text-xs text-amber-400"></i>
+                    <span>Reservar Fecha Online</span>
+                </button>
             </div>
 
             <!-- Trust Badges compactos -->
@@ -301,96 +310,115 @@
         </div>
     </section>
 
-    <!-- 4X4 VEHICLES & EQUIPMENT -->
+    <!-- 4X4 VEHICLES & LOGISTICS SUPPORT -->
     <section id="vehiculos" class="py-24 bg-sierra-950 border-t border-b border-stone-800 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">APOYO LOGÍSTICO Y TRASLADOS</span>
+                <h2 class="text-3xl sm:text-5xl font-heading font-black text-white uppercase tracking-tight mb-4">
+                    Nuestra Flota: 2 Nissan Frontier 4x4
+                </h2>
+                <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                    Para caminar los mejores senderos, primero hay que llegar. Nuestras dos camionetas Nissan Frontier 4x4 son el soporte de expedición que te traslada por huellas de roca, arroyos y altura hasta el inicio exacto de cada caminata.
+                </p>
+            </div>
+
+            <!-- FOTOS REALES DE LAS CAMIONETAS EN ACCIÓN (GRILLA DESTACADA DE 3 FOTOS) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                 
-                <div>
-                    <span class="text-amber-500 font-bold text-xs uppercase tracking-widest block mb-2">FLOTA PROPIA • NISSAN FRONTIER</span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight mb-6">
-                        Dos Nissan Frontier 4x4 Diseñadas para Terreno Serrano
-                    </h2>
-                    <p class="text-stone-300 text-base leading-relaxed mb-8">
-                        La geografía de los Comechingones exige máquinas robustas y preparadas al 100%. Nuestra flota propia está integrada por <strong>dos camionetas Nissan Frontier 4x4</strong> con reductora (alta y baja), snorkel para vadeo de ríos, suspensión reforzada para huella rocosa, barras LED de alta visibilidad, baca de expedición y todas las normas de seguridad exigidas por la Secretaría de Turismo de San Luis.
-                    </p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
-                            <i class="fa-solid fa-truck-monster text-amber-500 text-xl mb-2"></i>
-                            <h4 class="font-bold text-white text-sm mb-1">Tracción 4x4 & Reductora</h4>
-                            <p class="text-xs text-stone-400">Tracción integral en alta y baja para superar cualquier vado, trepada rocosa o nieve serrana.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
-                            <i class="fa-solid fa-wrench text-amber-500 text-xl mb-2"></i>
-                            <h4 class="font-bold text-white text-sm mb-1">Snorkel & Baca Off-Road</h4>
-                            <p class="text-xs text-stone-400">Snorkel para vadeo seguro de arroyos y baca de expedición para equipaje y kayaks.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
-                            <i class="fa-solid fa-tower-broadcast text-amber-500 text-xl mb-2"></i>
-                            <h4 class="font-bold text-white text-sm mb-1">Comunicación VHF</h4>
-                            <p class="text-xs text-stone-400">Radiocomunicación permanente punto a punto entre ambas unidades y base central en Merlo.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800">
-                            <i class="fa-solid fa-kit-medical text-amber-500 text-xl mb-2"></i>
-                            <h4 class="font-bold text-white text-sm mb-1">Seguridad & Rescate</h4>
-                            <p class="text-xs text-stone-400">Barras LED, malacate, botiquín de altura y guías capacitados en primeros auxilios agrestes.</p>
-                        </div>
+                <!-- Foto 1: Alta Cumbre -->
+                <div class="bg-stone-900 rounded-3xl overflow-hidden border border-stone-800 group hover:border-amber-500/50 transition-all duration-300 hover:shadow-2xl flex flex-col">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="images/flota/nissan_frontier_montana.jpg" alt="Dos Nissan Frontier en caravana de montaña" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-amber-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase shadow">
+                            Caravana en Altura
+                        </span>
                     </div>
-
-                    <div class="flex items-center gap-4">
-                        <button onclick="openBookingModal()" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl text-sm shadow-lg shadow-amber-500/20">
-                            Subite a la Próxima Salida
-                        </button>
-                        <a href="https://wa.me/5492664123456" target="_blank" class="px-5 py-3.5 text-stone-300 hover:text-white border border-stone-700 rounded-xl text-sm font-semibold">
-                            Consultar al Baqueano
-                        </a>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-heading font-bold text-lg text-white mb-2">Ambas Unidades en Sintonía</h3>
+                            <p class="text-xs text-stone-400 leading-relaxed">
+                                Operando en caravana por caminos de alta montaña con picos nevados y quebradas de difícil acceso.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-stone-800 text-[11px] text-amber-400 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-mountain text-xs"></i> Sierras de los Comechingones
+                        </div>
                     </div>
                 </div>
 
-                <div class="relative space-y-4">
-                    <!-- Imagen Principal de la Flota -->
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-800 bg-stone-950">
-                        <img id="fleetMainImage" src="images/flota/nissan_frontier_montana.jpg" alt="Dos Nissan Frontier 4x4 Merlo Aventura en alta montaña" class="w-full h-[380px] sm:h-[420px] object-cover transition-all duration-300">
-                        <div class="absolute inset-0 bg-gradient-to-t from-sierra-950 via-transparent to-black/30 pointer-events-none"></div>
-                        
-                        <!-- Badges en imagen -->
-                        <div class="absolute top-4 left-4 flex flex-wrap gap-2">
-                            <span class="bg-amber-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow">
-                                Flota Propia
-                            </span>
-                            <span class="bg-stone-900/80 backdrop-blur-md text-stone-200 text-xs font-semibold px-3 py-1 rounded-full border border-stone-700/60">
-                                2 Nissan Frontier 4x4
-                            </span>
+                <!-- Foto 2: Vista Aérea & Equipamiento -->
+                <div class="bg-stone-900 rounded-3xl overflow-hidden border border-stone-800 group hover:border-amber-500/50 transition-all duration-300 hover:shadow-2xl flex flex-col">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="images/flota/nissan_frontier_aerea.jpg" alt="Nissan Frontier con Snorkel y Baca de expedición" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-emerald-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase shadow">
+                            Equipamiento Off-Road
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-heading font-bold text-lg text-white mb-2">Snorkel, Baca & Barra LED</h3>
+                            <p class="text-xs text-stone-400 leading-relaxed">
+                                Snorkel de vadeo para arroyos serranos, paragolpes reforzado, baca de expedición y luces de alta visibilidad.
+                            </p>
                         </div>
-
-                        <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-stone-900/85 backdrop-blur-md border border-stone-800">
-                            <div class="flex items-center justify-between text-xs text-stone-200">
-                                <span id="fleetCaptionTitle" class="font-bold text-white text-sm">Caravana en Alta Cumbre</span>
-                                <span class="text-amber-400 font-semibold"><i class="fa-solid fa-shield-halved mr-1"></i> Homologadas</span>
-                            </div>
-                            <p id="fleetCaptionDesc" class="text-[11px] text-stone-400 mt-1">Nuestras dos Nissan Frontier operando en travesía serrana y alta montaña.</p>
+                        <div class="mt-4 pt-3 border-t border-stone-800 text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-xs"></i> 100% Homologadas
                         </div>
                     </div>
+                </div>
 
-                    <!-- Miniaturas interactivas para alternar las fotos de las camionetas -->
-                    <div class="grid grid-cols-3 gap-3">
-                        <button type="button" onclick="setFleetPhoto('images/flota/nissan_frontier_montana.jpg', 'Caravana en Alta Cumbre', 'Nuestras dos Nissan Frontier operando en travesía serrana y alta montaña.', this)" class="fleet-thumb relative h-20 sm:h-24 rounded-2xl overflow-hidden border-2 border-amber-400 scale-[1.02] shadow-md transition-all cursor-pointer group">
-                            <img src="images/flota/nissan_frontier_montana.jpg" alt="Caravana" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                            <span class="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded text-center truncate">Alta Cumbre</span>
-                        </button>
-                        <button type="button" onclick="setFleetPhoto('images/flota/nissan_frontier_aerea.jpg', 'Nissan Frontier • Snorkel & Baca', 'Equipamiento off-road: snorkel de vadeo, suspensión elevada, barra LED y baca.', this)" class="fleet-thumb relative h-20 sm:h-24 rounded-2xl overflow-hidden border-2 border-stone-800 opacity-70 hover:opacity-100 transition-all cursor-pointer group">
-                            <img src="images/flota/nissan_frontier_aerea.jpg" alt="Equipamiento" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                            <span class="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded text-center truncate">Equipamiento 4x4</span>
-                        </button>
-                        <button type="button" onclick="setFleetPhoto('images/flota/nissan_frontier_nieve.jpg', 'Nissan Frontier en la Nieve', 'Preparación para clima extremo y nieve en las cumbres de los Comechingones.', this)" class="fleet-thumb relative h-20 sm:h-24 rounded-2xl overflow-hidden border-2 border-stone-800 opacity-70 hover:opacity-100 transition-all cursor-pointer group">
-                            <img src="images/flota/nissan_frontier_nieve.jpg" alt="Nieve" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                            <span class="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded text-center truncate">Nieve & Sierras</span>
-                        </button>
+                <!-- Foto 3: Nieve & Invierno -->
+                <div class="bg-stone-900 rounded-3xl overflow-hidden border border-stone-800 group hover:border-amber-500/50 transition-all duration-300 hover:shadow-2xl flex flex-col">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="images/flota/nissan_frontier_nieve.jpg" alt="Nissan Frontier en la nieve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-sky-500 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase shadow">
+                            Clima Extremo
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-heading font-bold text-lg text-white mb-2">Preparadas para Nieve</h3>
+                            <p class="text-xs text-stone-400 leading-relaxed">
+                                Tracción total con reductora (alta y baja) para operar en condiciones invernales de hielo y nieve serrana.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-stone-800 text-[11px] text-sky-400 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-snowflake text-xs"></i> Tracción 4x4 en Alta y Baja
+                        </div>
                     </div>
                 </div>
 
             </div>
+
+            <!-- CARACTERÍSTICAS DEL VEHÍCULO -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-5 rounded-2xl bg-stone-900/80 border border-stone-800">
+                    <i class="fa-solid fa-truck-monster text-amber-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm mb-1">Tracción 4x4 & Reductora</h4>
+                    <p class="text-xs text-stone-400">Acceso a vados de río, trepadas de piedra y caminos donde ningún vehículo convencional llega.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-stone-900/80 border border-stone-800">
+                    <i class="fa-solid fa-tower-broadcast text-amber-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm mb-1">Comunicaciones VHF</h4>
+                    <p class="text-xs text-stone-400">Enlace radial permanente punto a punto entre ambas unidades y la base central de Merlo.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-stone-900/80 border border-stone-800">
+                    <i class="fa-solid fa-temperature-arrow-up text-amber-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm mb-1">Cabina Climatizada</h4>
+                    <p class="text-xs text-stone-400">Calefacción potente y aire acondicionado para viajar relajados en cualquier época del año.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-stone-900/80 border border-stone-800">
+                    <i class="fa-solid fa-users text-amber-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm mb-1">Grupos Reducidos</h4>
+                    <p class="text-xs text-stone-400">Máximo 8 pasajeros por camioneta para una experiencia personalizada, ágil y segura.</p>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -818,6 +846,55 @@
                         <!-- Thumbnails strip -->
                         <div id="detailThumbnails" class="grid grid-cols-4 gap-2.5 sm:gap-3">
                             <!-- Populated with thumbnails -->
+                        </div>
+                    </div>
+
+                                        <!-- DESGLOSE DE RECORRIDO Y MAPA INTERACTIVO -->
+                    <div class="bg-sierra-950 p-5 sm:p-6 rounded-2xl border border-stone-800 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800/80 pb-3">
+                            <h4 class="font-heading font-black text-base text-white uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot text-amber-500"></i>
+                                Recorrido: Camioneta 4x4 vs Caminata
+                            </h4>
+                            <span class="text-xs text-stone-400 flex items-center gap-3">
+                                <span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-amber-400 rounded-full"></span> Tramo en 4x4</span>
+                                <span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-emerald-400 rounded-full"></span> Trekking a pie</span>
+                            </span>
+                        </div>
+
+                        <!-- Tiempos y Distancias -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <!-- Tramo Vehicular -->
+                            <div class="bg-stone-900/90 p-4 rounded-xl border border-stone-800 flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg shrink-0">
+                                    <i class="fa-solid fa-truck-pickup"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 block">Aproximación en Camioneta</span>
+                                    <div id="detailRoute4x4Time" class="text-sm font-black text-white mt-0.5">50 min de viaje</div>
+                                    <p id="detailRoute4x4Desc" class="text-xs text-stone-400 mt-1">Traslado en Nissan Frontier 4x4 por camino serrano hasta el inicio de la senda.</p>
+                                </div>
+                            </div>
+
+                            <!-- Tramo Caminando -->
+                            <div class="bg-stone-900/90 p-4 rounded-xl border border-stone-800 flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                                    <i class="fa-solid fa-person-hiking"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 block">Trekking Caminando</span>
+                                    <div id="detailRouteTrekTime" class="text-sm font-black text-white mt-0.5">90 min de caminata</div>
+                                    <p id="detailRouteTrekDesc" class="text-xs text-stone-400 mt-1">Sendero a pie guiado por huella serrana, cruce de piedras y cascada.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor del Mapa Interactivo Leaflet -->
+                        <div class="relative">
+                            <div id="excursionDetailMap" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
+                            <div class="absolute bottom-2 right-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
+                                <i class="fa-solid fa-location-crosshairs text-amber-400 mr-1"></i> Sierras de los Comechingones
+                            </div>
                         </div>
                     </div>
 
@@ -1352,6 +1429,8 @@ Se recomienda llevar agua para el camino y el mate con algo para acompañar.`,
                 extras: `Regreso a Caballo opcional desde Pueblo Escondido: $25.000.
 En Pueblo Escondido hay servicio de pastas y sándwiches (se recomienda vianda si se requiere comida para celíacos).`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
@@ -1396,6 +1475,8 @@ Se recomienda llevar agua para el camino y el mate con algo para acompañar si l
                 extras: `Regreso a Caballo opcional: $25.000.
 En Pueblo Escondido hay pastas y sándwiches por lo que se recomienda llevar comida especial para celiacos o su propia vianda si no es de su agrado lo que se ofrece.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
@@ -1432,6 +1513,8 @@ ENTRADA AL CAMPO: $3.500`,
                 equipment: `Calzado deportivo o de trekking con buena suela, protector solar, lentes de sol, abrigo liviano, botella de agua personal y malla en temporada cálida.`,
                 extras: `Entrada al campo: $3.500 por persona.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
@@ -1474,6 +1557,8 @@ Se puede ir en pantalón corto pero hay que tener en cuenta que se puede raspar 
 Cuando hace calor es posible disfrutar de los pozos de agua.`,
                 extras: `Pausa especial en el salto para fotografías y mate.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
@@ -1510,6 +1595,8 @@ Costo: $30.000 por persona`,
                 equipment: `Ropa cómoda, zapatillas deportivas o de trekking, protector solar, cámara o celular para fotos y buena energía.`,
                 extras: `Ideal para niños, adultos mayores y toda la familia sin exigencia física.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
@@ -1546,6 +1633,8 @@ Salida : Todos los días
                 equipment: `Calzado deportivo o de trekking con buen agarre, abrigo para la caída del sol en la cumbre, agua y cámara de fotos.`,
                 extras: `Salida garantizada todos los días (mínimo 2 pasajeros).`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
@@ -1584,6 +1673,8 @@ RECOMENDACION : Llevar Calzado cómodo acordonado, abrigo liviano, agua.`,
                 equipment: `Llevar calzado cómodo acordonado con buen agarre, abrigo liviano (en la montaña la temperatura desciende de noche), agua personal.`,
                 extras: `Observación de estrellas y reconocimiento de constelaciones en la cumbre.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
@@ -1619,6 +1710,8 @@ Incluye: entrada al Parque, picada serrana.`,
                 equipment: `Calzado cómodo con agarre, protector solar, cámara o celular, abrigo liviano, botella de agua personal.`,
                 extras: `Avistaje de fauna autóctona y aves serranas en estado salvaje.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
@@ -1662,6 +1755,8 @@ OPCION: Cabeza del Indio es el mismo recorrido y altura.`,
                 equipment: `Calzado de trekking con buen agarre indispensable, vianda para el almuerzo en la cumbre, agua abundante (2 litros mínimo), ropa en capas (abrigo de montaña, campera corta-viento), protector solar y gorro.`,
                 extras: `Opción Cabeza del Indio: mismo recorrido y altura. Desnivel total de 1.100 metros.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
@@ -1719,6 +1814,8 @@ CRONOGRAMA DETALLADO:
                 extras: `Tarifa final con todo incluido: $195.000 por persona (menores hasta 12 años: $145.000).
 Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con reserva previa.`,
                 gallery: [
+                    "images/flota/nissan_frontier_montana.jpg",
+
                     "images/excursions/huertita/huertita_portada.png",
                     "images/excursions/huertita/huertita_dique.png",
                     "images/excursions/huertita/huertita_kayak.png",
@@ -1870,6 +1967,100 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         }
 
         // ------------------ MODAL DE DETALLE DE EXCURSIÓN (FOTOS & DESCRIPCIÓN) ------------------ //
+        
+        // ------------------ MAPA INTERACTIVO LEAFLET ------------------ //
+        let detailLeafletMap = null;
+        let detailMapLayerGroup = null;
+
+        function renderExcursionMap(exc) {
+            const mapEl = document.getElementById('excursionDetailMap');
+            if (!mapEl || typeof L === 'undefined') return;
+
+            const r = exc.routeInfo;
+            if (!r) return;
+
+            // Actualizar datos de texto y tiempos
+            const t4x4 = document.getElementById('detailRoute4x4Time');
+            const d4x4 = document.getElementById('detailRoute4x4Desc');
+            const tTrek = document.getElementById('detailRouteTrekTime');
+            const dTrek = document.getElementById('detailRouteTrekDesc');
+
+            if (t4x4) t4x4.innerText = r.time4x4;
+            if (d4x4) d4x4.innerText = r.desc4x4;
+            if (tTrek) tTrek.innerText = r.timeTrek;
+            if (dTrek) dTrek.innerText = r.descTrek;
+
+            // Inicializar mapa Leaflet una sola vez
+            if (!detailLeafletMap) {
+                detailLeafletMap = L.map('excursionDetailMap', {
+                    zoomControl: true,
+                    scrollWheelZoom: false,
+                    attributionControl: false
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(detailLeafletMap);
+
+                detailMapLayerGroup = L.layerGroup().addTo(detailLeafletMap);
+            } else {
+                detailMapLayerGroup.clearLayers();
+            }
+
+            // Generador de marcadores con estilo Tailwind / Comechingones
+            const makeBadgeIcon = (colorBg, iconClass, label) => L.divIcon({
+                className: 'custom-map-marker',
+                html: `<div class="flex items-center gap-1.5 bg-stone-900/95 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-xl whitespace-nowrap">
+                          <span class="w-5 h-5 rounded-lg ${colorBg} text-stone-950 flex items-center justify-center text-[10px]"><i class="${iconClass}"></i></span>
+                          <span>${label}</span>
+                       </div>`,
+                iconSize: [120, 28],
+                iconAnchor: [60, 14]
+            });
+
+            // Marcador A: Salida desde Merlo
+            const mStart = L.marker(r.start, {
+                icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Villa de Merlo')
+            }).bindPopup('<b>Punto de Salida:</b> Villa de Merlo').addTo(detailMapLayerGroup);
+
+            // Marcador B: Fin de Tramo 4x4 / Inicio Trekking
+            const mTrail = L.marker(r.trailhead, {
+                icon: makeBadgeIcon('bg-amber-500', 'fa-solid fa-truck-pickup', 'Inicio Senda 4x4')
+            }).bindPopup(`<b>Fin Tramo Nissan Frontier 4x4 / Inicio Trekking:</b><br>${r.desc4x4}`).addTo(detailMapLayerGroup);
+
+            // Marcador C: Destino a pie
+            const mDest = L.marker(r.destination, {
+                icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-flag-checkered', 'Destino a Pie')
+            }).bindPopup(`<b>Destino de Trekking:</b><br>${exc.name}`).addTo(detailMapLayerGroup);
+
+            // Línea 1: Tramo Camioneta 4x4 (Línea discontinua ámbar)
+            const line4x4 = L.polyline([r.start, r.trailhead], {
+                color: '#f59e0b',
+                weight: 4,
+                dashArray: '6, 8',
+                opacity: 0.95
+            }).addTo(detailMapLayerGroup);
+
+            // Línea 2: Tramo Caminando Trekking (Línea continua esmeralda)
+            const lineTrek = L.polyline([r.trailhead, r.destination], {
+                color: '#10b981',
+                weight: 5,
+                opacity: 0.95
+            }).addTo(detailMapLayerGroup);
+
+            // Ajustar vista para abarcar todo el recorrido con margen
+            const bounds = L.latLngBounds([r.start, r.trailhead, r.destination]);
+            detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+
+            // Invalidate size en modal para que renderice perfecto
+            setTimeout(() => {
+                if (detailLeafletMap) {
+                    detailLeafletMap.invalidateSize();
+                    detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+                }
+            }, 250);
+        }
+
         function openExcursionDetailModal(excursionId) {
             const exc = EXCURSIONS.find(e => e.id === excursionId);
             if (!exc) return;
@@ -1904,6 +2095,9 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
 
             // Descripción de texto completo
             document.getElementById('detailFullText').innerText = exc.fullDescription || exc.subtitle;
+
+            // Renderizar recorrido y mapa interactivo
+            renderExcursionMap(exc);
 
             // Qué incluye
             const includesList = document.getElementById('detailIncludesList');
