@@ -893,8 +893,8 @@
 
                         <!-- Contenedor del Mapa Interactivo Leaflet -->
                         <div class="relative">
-                            <div id="excursionDetailMap" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
-                            <div class="absolute bottom-2 right-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
+                            <div id="excursionDetailMap" role="region" aria-label="Mapa interactivo del tramo en camioneta y el track GPS de la senda" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
+                            <div class="hidden sm:block absolute bottom-2 left-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
                                 <i class="fa-solid fa-location-crosshairs text-amber-400 mr-1"></i> Sierras de los Comechingones
                             </div>
                         </div>
@@ -1462,6 +1462,13 @@ En Pueblo Escondido hay servicio de pastas y sándwiches (se recomienda vianda s
                 image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 preparada",
                 times: ["09:00"],
+                routeInfo: {
+                    routeData: "/static/routes/cerro-aspero.json",
+                    time4x4: "Aprox. 1 h · 21,5 km desde la Plaza central",
+                    desc4x4: "Recorrido en camioneta desde la Plaza central de Merlo hasta el estacionamiento donde comienza la senda.",
+                    timeTrek: "Track GPS: 13,7 km · 2.540 puntos",
+                    descTrek: "Recorrido registrado en Wikiloc por Pueblo Escondido, el Salto del Tigre y la cumbre del Cerro Áspero."
+                },
                 fullDescription: `DIA COMPLETO: +7años
 DIFICULTAD: Poco difícil
 ZONA: Villa de Merlo
@@ -1983,14 +1990,18 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         let detailLeafletMap = null;
         let detailMapLayerGroup = null;
 
+        let detailRouteDataPromise = null;
+
         function renderExcursionMap(exc) {
             const mapEl = document.getElementById('excursionDetailMap');
             if (!mapEl || typeof L === 'undefined') return;
 
             const r = exc.routeInfo;
-            if (!r) return;
+            if (!r) {
+                if (detailMapLayerGroup) detailMapLayerGroup.clearLayers();
+                return;
+            }
 
-            // Actualizar datos de texto y tiempos
             const t4x4 = document.getElementById('detailRoute4x4Time');
             const d4x4 = document.getElementById('detailRoute4x4Desc');
             const tTrek = document.getElementById('detailRouteTrekTime');
@@ -2001,16 +2012,16 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
             if (tTrek) tTrek.innerText = r.timeTrek;
             if (dTrek) dTrek.innerText = r.descTrek;
 
-            // Inicializar mapa Leaflet una sola vez
             if (!detailLeafletMap) {
                 detailLeafletMap = L.map('excursionDetailMap', {
                     zoomControl: true,
                     scrollWheelZoom: false,
-                    attributionControl: false
+                    attributionControl: true
                 });
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 18
+                    maxZoom: 18,
+                    attribution: '&copy; OpenStreetMap contributors · enrutamiento OSRM'
                 }).addTo(detailLeafletMap);
 
                 detailMapLayerGroup = L.layerGroup().addTo(detailLeafletMap);
@@ -2018,58 +2029,55 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
                 detailMapLayerGroup.clearLayers();
             }
 
-            // Generador de marcadores con estilo Tailwind / Comechingones
-            const makeBadgeIcon = (colorBg, iconClass, label) => L.divIcon({
-                className: 'custom-map-marker',
-                html: `<div class="flex items-center gap-1.5 bg-stone-900/95 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-xl whitespace-nowrap">
-                          <span class="w-5 h-5 rounded-lg ${colorBg} text-stone-950 flex items-center justify-center text-[10px]"><i class="${iconClass}"></i></span>
-                          <span>${label}</span>
-                       </div>`,
-                iconSize: [120, 28],
-                iconAnchor: [60, 14]
+            detailRouteDataPromise ||= fetch(r.routeData).then(response => {
+                if (!response.ok) throw new Error('No se pudo cargar el track GPS');
+                return response.json();
             });
 
-            // Marcador A: Salida desde Merlo
-            const mStart = L.marker(r.start, {
-                icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Villa de Merlo')
-            }).bindPopup('<b>Punto de Salida:</b> Villa de Merlo').addTo(detailMapLayerGroup);
+            detailRouteDataPromise.then(route => {
+                if (!detailLeafletMap || !detailMapLayerGroup) return;
 
-            // Marcador B: Fin de Tramo 4x4 / Inicio Trekking
-            const mTrail = L.marker(r.trailhead, {
-                icon: makeBadgeIcon('bg-amber-500', 'fa-solid fa-truck-pickup', 'Inicio Senda 4x4')
-            }).bindPopup(`<b>Fin Tramo Nissan Frontier 4x4 / Inicio Trekking:</b><br>${r.desc4x4}`).addTo(detailMapLayerGroup);
+                const driveLayer = L.geoJSON(route.drive, {
+                    style: { color: '#f59e0b', weight: 5, opacity: 0.95 }
+                }).bindPopup(`Ruta en camioneta desde la Plaza central de Merlo · ${route.drive.properties.distanceKm} km`).addTo(detailMapLayerGroup);
 
-            // Marcador C: Destino a pie
-            const mDest = L.marker(r.destination, {
-                icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-flag-checkered', 'Destino a Pie')
-            }).bindPopup(`<b>Destino de Trekking:</b><br>${exc.name}`).addTo(detailMapLayerGroup);
+                const trekLayer = L.geoJSON(route.trail, {
+                    style: { color: '#10b981', weight: 5, opacity: 0.95 }
+                }).bindPopup(`Track GPS de Wikiloc · ${route.source.distanceKm} km · ${route.source.trackPoints.toLocaleString('es-AR')} puntos · ${route.source.elevationMinM}–${route.source.elevationMaxM} m`).addTo(detailMapLayerGroup);
 
-            // Línea 1: Tramo Camioneta 4x4 (Línea discontinua ámbar)
-            const line4x4 = L.polyline([r.start, r.trailhead], {
-                color: '#f59e0b',
-                weight: 4,
-                dashArray: '6, 8',
-                opacity: 0.95
-            }).addTo(detailMapLayerGroup);
+                const compactMap = mapEl.clientWidth < 360;
+                const makeBadgeIcon = (colorBg, iconClass, label) => L.divIcon({
+                    className: 'custom-map-marker',
+                    html: compactMap
+                        ? `<div class="w-7 h-7 rounded-xl ${colorBg} text-stone-950 flex items-center justify-center text-xs border border-stone-950 shadow-xl"><i class="${iconClass}"></i></div>`
+                        : `<div class="flex items-center gap-1.5 bg-stone-900/95 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-xl whitespace-nowrap">
+                              <span class="w-5 h-5 rounded-lg ${colorBg} text-stone-950 flex items-center justify-center text-[10px]"><i class="${iconClass}"></i></span>
+                              <span>${label}</span>
+                           </div>`,
+                    iconSize: compactMap ? [28, 28] : [160, 30],
+                    iconAnchor: compactMap ? [14, 14] : [80, 15]
+                });
 
-            // Línea 2: Tramo Caminando Trekking (Línea continua esmeralda)
-            const lineTrek = L.polyline([r.trailhead, r.destination], {
-                color: '#10b981',
-                weight: 5,
-                opacity: 0.95
-            }).addTo(detailMapLayerGroup);
+                L.marker([route.plaza[1], route.plaza[0]], {
+                    icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Plaza central de Merlo')
+                }).bindPopup('<b>Salida:</b> Plaza central de Merlo').addTo(detailMapLayerGroup);
 
-            // Ajustar vista para abarcar todo el recorrido con margen
-            const bounds = L.latLngBounds([r.start, r.trailhead, r.destination]);
-            detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+                L.marker([route.trailhead[1], route.trailhead[0]], {
+                    icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-person-hiking', 'Inicio de la senda')
+                }).bindPopup('<b>Estacionamiento · inicio y fin de la senda</b><br>Track GPS de Wikiloc').addTo(detailMapLayerGroup);
 
-            // Invalidate size en modal para que renderice perfecto
-            setTimeout(() => {
-                if (detailLeafletMap) {
-                    detailLeafletMap.invalidateSize();
-                    detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
-                }
-            }, 250);
+                const bounds = L.featureGroup([driveLayer, trekLayer]).getBounds();
+                detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+
+                setTimeout(() => {
+                    if (detailLeafletMap) {
+                        detailLeafletMap.invalidateSize();
+                        detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+                    }
+                }, 250);
+            }).catch(() => {
+                mapEl.setAttribute('aria-label', 'No se pudo cargar el recorrido GPS');
+            });
         }
 
         function openExcursionDetailModal(excursionId) {
