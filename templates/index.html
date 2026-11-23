@@ -893,8 +893,11 @@
 
                         <!-- Contenedor del Mapa Interactivo Leaflet -->
                         <div class="relative">
-                            <div id="excursionDetailMap" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
-                            <div class="absolute bottom-2 right-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
+                            <div id="excursionDetailMap" role="region" aria-label="Mapa interactivo del tramo en camioneta y el track GPS de la senda" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
+                            <a href="visor-senderos.html" target="_blank" class="absolute top-2 right-2 z-20 rounded-lg border border-stone-700 bg-stone-900/95 px-3 py-1.5 text-xs font-bold text-orange-400 hover:text-orange-300 hover:border-orange-500 shadow-lg transition flex items-center gap-1.5" aria-label="Abrir en Visor Wikiloc Completo">
+                                <i class="fa-solid fa-up-right-from-square text-amber-400"></i> Visor Wikiloc 3D
+                            </a>
+                            <div class="hidden sm:block absolute bottom-2 left-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
                                 <i class="fa-solid fa-location-crosshairs text-amber-400 mr-1"></i> Sierras de los Comechingones
                             </div>
                         </div>
@@ -1422,6 +1425,13 @@
                 image: "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 de alta montaña",
                 times: ["08:30"],
+                routeInfo: {
+                    routeData: "static/routes/cerro-aspero.json",
+                    time4x4: "Aprox. 1 h · 21,5 km desde Plaza central",
+                    desc4x4: "Aproximación en Nissan Frontier 4x4 por la cuesta de montaña hasta el estacionamiento inicial.",
+                    timeTrek: "Track GPS: 13,7 km · 2.540 puntos",
+                    descTrek: "Circuito completo registrado en Wikiloc: Pueblo Escondido, Cascada Salto del Tigre y Cerro Áspero."
+                },
                 fullDescription: `DIA COMPLETO / + 7 años.
 
 La experiencia definitiva de alta montaña en los Comechingones: combinamos la visita al legendario pueblo minero abandonado de Pueblo Escondido en el fondo del cañón y el trekking hacia la majestuosa cascada Salto del Tigre con su imponente pileta natural de agua cristalina.
@@ -1462,6 +1472,13 @@ En Pueblo Escondido hay servicio de pastas y sándwiches (se recomienda vianda s
                 image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 preparada",
                 times: ["09:00"],
+                routeInfo: {
+                    routeData: "/static/routes/cerro-aspero.json",
+                    time4x4: "Aprox. 1 h · 21,5 km desde la Plaza central",
+                    desc4x4: "Recorrido en camioneta desde la Plaza central de Merlo hasta el estacionamiento donde comienza la senda.",
+                    timeTrek: "Track GPS: 13,7 km · 2.540 puntos",
+                    descTrek: "Recorrido registrado en Wikiloc por Pueblo Escondido, el Salto del Tigre y la cumbre del Cerro Áspero."
+                },
                 fullDescription: `DIA COMPLETO: +7años
 DIFICULTAD: Poco difícil
 ZONA: Villa de Merlo
@@ -1508,6 +1525,13 @@ En Pueblo Escondido hay pastas y sándwiches por lo que se recomienda llevar com
                 image: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 tracción total",
                 times: ["09:00"],
+                routeInfo: {
+                    routeData: "static/routes/cerro-aspero.json",
+                    time4x4: "Aprox. 1 h · 21,5 km desde Plaza central",
+                    desc4x4: "Aproximación en Nissan Frontier 4x4 hasta el filo de las Sierras de los Comechingones.",
+                    timeTrek: "Trekking 90 min · 7,2 km",
+                    descTrek: "Sendero por huella serrana hasta la imponente cascada de 25m y hoya natural."
+                },
                 fullDescription: `Una imponente cascada escondida en pleno corazón de las sierras.
 
 Se trata de un salto de agua que se ubica en lo más alto de las sierras de los Comechingones. Por sus características naturales, es uno de los paisajes preferidos para pasar el día, incluye el filo de las sierras y un trekking de aproximadamente 90 minutos ida y vuelta por una senda marcada.
@@ -1546,6 +1570,15 @@ ENTRADA AL CAMPO: $3.500`,
                 image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 con acceso a reserva",
                 times: ["09:00"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.3468, -64.9780],
+                    destination: [-32.3550, -64.9860],
+                    time4x4: "15 min · 4,2 km",
+                    desc4x4: "Traslado en Nissan Frontier 4x4 hasta el ingreso a la Reserva de Rincón del Este.",
+                    timeTrek: "2 h 30 min · 4,5 km",
+                    descTrek: "Trekking guiado remontando el arroyo del Rincón entre tabaquillos y piedras gigantes."
+                },
                 fullDescription: `MEDIO DIA ( 5-6 horas ) + 7 años.
 DIFICULTAD: Poco difícil
 ZONA: Villa de Merlo
@@ -1590,6 +1623,15 @@ Cuando hace calor es posible disfrutar de los pozos de agua.`,
                 image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 climatizada",
                 times: ["09:30", "15:00"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.3250, -64.9920],
+                    destination: [-32.3180, -64.9850],
+                    time4x4: "20 min · 5,5 km",
+                    desc4x4: "Aproximación en Nissan Frontier 4x4 por camino serrano de Piedra Blanca.",
+                    timeTrek: "2 h · 3,8 km",
+                    descTrek: "Caminata serrana por quebrada del Molino y pozas naturales de agua cristalina."
+                },
                 fullDescription: `Descubrí uno de los rincones más hermosos de las sierras en una caminata pensada para disfrutar en familia. Recorreremos la pintoresca Quebrada El Molino, atravesando senderos rodeados de vegetación nativa, arroyos de aguas cristalinas y espectaculares formaciones rocosas, hasta llegar a la imponente Cascada Hoya de Piedra, un lugar ideal para relajarse, tomar fotografías y conectar con la naturaleza. La Quebrada se caracteriza por sus paisajes serranos, cursos de agua y cascadas que la convierten en un escenario ideal para senderismo.
 
 Dificultad: Baja
@@ -1628,6 +1670,13 @@ Costo: $30.000 por persona`,
                 image: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 con luces auxiliares",
                 times: ["14:30"],
+                routeInfo: {
+                    routeData: "static/routes/cerro-aspero.json",
+                    time4x4: "Aprox. 1 h · 21,5 km desde Plaza central",
+                    desc4x4: "Ascenso en Nissan Frontier 4x4 al atardecer por la cuesta del Filo Comechingones.",
+                    timeTrek: "Trekking 90 min · 7,2 km",
+                    descTrek: "Caminata a la cascada y mirador de altura para presenciar la puesta de sol."
+                },
                 fullDescription: `📍 Destino: salto del Tigre
 Salida : Todos los días
 👥 Minimo: 2 pasajeros
@@ -1666,6 +1715,15 @@ Salida : Todos los días
                 image: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 equipada con VHF",
                 times: ["19:30"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.3530, -64.9350],
+                    destination: [-32.3650, -64.9200],
+                    time4x4: "35 min · 14,0 km",
+                    desc4x4: "Ascenso nocturno en Nissan Frontier 4x4 por la cuesta del Filo Serrano.",
+                    timeTrek: "1 h 30 min · 3,0 km",
+                    descTrek: "Caminata bajo el cielo estrellado con linternas frontales y vista panorámica."
+                },
                 fullDescription: `Viví una experiencia diferente recorriendo los senderos de montaña bajo la luz de la luna.
 Esta caminata de dificultad media nos lleva por un paisaje serrano encantador, donde la calma de la noche y los sonidos del entorno se vuelven protagonistas.
 Con nuestras linternas frontales, avanzaremos por senderos con suaves pendientes, disfrutando de miradores naturales y la magia del cielo estrellado.
@@ -1706,6 +1764,15 @@ RECOMENDACION : Llevar Calzado cómodo acordonado, abrigo liviano, agua.`,
                 image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 de alta cumbre",
                 times: ["08:30"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.3800, -64.9100],
+                    destination: [-32.3950, -64.8950],
+                    time4x4: "50 min · 18,5 km",
+                    desc4x4: "Travesía 4x4 por camino de ripio y alta montaña hasta la entrada al parque.",
+                    timeTrek: "3 h · 6,0 km",
+                    descTrek: "Senderismo por praderas de altura, valles colgantes y formaciones graníticas."
+                },
                 fullDescription: `Parque Natural de más de 1000has de bosques y valles ubicado en el corazón de las sierras de los Comechingones. Un día en las sierras donde vamos a conocer diferentes cascadas y sus hoyas repletas de truchas, pasear por los bosques, descansar en los espacios de estancia y maravillarse con la fauna del lugar.
 
 Duracion: 8 horas
@@ -1743,6 +1810,15 @@ Incluye: entrada al Parque, picada serrana.`,
                 image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
                 vehicle: "Nissan Frontier 4x4 con VHF y rescate",
                 times: ["08:00"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.3680, -64.9150],
+                    destination: [-32.3780, -64.8850],
+                    time4x4: "55 min · 20,0 km",
+                    desc4x4: "Ascenso en Nissan Frontier 4x4 hasta lo más alto del Filo de los Comechingones.",
+                    timeTrek: "4 h · 8,5 km",
+                    descTrek: "Trekking de alta exigencia a la cumbre máxima de San Luis con vista al Valle."
+                },
                 fullDescription: `Ascenso al cerro más alto de la provincia de San Luis.
 Adelante recorrido inicia en la Reserva Mogote Bayo (1170 msnm) Desde ahí sale una senda hasta Mogote Bayo, un cerro icónico con una vista de la Villa de Merlo. Desde ahí se continua por un antiguo camino utilizado por los pobladores de la sierra. Un sendero que permite recorrer todo el valle con una vista espectacular.
 Una vez que llegamos al filo, seguimos el recorrido por caminos poco marcados hasta llegar a la cumbre del Cerro de las Ovejas. Aquí arriba es conveniente hacer una parada para almorzar .
@@ -1788,6 +1864,15 @@ OPCION: Cabeza del Indio es el mismo recorrido y altura.`,
                 image: "images/excursions/huertita/huertita_portada.png",
                 vehicle: "2 Camionetas Nissan Frontier 4x4 (~100 km)",
                 times: ["15:00"],
+                routeInfo: {
+                    start: [-32.343331, -64.967337],
+                    trailhead: [-32.4450, -65.5500],
+                    destination: [-32.4600, -65.5650],
+                    time4x4: "1 h 30 min · 95 km",
+                    desc4x4: "Traslado expedición en Nissan Frontier 4x4 cruzando el norte puntano.",
+                    timeTrek: "Actividades combinadas",
+                    descTrek: "Kayak, senderismo ribereño y navegación en el espejo de agua."
+                },
                 fullDescription: `TURISMO ACTIVO & SOSTENIBLE — EXPERIENCIA LA HUERTITA
 Un fin de semana exclusivo de naturaleza, agua y serranías en el Dique La Huertita, San Luis. Un destino virgen, de aguas calmas y tranquilidad absoluta en el norte puntano.
 
@@ -1982,35 +2067,40 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         // ------------------ MAPA INTERACTIVO LEAFLET ------------------ //
         let detailLeafletMap = null;
         let detailMapLayerGroup = null;
+        const ROUTES_CACHE = {};
 
         function renderExcursionMap(exc) {
             const mapEl = document.getElementById('excursionDetailMap');
             if (!mapEl || typeof L === 'undefined') return;
 
             const r = exc.routeInfo;
-            if (!r) return;
+            if (!r) {
+                if (detailMapLayerGroup) detailMapLayerGroup.clearLayers();
+                return;
+            }
 
-            // Actualizar datos de texto y tiempos
+            // Actualizar datos de texto y tiempos en el menú modal
             const t4x4 = document.getElementById('detailRoute4x4Time');
             const d4x4 = document.getElementById('detailRoute4x4Desc');
             const tTrek = document.getElementById('detailRouteTrekTime');
             const dTrek = document.getElementById('detailRouteTrekDesc');
 
-            if (t4x4) t4x4.innerText = r.time4x4;
-            if (d4x4) d4x4.innerText = r.desc4x4;
-            if (tTrek) tTrek.innerText = r.timeTrek;
-            if (dTrek) dTrek.innerText = r.descTrek;
+            if (t4x4) t4x4.innerText = r.time4x4 || 'Aproximación 4x4';
+            if (d4x4) d4x4.innerText = r.desc4x4 || 'Traslado en Nissan Frontier 4x4.';
+            if (tTrek) tTrek.innerText = r.timeTrek || 'Trekking a pie';
+            if (dTrek) dTrek.innerText = r.descTrek || 'Sendero pedestre de montaña.';
 
             // Inicializar mapa Leaflet una sola vez
             if (!detailLeafletMap) {
                 detailLeafletMap = L.map('excursionDetailMap', {
                     zoomControl: true,
                     scrollWheelZoom: false,
-                    attributionControl: false
+                    attributionControl: true
                 });
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 18
+                    maxZoom: 18,
+                    attribution: '&copy; OpenStreetMap contributors · Merlo Aventura'
                 }).addTo(detailLeafletMap);
 
                 detailMapLayerGroup = L.layerGroup().addTo(detailLeafletMap);
@@ -2018,58 +2108,115 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
                 detailMapLayerGroup.clearLayers();
             }
 
-            // Generador de marcadores con estilo Tailwind / Comechingones
-            const makeBadgeIcon = (colorBg, iconClass, label) => L.divIcon({
-                className: 'custom-map-marker',
-                html: `<div class="flex items-center gap-1.5 bg-stone-900/95 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-xl whitespace-nowrap">
-                          <span class="w-5 h-5 rounded-lg ${colorBg} text-stone-950 flex items-center justify-center text-[10px]"><i class="${iconClass}"></i></span>
-                          <span>${label}</span>
-                       </div>`,
-                iconSize: [120, 28],
-                iconAnchor: [60, 14]
-            });
+            const makeBadgeIcon = (colorBg, iconClass, label) => {
+                const compact = mapEl.clientWidth < 380;
+                return L.divIcon({
+                    className: 'custom-map-marker',
+                    html: compact
+                        ? `<div class="w-7 h-7 rounded-xl ${colorBg} text-stone-950 flex items-center justify-center text-xs border border-stone-950 shadow-xl"><i class="${iconClass}"></i></div>`
+                        : `<div class="flex items-center gap-1.5 bg-stone-900/95 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-xl whitespace-nowrap">
+                              <span class="w-5 h-5 rounded-lg ${colorBg} text-stone-950 flex items-center justify-center text-[10px]"><i class="${iconClass}"></i></span>
+                              <span>${label}</span>
+                           </div>`,
+                    iconSize: compact ? [28, 28] : [160, 30],
+                    iconAnchor: compact ? [14, 14] : [80, 15]
+                });
+            };
 
-            // Marcador A: Salida desde Merlo
-            const mStart = L.marker(r.start, {
-                icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Villa de Merlo')
-            }).bindPopup('<b>Punto de Salida:</b> Villa de Merlo').addTo(detailMapLayerGroup);
+            const plotRouteData = (route) => {
+                if (!detailLeafletMap || !detailMapLayerGroup) return;
+                detailMapLayerGroup.clearLayers();
 
-            // Marcador B: Fin de Tramo 4x4 / Inicio Trekking
-            const mTrail = L.marker(r.trailhead, {
-                icon: makeBadgeIcon('bg-amber-500', 'fa-solid fa-truck-pickup', 'Inicio Senda 4x4')
-            }).bindPopup(`<b>Fin Tramo Nissan Frontier 4x4 / Inicio Trekking:</b><br>${r.desc4x4}`).addTo(detailMapLayerGroup);
+                // 1. Tramo en Nissan Frontier 4x4 desde Plaza Merlo (Línea ámbar discontinua con 1.135 puntos OSRM)
+                const driveLayer = L.geoJSON(route.drive, {
+                    style: { color: '#f59e0b', weight: 5, dashArray: '6, 8', opacity: 0.95 }
+                }).bindPopup(`<b>Tramo 4x4 Nissan Frontier</b><br>Ruta desde Plaza central de Merlo · ${route.drive?.properties?.distanceKm || 21.5} km`).addTo(detailMapLayerGroup);
 
-            // Marcador C: Destino a pie
-            const mDest = L.marker(r.destination, {
-                icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-flag-checkered', 'Destino a Pie')
-            }).bindPopup(`<b>Destino de Trekking:</b><br>${exc.name}`).addTo(detailMapLayerGroup);
+                // 2. Tramo Trekking (Track GPS auténtico de Wikiloc en esmeralda viva con 2.540 puntos)
+                const trekLayer = L.geoJSON(route.trail, {
+                    style: { color: '#10b981', weight: 5, opacity: 0.95 }
+                }).bindPopup(`<b>Track GPS Wikiloc Oficial</b><br>${route.source?.distanceKm || 13.7} km · ${route.source?.trackPoints ? route.source.trackPoints.toLocaleString('es-AR') : '2.540'} puntos · ${route.source?.elevationMinM || 1597}–${route.source?.elevationMaxM || 2010} msnm`).addTo(detailMapLayerGroup);
 
-            // Línea 1: Tramo Camioneta 4x4 (Línea discontinua ámbar)
-            const line4x4 = L.polyline([r.start, r.trailhead], {
-                color: '#f59e0b',
-                weight: 4,
-                dashArray: '6, 8',
-                opacity: 0.95
-            }).addTo(detailMapLayerGroup);
+                // Marcador Plaza Merlo
+                L.marker([route.plaza[1], route.plaza[0]], {
+                    icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Plaza central de Merlo')
+                }).bindPopup('<b>Punto de Salida:</b> Plaza central de Villa de Merlo').addTo(detailMapLayerGroup);
 
-            // Línea 2: Tramo Caminando Trekking (Línea continua esmeralda)
-            const lineTrek = L.polyline([r.trailhead, r.destination], {
-                color: '#10b981',
-                weight: 5,
-                opacity: 0.95
-            }).addTo(detailMapLayerGroup);
+                // Marcador Inicio Senda / Estacionamiento
+                L.marker([route.trailhead[1], route.trailhead[0]], {
+                    icon: makeBadgeIcon('bg-amber-500', 'fa-solid fa-truck-pickup', 'Inicio Senda 4x4')
+                }).bindPopup('<b>Estacionamiento de Alta Montaña:</b><br>Fin aproximación Nissan Frontier / Inicio Senda Wikiloc').addTo(detailMapLayerGroup);
 
-            // Ajustar vista para abarcar todo el recorrido con margen
-            const bounds = L.latLngBounds([r.start, r.trailhead, r.destination]);
-            detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+                // Marcador Destino Pueblo Escondido
+                const destCoords = route.destination ? [route.destination[1], route.destination[0]] : [-32.4268, -64.8737];
+                L.marker(destCoords, {
+                    icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-flag-checkered', 'Pueblo Escondido')
+                }).bindPopup('<b>Destino de Trekking:</b><br>Pueblo Escondido, Cañón & Cerro Áspero').addTo(detailMapLayerGroup);
 
-            // Invalidate size en modal para que renderice perfecto
-            setTimeout(() => {
-                if (detailLeafletMap) {
-                    detailLeafletMap.invalidateSize();
-                    detailLeafletMap.fitBounds(bounds, { padding: [40, 40] });
+                const bounds = L.featureGroup([driveLayer, trekLayer]).getBounds();
+                detailLeafletMap.fitBounds(bounds, { padding: [35, 35] });
+
+                setTimeout(() => {
+                    if (detailLeafletMap) {
+                        detailLeafletMap.invalidateSize();
+                        detailLeafletMap.fitBounds(bounds, { padding: [35, 35] });
+                    }
+                }, 200);
+            };
+
+            // Caso A: Excursión con GeoJSON completo (Wikiloc)
+            if (r.routeData) {
+                if (ROUTES_CACHE[r.routeData]) {
+                    plotRouteData(ROUTES_CACHE[r.routeData]);
+                } else {
+                    fetch(r.routeData)
+                        .then(res => res.json())
+                        .then(route => {
+                            ROUTES_CACHE[r.routeData] = route;
+                            plotRouteData(route);
+                        })
+                        .catch(err => {
+                            console.error('Error cargando track GPS:', err);
+                        });
                 }
-            }, 250);
+            }
+            // Caso B: Excursión con tramos definidos por coordenadas
+            else if (r.start && r.trailhead && r.destination) {
+                const line4x4 = L.polyline([r.start, r.trailhead], {
+                    color: '#f59e0b',
+                    weight: 4,
+                    dashArray: '6, 8',
+                    opacity: 0.95
+                }).bindPopup(`<b>Tramo Nissan Frontier 4x4:</b><br>${r.desc4x4}`).addTo(detailMapLayerGroup);
+
+                const lineTrek = L.polyline([r.trailhead, r.destination], {
+                    color: '#10b981',
+                    weight: 5,
+                    opacity: 0.95
+                }).bindPopup(`<b>Tramo Trekking a Pie:</b><br>${r.descTrek}`).addTo(detailMapLayerGroup);
+
+                L.marker(r.start, {
+                    icon: makeBadgeIcon('bg-amber-400', 'fa-solid fa-house', 'Villa de Merlo')
+                }).bindPopup('<b>Punto de Salida:</b> Villa de Merlo').addTo(detailMapLayerGroup);
+
+                L.marker(r.trailhead, {
+                    icon: makeBadgeIcon('bg-amber-500', 'fa-solid fa-truck-pickup', 'Inicio Senda 4x4')
+                }).bindPopup(`<b>Fin Tramo 4x4 / Inicio Trekking:</b><br>${r.desc4x4}`).addTo(detailMapLayerGroup);
+
+                L.marker(r.destination, {
+                    icon: makeBadgeIcon('bg-emerald-400', 'fa-solid fa-flag-checkered', exc.name)
+                }).bindPopup(`<b>Destino:</b><br>${exc.name}`).addTo(detailMapLayerGroup);
+
+                const bounds = L.latLngBounds([r.start, r.trailhead, r.destination]);
+                detailLeafletMap.fitBounds(bounds, { padding: [35, 35] });
+
+                setTimeout(() => {
+                    if (detailLeafletMap) {
+                        detailLeafletMap.invalidateSize();
+                        detailLeafletMap.fitBounds(bounds, { padding: [35, 35] });
+                    }
+                }, 200);
+            }
         }
 
         function openExcursionDetailModal(excursionId) {
@@ -2155,7 +2302,7 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         }
 
         function closeExcursionDetailModal() {
-            const modal = document.getElementById('excursionDetailModal');
+                        const modal = document.getElementById('excursionDetailModal');
             if (modal) modal.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
         }
