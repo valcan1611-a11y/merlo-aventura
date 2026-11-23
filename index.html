@@ -892,6 +892,9 @@
                         <!-- Contenedor del Mapa Interactivo Leaflet -->
                         <div class="relative">
                             <div id="excursionDetailMap" role="region" aria-label="Mapa interactivo del tramo en camioneta y el track GPS de la senda" class="w-full h-64 sm:h-72 rounded-xl overflow-hidden border border-stone-800 z-10 shadow-inner"></div>
+                            <button type="button" onclick="openExpandedRouteMap()" class="absolute top-2 right-2 z-20 rounded-lg border border-stone-700 bg-stone-900/95 px-3 py-2 text-xs font-bold text-white shadow-lg transition hover:border-amber-400 hover:text-amber-300" aria-label="Ver recorrido en mapa grande">
+                                <i class="fa-solid fa-expand mr-1.5 text-amber-400"></i> Ver mapa grande
+                            </button>
                             <div class="hidden sm:block absolute bottom-2 left-2 z-20 bg-stone-900/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-stone-300 border border-stone-700/60 pointer-events-none">
                                 <i class="fa-solid fa-location-crosshairs text-amber-400 mr-1"></i> Sierras de los Comechingones
                             </div>
@@ -1980,6 +1983,70 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         let detailMapLayerGroup = null;
 
         let detailRouteDataPromise = null;
+        let expandedRouteMap = null;
+
+        function closeExpandedRouteMap() {
+            const overlay = document.getElementById('expandedRouteMapOverlay');
+            if (expandedRouteMap) {
+                expandedRouteMap.remove();
+                expandedRouteMap = null;
+            }
+            overlay?.remove();
+            document.removeEventListener('keydown', handleExpandedMapEscape);
+        }
+
+        function handleExpandedMapEscape(event) {
+            if (event.key === 'Escape') closeExpandedRouteMap();
+        }
+
+        function openExpandedRouteMap() {
+            if (!detailRouteDataPromise || typeof L === 'undefined') return;
+            closeExpandedRouteMap();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'expandedRouteMapOverlay';
+            overlay.className = 'fixed inset-0 z-[100] bg-stone-950/95 p-3 sm:p-6';
+            overlay.innerHTML = `
+                <section class="flex h-full flex-col gap-3" role="dialog" aria-modal="true" aria-label="Mapa ampliado del recorrido">
+                    <header class="flex shrink-0 items-center justify-between gap-3">
+                        <div>
+                            <h2 class="font-heading text-base sm:text-lg font-black text-white">${document.getElementById('detailModalTitle')?.textContent || 'Recorrido'}</h2>
+                            <p class="text-xs text-stone-400">Tramo en camioneta y track GPS de Wikiloc</p>
+                        </div>
+                        <button type="button" class="rounded-xl border border-stone-700 bg-stone-900 px-4 py-2 text-sm font-bold text-white hover:border-amber-400 hover:text-amber-300" aria-label="Cerrar mapa ampliado">
+                            <i class="fa-solid fa-xmark mr-1.5"></i> Cerrar
+                        </button>
+                    </header>
+                    <div id="expandedRouteMap" role="region" aria-label="Mapa ampliado interactivo del recorrido" class="min-h-0 flex-1 overflow-hidden rounded-2xl border border-stone-800"></div>
+                    <div class="flex shrink-0 flex-wrap gap-x-5 gap-y-2 text-xs text-stone-300">
+                        <span><i class="fa-solid fa-minus text-amber-400 mr-1"></i> Ruta en camioneta desde la Plaza central de Merlo</span>
+                        <span><i class="fa-solid fa-minus text-emerald-400 mr-1"></i> Track GPS de la senda</span>
+                    </div>
+                </section>
+            `;
+            document.body.appendChild(overlay);
+            overlay.querySelector('button')?.addEventListener('click', closeExpandedRouteMap);
+            document.addEventListener('keydown', handleExpandedMapEscape);
+
+            expandedRouteMap = L.map('expandedRouteMap', { zoomControl: true, scrollWheelZoom: true });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(expandedRouteMap);
+
+            detailRouteDataPromise.then(route => {
+                if (!expandedRouteMap) return;
+                const driveLayer = L.geoJSON(route.drive, { style: { color: '#f59e0b', weight: 6, opacity: 0.95 } }).addTo(expandedRouteMap);
+                const trekLayer = L.geoJSON(route.trail, { style: { color: '#10b981', weight: 6, opacity: 0.95 } }).addTo(expandedRouteMap);
+                L.marker([route.plaza[1], route.plaza[0]]).bindPopup('Salida: Plaza central de Merlo').addTo(expandedRouteMap);
+                L.marker([route.trailhead[1], route.trailhead[0]]).bindPopup('Estacionamiento · inicio y fin de la senda').addTo(expandedRouteMap);
+                expandedRouteMap.fitBounds(L.featureGroup([driveLayer, trekLayer]).getBounds(), { padding: [40, 40] });
+                setTimeout(() => expandedRouteMap?.invalidateSize(), 100);
+            }).catch(() => {
+                const mapContainer = document.getElementById('expandedRouteMap');
+                if (mapContainer) mapContainer.innerHTML = '<p class="p-6 text-sm text-stone-300">No se pudo cargar el recorrido GPS.</p>';
+            });
+        }
 
         function renderExcursionMap(exc) {
             const mapEl = document.getElementById('excursionDetailMap');
@@ -2152,6 +2219,7 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
         }
 
         function closeExcursionDetailModal() {
+            closeExpandedRouteMap();
             const modal = document.getElementById('excursionDetailModal');
             if (modal) modal.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
