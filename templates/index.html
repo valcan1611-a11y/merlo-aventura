@@ -1935,6 +1935,13 @@ Grupos reducidos de hasta 16 personas. Solo 5 salidas anuales programadas con re
             initFlatpickrCalendar();
             initHeroVideo();
             loadSettings();
+
+            // Auto-abrir modal si viene por URL (ej: index.html?excursion=1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const openId = urlParams.get('excursion');
+            if (openId) {
+                openExcursionDetailModal(parseInt(openId));
+            }
         });
 
         // ------------------ VIDEO HERO ------------------ //
