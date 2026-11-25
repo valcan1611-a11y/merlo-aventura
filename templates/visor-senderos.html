@@ -168,53 +168,77 @@
                         <i class="fa-solid fa-chart-simple text-amber-500"></i> Estadísticas Técnicas del Sendero
                     </h3>
                     
-                    <div class="grid grid-cols-2 gap-2 sm:gap-2.5 text-xs">
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Distancia Total</span>
-                            <span id="statDist" class="font-black text-white text-sm sm:text-base mt-0.5 block">13,65 km</span>
-                            <span id="statDistMi" class="text-[10px] text-stone-500 font-medium">(8.48 mi)</span>
+                    <div class="grid grid-cols-2 gap-1.5 sm:gap-2 text-xs">
+                        <!-- 1. Distancia -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Distancia</span>
+                                <span id="statDist" class="font-black text-white text-xs sm:text-sm mt-0.5 block leading-tight">13,65 km</span>
+                            </div>
+                            <span id="statDistMi" class="text-[9px] text-stone-500 font-semibold bg-stone-900 px-1 py-0.5 rounded leading-none">8.5 mi</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Tipo de Ruta</span>
-                            <span id="statType" class="font-black text-amber-400 text-sm sm:text-base mt-0.5 block truncate">Circular (Loop)</span>
-                            <span class="text-[10px] text-stone-500 font-medium">Ida y vuelta distintas</span>
+                        <!-- 2. Tipo de Ruta -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Tipo Ruta</span>
+                                <span id="statType" class="font-black text-amber-400 text-xs sm:text-sm mt-0.5 block leading-tight truncate">Circular</span>
+                            </div>
+                            <span class="text-[9px] text-amber-500/90 font-semibold bg-amber-500/10 px-1 py-0.5 rounded border border-amber-500/20 leading-none">Loop</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Desnivel (+)</span>
-                            <span id="statEleGain" class="font-black text-emerald-400 text-sm sm:text-base mt-0.5 block">+648 m</span>
-                            <span id="statEleGainFt" class="text-[10px] text-stone-500 font-medium">(+2.126 ft)</span>
+                        <!-- 3. Desnivel (+) -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Desnivel (+)</span>
+                                <span id="statEleGain" class="font-black text-emerald-400 text-xs sm:text-sm mt-0.5 block leading-tight">+648 m</span>
+                            </div>
+                            <span id="statEleGainFt" class="text-[9px] text-emerald-500/90 font-semibold bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 leading-none">+2.126ft</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Desnivel (-)</span>
-                            <span id="statEleLoss" class="font-black text-emerald-400 text-sm sm:text-base mt-0.5 block">-648 m</span>
-                            <span id="statEleLossFt" class="text-[10px] text-stone-500 font-medium">(-2.126 ft)</span>
+                        <!-- 4. Desnivel (-) -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Desnivel (-)</span>
+                                <span id="statEleLoss" class="font-black text-emerald-400 text-xs sm:text-sm mt-0.5 block leading-tight">-648 m</span>
+                            </div>
+                            <span id="statEleLossFt" class="text-[9px] text-emerald-500/90 font-semibold bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 leading-none">-2.126ft</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Altitud Máxima</span>
-                            <span id="statMaxEle" class="font-black text-white text-sm sm:text-base mt-0.5 block">2.010 m</span>
-                            <span id="statMaxEleFt" class="text-[10px] text-stone-500 font-medium">(6.595 ft - Cumbre)</span>
+                        <!-- 5. Altitud Máxima -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Alt. Máx</span>
+                                <span id="statMaxEle" class="font-black text-white text-xs sm:text-sm mt-0.5 block leading-tight">2.010 m</span>
+                            </div>
+                            <span id="statMaxEleFt" class="text-[9px] text-stone-500 font-semibold bg-stone-900 px-1 py-0.5 rounded leading-none">Cumbre</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Altitud Mínima</span>
-                            <span id="statMinEle" class="font-black text-white text-sm sm:text-base mt-0.5 block">1.596 m</span>
-                            <span id="statMinEleFt" class="text-[10px] text-stone-500 font-medium">(5.238 ft - Cañón)</span>
+                        <!-- 6. Altitud Mínima -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Alt. Mín</span>
+                                <span id="statMinEle" class="font-black text-white text-xs sm:text-sm mt-0.5 block leading-tight">1.596 m</span>
+                            </div>
+                            <span id="statMinEleFt" class="text-[9px] text-stone-500 font-semibold bg-stone-900 px-1 py-0.5 rounded leading-none">Cañón</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Tiempo en Mov.</span>
-                            <span id="statMovingTime" class="font-black text-white text-sm sm:text-base mt-0.5 block">4h 42m</span>
-                            <span id="statTotalTime" class="text-[10px] text-stone-500 font-medium">Total: 8h 47m</span>
+                        <!-- 7. Tiempo en Mov. -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Tiempo Mov.</span>
+                                <span id="statMovingTime" class="font-black text-white text-xs sm:text-sm mt-0.5 block leading-tight">4h 42m</span>
+                            </div>
+                            <span id="statTotalTime" class="text-[9px] text-stone-500 font-semibold bg-stone-900 px-1 py-0.5 rounded leading-none">8h 47m</span>
                         </div>
 
-                        <div class="bg-stone-950/80 p-2.5 sm:p-3 rounded-xl border border-stone-800/80 shadow-sm">
-                            <span class="text-[10px] text-stone-400 uppercase font-bold tracking-tight block">Dificultad</span>
-                            <span id="statDifficulty" class="font-black text-amber-400 text-sm sm:text-base mt-0.5 block">Moderada</span>
-                            <span class="text-[10px] text-stone-500 font-medium">Terreno técnico</span>
+                        <!-- 8. Dificultad -->
+                        <div class="bg-stone-950/90 px-2.5 py-1.5 rounded-lg border border-stone-800/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-stone-400 uppercase font-bold tracking-tight block leading-none">Dificultad</span>
+                                <span id="statDifficulty" class="font-black text-amber-400 text-xs sm:text-sm mt-0.5 block leading-tight">Moderada</span>
+                            </div>
+                            <span class="text-[9px] text-amber-500/90 font-semibold bg-amber-500/10 px-1 py-0.5 rounded border border-amber-500/20 leading-none">Técnica</span>
                         </div>
                     </div>
 
@@ -259,28 +283,36 @@
         <!-- MAPA Y PERFIL DE ELEVACIÓN -->
         <main id="mainMapArea" class="hidden md:flex flex-1 flex-col h-full relative overflow-hidden bg-stone-950">
             
-            <!-- BOTÓN VOLVER A FICHA EN MÓVIL -->
-            <button type="button" onclick="setMobileView('info')" class="md:hidden absolute top-4 left-4 z-[500] px-3 py-1.5 rounded-xl bg-stone-900/95 text-stone-200 hover:text-white font-bold text-xs border border-stone-700 shadow-xl backdrop-blur-md flex items-center gap-1.5">
-                <i class="fa-solid fa-list-check text-amber-400"></i> Ficha Técnica
-            </button>
+            <!-- LAYER CONTROLS (BARRA COMPACTA UNIFICADA SIN BOTONES ENCIMADOS) -->
+            <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-[500] max-w-[calc(100vw-1.5rem)]">
+                <div class="bg-stone-950/90 backdrop-blur-md p-1 rounded-xl border border-stone-700/80 shadow-2xl flex items-center gap-1">
+                    <button type="button" onclick="setMapLayer('satellite')" id="btnLayerSat" class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-stone-800 text-white font-bold text-[11px] sm:text-xs border border-amber-500 shadow-md transition-all flex items-center gap-1.5" title="Capa Satelital HD">
+                        <i class="fa-solid fa-satellite text-amber-400"></i>
+                        <span class="hidden sm:inline">Satelital</span>
+                        <span class="sm:hidden">Sat</span>
+                    </button>
+                    <button type="button" onclick="setMapLayer('topo')" id="btnLayerTopo" class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-stone-400 hover:text-white font-semibold text-[11px] sm:text-xs transition-all flex items-center gap-1.5" title="Capa de Relieve Topográfico">
+                        <i class="fa-solid fa-mountain text-emerald-400"></i>
+                        <span class="hidden sm:inline">Relieve</span>
+                        <span class="sm:hidden">Topo</span>
+                    </button>
+                    <button type="button" onclick="setMapLayer('osm')" id="btnLayerOsm" class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-stone-400 hover:text-white font-semibold text-[11px] sm:text-xs transition-all flex items-center gap-1.5" title="Capa Callejero">
+                        <i class="fa-solid fa-map text-sky-400"></i>
+                        <span class="hidden sm:inline">Calles</span>
+                        <span class="sm:hidden">OSM</span>
+                    </button>
 
-            <!-- LAYER CONTROLS (BOTONES FLOTANTES EN MAPA) -->
-            <div class="absolute top-4 right-4 z-[500] flex flex-wrap gap-2">
-                <button type="button" onclick="toggleFitAll()" id="btnToggle4x4" class="px-3 py-1.5 rounded-xl bg-stone-900/80 text-amber-400 hover:text-white font-medium text-xs border border-stone-700 hover:border-amber-500 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5" title="Ver todo el recorrido incluyendo aproximación en 4x4 desde Merlo">
-                    <i class="fa-solid fa-truck-pickup text-amber-400"></i> <span class="hidden md:inline">Ver 4x4 Merlo</span>
-                </button>
-                <button type="button" onclick="setMapLayer('satellite')" id="btnLayerSat" class="px-3 py-1.5 rounded-xl bg-stone-900/90 text-white font-bold text-xs border border-amber-500 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-satellite text-amber-400"></i> Satelital HD
-                </button>
-                <button type="button" onclick="setMapLayer('topo')" id="btnLayerTopo" class="px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-mountain text-emerald-400"></i> Relieve / Topo
-                </button>
-                <button type="button" onclick="setMapLayer('osm')" id="btnLayerOsm" class="px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-map text-sky-400"></i> Callejero
-                </button>
-                <button type="button" onclick="fitCurrentTrail()" class="p-1.5 rounded-xl bg-stone-900/90 text-white text-xs border border-stone-700 hover:border-amber-400 shadow-xl backdrop-blur-md" title="Centrar sendero de trekking">
-                    <i class="fa-solid fa-compress px-1"></i>
-                </button>
+                    <div class="h-4 w-px bg-stone-700 mx-0.5"></div>
+
+                    <button type="button" onclick="toggleFitAll()" id="btnToggle4x4" class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-stone-400 hover:text-white font-semibold text-[11px] sm:text-xs transition-all flex items-center gap-1" title="Alternar aproximación 4x4 desde Merlo">
+                        <i class="fa-solid fa-truck-pickup text-amber-400"></i>
+                        <span>4x4</span>
+                    </button>
+
+                    <button type="button" onclick="fitCurrentTrail()" class="p-1 sm:p-1.5 rounded-lg text-stone-400 hover:text-white text-xs hover:bg-stone-800 transition" title="Centrar recorrido">
+                        <i class="fa-solid fa-compress px-1"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- CONTENEDOR DE MAPA LEAFLET -->
@@ -25144,18 +25176,17 @@
             activeTileLayer = mapLayers[type];
             activeTileLayer.addTo(map);
 
+            const inactiveClass = 'px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-stone-400 hover:text-white font-semibold text-[11px] sm:text-xs transition-all flex items-center gap-1.5';
+            const activeClass = 'px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-stone-800 text-white font-bold text-[11px] sm:text-xs border border-amber-500 shadow-md transition-all flex items-center gap-1.5';
+
             ['btnLayerSat', 'btnLayerTopo', 'btnLayerOsm'].forEach(id => {
                 const b = document.getElementById(id);
-                if (b) {
-                    b.className = 'px-3 py-1.5 rounded-xl bg-stone-900/80 text-stone-300 hover:text-white font-medium text-xs border border-stone-700 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5';
-                }
+                if (b) b.className = inactiveClass;
             });
 
             const activeBtn = type === 'satellite' ? 'btnLayerSat' : (type === 'topo' ? 'btnLayerTopo' : 'btnLayerOsm');
             const ab = document.getElementById(activeBtn);
-            if (ab) {
-                ab.className = 'px-3 py-1.5 rounded-xl bg-stone-900/90 text-white font-bold text-xs border border-amber-500 shadow-xl backdrop-blur-md transition-all flex items-center gap-1.5';
-            }
+            if (ab) ab.className = activeClass;
         }
 
         // 2. Cargar Sendero
