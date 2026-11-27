@@ -53,6 +53,18 @@ def inject_global_data():
 
 # ----------------- FRONTEND ROUTES ----------------- #
 
+@app.route("/src/<path:filename>")
+def serve_src_modules(filename):
+    return send_from_directory(os.path.join(BASE_DIR, "src"), filename)
+
+@app.route("/images/<path:filename>")
+def serve_root_images(filename):
+    return send_from_directory(os.path.join(BASE_DIR, "images"), filename)
+
+@app.route("/hero.mp4")
+def serve_root_hero_video():
+    return send_from_directory(BASE_DIR, "hero.mp4")
+
 @app.route("/visor-senderos")
 @app.route("/visor-senderos.html")
 def visor_senderos():

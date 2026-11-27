@@ -68,7 +68,7 @@ function initDatePicker() {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     flatpickrInstance = flatpickr(dateInput, {
-        locale: flatpickr.l1ons.es,
+        locale: flatpickr.l10ns?.es || 'default',
         minDate: 'today',
         dateFormat: 'Y-m-d',
         altInput: true,

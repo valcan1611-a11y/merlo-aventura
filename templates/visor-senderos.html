@@ -25115,12 +25115,22 @@
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestedTrail = urlParams.get('trail');
+            if (requestedTrail && TRAILS[requestedTrail]) {
+                currentTrailKey = requestedTrail;
+                currentTrail = TRAILS[requestedTrail];
+                const selDesktop = document.getElementById('trailSelect');
+                const selMobile = document.getElementById('trailSelectMobile');
+                if (selDesktop) selDesktop.value = requestedTrail;
+                if (selMobile) selMobile.value = requestedTrail;
+            }
+
             initLeafletMap();
             loadTrail(currentTrailKey);
             initElevationCanvas();
 
             // En móvil, si se solicita ?view=map o #map, activar vista mapa
-            const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'map' || window.location.hash === '#map') {
                 setMobileView('map');
             }

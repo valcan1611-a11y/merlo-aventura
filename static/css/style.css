@@ -1,6 +1,14 @@
-/* Custom styling for Merlo Aventura */
+/* Merlo Aventura — Sistema de Diseño Serrano/Terracota Oscuro */
 
-/* Smooth scroll behavior */
+:root {
+    --sierra-950: #0a0e0d;
+    --sierra-900: #111715;
+    --sierra-800: #1c2421;
+    --accent-amber: #f59e0b;
+    --accent-terracotta: #ea580c;
+    --accent-trek: #10b981;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -11,89 +19,174 @@ html {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #111715;
+    background: var(--sierra-900);
 }
 ::-webkit-scrollbar-thumb {
     background: #44403c;
-    border-radius: 4px;
+    border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #d97706;
+    background: var(--accent-amber);
 }
 
-/* Hero Background Video Styling */
+/* Accesibilidad: foco visible consistente */
+:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+}
+
+/* Hero media layers */
 #heroVideo {
     min-width: 100%;
     min-height: 100%;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
     object-fit: cover;
-    z-index: 0;
+    z-index: 1;
 }
 
-/* Vignette overlay */
 .bg-radial-vignette {
-    background: radial-gradient(circle at center, transparent 35%, rgba(10, 14, 13, 0.85) 100%);
+    background: radial-gradient(circle at 50% 35%, transparent 25%, rgba(10, 14, 13, 0.88) 100%);
 }
 
 /* Mountain glassmorphism */
 .glass-panel {
-    background: rgba(23, 23, 23, 0.75);
+    background: rgba(17, 23, 21, 0.78);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Flatpickr custom styling for dark mode */
+/* Leaflet map dark styling */
+.custom-map-marker {
+    background: transparent;
+    border: none;
+}
+.leaflet-container {
+    background: #141a17;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+.leaflet-popup-content-wrapper {
+    background: #1c1917 !important;
+    color: #f5f5f4 !important;
+    border: 1px solid #44403c !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.55) !important;
+}
+.leaflet-popup-tip {
+    background: #1c1917 !important;
+}
+
+/* Fullscreen map fallback */
+.map-fullscreen-fallback {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 90 !important;
+    border-radius: 0 !important;
+    background: #0a0e0d !important;
+    padding: 0 !important;
+}
+.map-fullscreen-fallback #excursionDetailMap,
+#detailMapWrapper:fullscreen #excursionDetailMap {
+    height: 100vh !important;
+    border-radius: 0 !important;
+}
+
+/* Details accordion marker hide */
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Flatpickr custom dark mode */
 .flatpickr-calendar {
     background: #1c1917 !important;
     border: 1px solid #44403c !important;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75) !important;
     border-radius: 1.25rem !important;
     color: #f5f5f4 !important;
     font-family: inherit !important;
 }
-
 .flatpickr-months {
     background: #292524 !important;
     border-radius: 1.25rem 1.25rem 0 0 !important;
 }
-
-.flatpickr-current-month {
+.flatpickr-current-month,
+.flatpickr-monthDropdown-months {
     color: #f59e0b !important;
 }
-
+.flatpickr-months .flatpickr-prev-month svg,
+.flatpickr-months .flatpickr-next-month svg {
+    fill: #e7e5e4 !important;
+}
+.flatpickr-weekday {
+    color: #a8a29e !important;
+}
 .flatpickr-day {
     color: #e7e5e4 !important;
     border-radius: 0.5rem !important;
 }
-
 .flatpickr-day:hover {
     background: #44403c !important;
+    border-color: #44403c !important;
 }
-
-.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+.flatpickr-day.today {
+    border-color: #f59e0b !important;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
     background: #f59e0b !important;
     border-color: #f59e0b !important;
     color: #0c0a09 !important;
-    font-weight: bold !important;
+    font-weight: 800 !important;
 }
-
-.flatpickr-day.disabled, .flatpickr-day.disabled:hover {
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
     color: #57534e !important;
 }
 
-.flatpickr-weekday {
-    color: #a8a29e !important;
-}
-
-/* Print utilities */
+/* Voucher light-mode print styling */
 @media print {
-    header, footer, .no-print, #bookingModal {
+    body {
+        background: #ffffff !important;
+        color: #111827 !important;
+    }
+    .no-print,
+    header,
+    main,
+    footer,
+    #floatingWhatsapp,
+    #excursionDetailModal,
+    #bookingModal,
+    #transferModal,
+    #mpCheckoutModal,
+    #adminAuthModal,
+    #adminModal,
+    #toastContainer {
         display: none !important;
+    }
+    #voucherModal {
+        display: block !important;
+        position: static !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+    }
+    #voucherBackdrop {
+        display: none !important;
+    }
+    #voucherContent {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: 2px solid #d6d3d1 !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    #voucherContent * {
+        color: #111827 !important;
+        background: transparent !important;
+        border-color: #d6d3d1 !important;
     }
 }
