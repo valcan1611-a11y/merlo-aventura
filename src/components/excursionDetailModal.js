@@ -14,6 +14,8 @@ let detailTileLayers = {};
 let activeTileKey = 'satellite';
 let currentRouteBounds = null;
 let currentExcursion = null;
+let detailMapResizeObserver = null;
+let detailMapParentBackup = null;
 const ROUTES_CACHE = new Map();
 
 let onReserveCallback = () => {};
@@ -115,10 +117,13 @@ export function openExcursionDetailModal(excursionId) {
     if (bar4x4) bar4x4.style.width = `${r.ratio4x4Pct || 40}%`;
     if (barTrek) barTrek.style.width = `${r.ratioTrekPct || 60}%`;
 
-    // Enlaces al Visor GPS 3D (con ?trail= cuando corresponde) y Wikiloc externo
-    const visorHref = exc.trailKey
-        ? `visor-senderos.html?trail=${encodeURIComponent(exc.trailKey)}`
-        : 'visor-senderos.html';
+    // Enlaces al Visor GPS 3D (en móvil abre directamente en la vista de mapa)
+    const isMobileViewport = window.innerWidth < 768;
+    const visorParams = new URLSearchParams();
+    if (exc.trailKey) visorParams.set('trail', exc.trailKey);
+    if (isMobileViewport) visorParams.set('view', 'map');
+    const visorQuery = visorParams.toString();
+    const visorHref = visorQuery ? `visor-senderos.html?${visorQuery}` : 'visor-senderos.html';
 
     ['detailVisorLinkTop', 'detailVisorLinkBottom'].forEach((id) => {
         const link = document.getElementById(id);
@@ -205,6 +210,7 @@ export function openExcursionDetailModal(excursionId) {
 }
 
 export function closeExcursionDetailModal() {
+    exitFallbackFullscreen();
     const modal = document.getElementById('excursionDetailModal');
     if (modal) modal.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
@@ -236,14 +242,26 @@ function ensureLeafletInitialized() {
         detailLeafletMap = window.L.map('excursionDetailMap', {
             zoomControl: true,
             scrollWheelZoom: false,
+            dragging: true,
+            touchZoom: true,
+            tap: false,
             attributionControl: true
         });
 
+        let satErrors = 0;
+        const satLayer = window.L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            { maxZoom: 18, attribution: '&copy; Esri Satelital · Merlo Aventura' }
+        );
+        satLayer.on('tileerror', () => {
+            satErrors += 1;
+            if (satErrors >= 4 && activeTileKey === 'satellite') {
+                setDetailMapLayer('osm');
+            }
+        });
+
         detailTileLayers = {
-            satellite: window.L.tileLayer(
-                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                { maxZoom: 18, attribution: '&copy; Esri Satelital · Merlo Aventura' }
-            ),
+            satellite: satLayer,
             osm: window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 18,
                 attribution: '&copy; OpenStreetMap · Merlo Aventura'
@@ -253,6 +271,24 @@ function ensureLeafletInitialized() {
         detailTileLayers[activeTileKey].addTo(detailLeafletMap);
         detailMapLayerGroup = window.L.layerGroup().addTo(detailLeafletMap);
         updateLayerToggleUI();
+
+        // Observar cambios de tamaño reales en móvil (teclado, barra de direcciones, rotación)
+        if (typeof window.ResizeObserver === 'function' && !detailMapResizeObserver) {
+            detailMapResizeObserver = new ResizeObserver(() => {
+                if (detailLeafletMap && mapEl.offsetWidth > 0 && mapEl.offsetHeight > 0) {
+                    detailLeafletMap.invalidateSize({ animate: false });
+                }
+            });
+            detailMapResizeObserver.observe(mapEl);
+        }
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (detailLeafletMap) {
+                    detailLeafletMap.invalidateSize({ animate: false });
+                    fitDetailBounds();
+                }
+            }, 250);
+        });
     } else {
         detailMapLayerGroup.clearLayers();
     }
@@ -296,8 +332,26 @@ function fitDetailBounds() {
     }
 }
 
+function exitFallbackFullscreen() {
+    const wrapper = document.getElementById('detailMapWrapper');
+    const fsIcon = document.querySelector('#detailMapFullscreenBtn i');
+    if (!wrapper) return;
+    wrapper.classList.remove('map-fullscreen-fallback');
+    if (detailMapParentBackup && detailMapParentBackup.parent) {
+        const { parent, nextSibling } = detailMapParentBackup;
+        if (nextSibling && nextSibling.parentNode === parent) {
+            parent.insertBefore(wrapper, nextSibling);
+        } else {
+            parent.appendChild(wrapper);
+        }
+        detailMapParentBackup = null;
+    }
+    if (fsIcon) fsIcon.className = 'fa-solid fa-expand';
+}
+
 function toggleMapFullscreen() {
     const wrapper = document.getElementById('detailMapWrapper');
+    const fsIcon = document.querySelector('#detailMapFullscreenBtn i');
     if (!wrapper) return;
 
     if (document.fullscreenElement === wrapper) {
@@ -305,21 +359,34 @@ function toggleMapFullscreen() {
         return;
     }
 
-    if (wrapper.requestFullscreen) {
-        wrapper.requestFullscreen().catch(() => {
-            wrapper.classList.toggle('map-fullscreen-fallback');
-            setTimeout(() => {
-                detailLeafletMap?.invalidateSize();
-                fitDetailBounds();
-            }, 100);
-        });
-    } else {
-        wrapper.classList.toggle('map-fullscreen-fallback');
+    if (wrapper.classList.contains('map-fullscreen-fallback')) {
+        exitFallbackFullscreen();
         setTimeout(() => {
-            detailLeafletMap?.invalidateSize();
+            detailLeafletMap?.invalidateSize({ animate: false });
             fitDetailBounds();
-        }, 100);
+        }, 120);
+        return;
     }
+
+    const enterFallback = () => {
+        // Mover al <body> evita recortes por overflow/transform del modal en iOS Safari
+        detailMapParentBackup = { parent: wrapper.parentNode, nextSibling: wrapper.nextSibling };
+        document.body.appendChild(wrapper);
+        wrapper.classList.add('map-fullscreen-fallback');
+        if (fsIcon) fsIcon.className = 'fa-solid fa-xmark';
+        setTimeout(() => {
+            detailLeafletMap?.invalidateSize({ animate: false });
+            fitDetailBounds();
+        }, 140);
+    };
+
+    // En móviles usar siempre el overlay fixed a 100dvh (iOS Safari no soporta requestFullscreen en div)
+    if (window.innerWidth < 768 || !wrapper.requestFullscreen) {
+        enterFallback();
+        return;
+    }
+
+    wrapper.requestFullscreen().catch(enterFallback);
 }
 
 function renderExcursionMap(exc) {

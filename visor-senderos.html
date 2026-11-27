@@ -38,12 +38,15 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
+        html, body { height: 100%; height: 100dvh; }
         .custom-map-marker { background: transparent; border: none; }
+        .leaflet-container { background: #141a17; touch-action: none; -webkit-tap-highlight-color: transparent; }
+        #mainTrailMap { touch-action: none; min-height: 260px; }
         .leaflet-popup-content-wrapper { background: #1c1917 !important; color: #f5f5f4 !important; border: 1px solid #44403c !important; border-radius: 12px !important; }
         .leaflet-popup-tip { background: #1c1917 !important; }
     </style>
 </head>
-<body class="h-full flex flex-col overflow-hidden select-none">
+<body class="h-[100dvh] flex flex-col overflow-hidden">
 
     <!-- TOP BAR -->
     <header class="h-16 bg-stone-900 border-b border-stone-800 px-4 sm:px-6 flex items-center justify-between gap-4 shrink-0 z-30">
@@ -115,10 +118,10 @@
     </nav>
 
     <!-- MAIN APP CONTAINER -->
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div class="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden relative">
 
         <!-- SIDEBAR DE DETALLES Y WAYPOINTS -->
-        <aside id="trailSidebar" class="w-full md:w-80 lg:w-96 bg-stone-900/95 backdrop-blur-md border-r border-stone-800 flex flex-col shrink-0 overflow-y-auto z-20 transition-all md:!flex">
+        <aside id="trailSidebar" class="hidden md:flex w-full md:w-80 lg:w-96 min-h-0 bg-stone-900/95 backdrop-blur-md border-r border-stone-800 flex-col shrink-0 overflow-y-auto z-20 transition-all">
             
             <!-- Mobile Selector -->
             <div class="p-4 border-b border-stone-800 lg:hidden">
@@ -281,7 +284,7 @@
         </aside>
 
         <!-- MAPA Y PERFIL DE ELEVACIÓN -->
-        <main id="mainMapArea" class="hidden md:flex flex-1 flex-col h-full relative overflow-hidden bg-stone-950">
+        <main id="mainMapArea" class="flex flex-1 min-h-0 flex-col h-full relative overflow-hidden bg-stone-950">
             
             <!-- LAYER CONTROLS (BARRA COMPACTA UNIFICADA SIN BOTONES ENCIMADOS) -->
             <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-[500] max-w-[calc(100vw-1.5rem)]">
@@ -25057,9 +25060,9 @@
 };
 
         let currentTrailKey = 'pueblo-escondido-cerro-aspero';
-        let currentMobileView = 'info'; // 'info' or 'map'
+        let currentMobileView = 'map'; // En móvil abre directo en el mapa GPS
 
-        function setMobileView(view) {
+        function setMobileView(view, { skipFit = false } = {}) {
             currentMobileView = view;
             const sidebar = document.getElementById('trailSidebar');
             const mainMap = document.getElementById('mainMapArea');
@@ -25067,7 +25070,10 @@
             const tabMap = document.getElementById('tabBtnMap');
 
             if (view === 'map') {
-                if (sidebar) sidebar.classList.add('hidden');
+                if (sidebar) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('flex');
+                }
                 if (mainMap) {
                     mainMap.classList.remove('hidden');
                     mainMap.classList.add('flex');
@@ -25078,17 +25084,27 @@
                 if (tabMap) {
                     tabMap.className = 'flex-1 py-2 px-3 rounded-xl bg-amber-500 text-stone-950 font-black text-xs flex items-center justify-center gap-1.5 shadow transition-all';
                 }
-                setTimeout(() => {
+                const refreshMap = () => {
                     if (map) {
-                        map.invalidateSize();
-                        fitCurrentTrail();
+                        map.invalidateSize({ animate: false });
+                        if (!skipFit) fitCurrentTrail();
                     }
                     if (currentTrail) {
                         drawElevationProfile(currentTrail);
                     }
-                }, 100);
+                };
+                requestAnimationFrame(() => {
+                    refreshMap();
+                    setTimeout(refreshMap, 150);
+                    setTimeout(() => {
+                        if (map) map.invalidateSize({ animate: false });
+                    }, 350);
+                });
             } else {
-                if (sidebar) sidebar.classList.remove('hidden');
+                if (sidebar) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('flex');
+                }
                 if (mainMap) {
                     mainMap.classList.add('hidden');
                     mainMap.classList.remove('flex');
@@ -25130,15 +25146,26 @@
             loadTrail(currentTrailKey);
             initElevationCanvas();
 
-            // En móvil, si se solicita ?view=map o #map, activar vista mapa
-            if (urlParams.get('view') === 'map' || window.location.hash === '#map') {
-                setMobileView('map');
+            // En móvil, abrir en Mapa GPS por defecto salvo que se pida ?view=info
+            if (window.innerWidth < 768) {
+                const requestedView = urlParams.get('view') === 'info' ? 'info' : 'map';
+                setMobileView(requestedView);
             }
 
-            window.addEventListener('resize', () => {
-                if (map) map.invalidateSize();
-                drawElevationProfile(currentTrail);
-            });
+            const onViewportChange = () => {
+                if (map) map.invalidateSize({ animate: false });
+                if (currentTrail) drawElevationProfile(currentTrail);
+            };
+            window.addEventListener('resize', onViewportChange);
+            window.addEventListener('orientationchange', () => setTimeout(onViewportChange, 250));
+            const mapEl = document.getElementById('mainTrailMap');
+            if (mapEl && typeof ResizeObserver === 'function') {
+                new ResizeObserver(() => {
+                    if (map && mapEl.offsetWidth > 0 && mapEl.offsetHeight > 0) {
+                        map.invalidateSize({ animate: false });
+                    }
+                }).observe(mapEl);
+            }
         });
 
         // 1. Inicializar Mapa Leaflet
@@ -25146,14 +25173,24 @@
             map = L.map('mainTrailMap', {
                 zoomControl: false,
                 scrollWheelZoom: true,
+                dragging: true,
+                touchZoom: true,
+                tap: false,
                 attributionControl: false
             });
 
             L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-            // Capas
+            // Capas con fallback automático si Satelital falla en red móvil
+            let satErrors = 0;
             mapLayers.satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19
+            });
+            mapLayers.satellite.on('tileerror', () => {
+                satErrors += 1;
+                if (satErrors >= 4 && activeTileLayer === mapLayers.satellite) {
+                    setMapLayer('osm');
+                }
             });
 
             mapLayers.topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
@@ -25291,16 +25328,19 @@
                 lineJoin: 'round'
             }).addTo(map);
 
-            // Crear Marcadores de Waypoints con iconos personalizados
+            // Crear Marcadores de Waypoints (íconos compactos en móvil para no tapar el sendero)
+            const compactWp = window.innerWidth < 640;
             t.waypoints.forEach(wp => {
                 const icon = L.divIcon({
                     className: 'custom-map-marker',
-                    html: `<div class="flex items-center gap-1.5 bg-stone-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-2xl hover:scale-110 transition-transform">
+                    html: compactWp
+                        ? `<div class="w-7 h-7 rounded-xl bg-amber-500 text-stone-950 border-2 border-stone-950 flex items-center justify-center text-[11px] shadow-xl"><i class="${wp.icon}"></i></div>`
+                        : `<div class="flex items-center gap-1.5 bg-stone-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl border border-stone-700 shadow-2xl hover:scale-110 transition-transform">
                               <span class="w-5 h-5 rounded-lg bg-amber-500 text-stone-950 flex items-center justify-center text-[10px]"><i class="${wp.icon}"></i></span>
                               <span class="truncate max-w-[100px]">${wp.name}</span>
                            </div>`,
-                    iconSize: [120, 26],
-                    iconAnchor: [60, 13]
+                    iconSize: compactWp ? [28, 28] : [120, 26],
+                    iconAnchor: compactWp ? [14, 14] : [60, 13]
                 });
 
                 const marker = L.marker([wp.lat, wp.lng], { icon })
@@ -25352,15 +25392,23 @@
         }
 
         function flyToWaypoint(lat, lng, name, desc, ele) {
+            const doFly = () => {
+                if (map) {
+                    map.invalidateSize({ animate: false });
+                    map.flyTo([lat, lng], 16, { duration: 1.0 });
+                }
+                const m = waypointMarkers.find(w => {
+                    const pos = w.getLatLng();
+                    return Math.abs(pos.lat - lat) < 0.0001 && Math.abs(pos.lng - lng) < 0.0001;
+                });
+                if (m) setTimeout(() => m.openPopup(), 1050);
+            };
             if (window.innerWidth < 768) {
-                setMobileView('map');
+                setMobileView('map', { skipFit: true });
+                setTimeout(doFly, 180);
+            } else {
+                doFly();
             }
-            map.flyTo([lat, lng], 16, { duration: 1.2 });
-            const m = waypointMarkers.find(w => {
-                const pos = w.getLatLng();
-                return Math.abs(pos.lat - lat) < 0.0001 && Math.abs(pos.lng - lng) < 0.0001;
-            });
-            if (m) setTimeout(() => m.openPopup(), 1250);
         }
 
         // 3. Gráfico Altimétrico Interactivo en Canvas con Hover Sync

@@ -67,6 +67,11 @@ html {
 .leaflet-container {
     background: #141a17;
     font-family: "Plus Jakarta Sans", sans-serif;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+#excursionDetailMap {
+    touch-action: none;
 }
 .leaflet-popup-content-wrapper {
     background: #1c1917 !important;
@@ -79,18 +84,24 @@ html {
     background: #1c1917 !important;
 }
 
-/* Fullscreen map fallback */
+/* Fullscreen map fallback (iOS Safari + Android) */
 .map-fullscreen-fallback {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 90 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    height: 100vh !important;
+    z-index: 95 !important;
     border-radius: 0 !important;
+    border: none !important;
     background: #0a0e0d !important;
     padding: 0 !important;
 }
 .map-fullscreen-fallback #excursionDetailMap,
 #detailMapWrapper:fullscreen #excursionDetailMap {
-    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    width: 100% !important;
     border-radius: 0 !important;
 }
 
